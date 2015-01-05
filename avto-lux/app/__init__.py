@@ -1,1 +1,1 @@
-__all__ = ['app', 'srvconfig']
+__all__ = ['app', 'srvconfig', 'core']

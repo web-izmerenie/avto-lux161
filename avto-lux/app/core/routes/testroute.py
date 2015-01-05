@@ -4,6 +4,6 @@ from pyjade.ext.tornado import patch_tornado
 patch_tornado()
 
 
-class MainHandler(BaseHandler):
-    def get(self):
-        self.write("Hello!")
+class TestRoute(BaseHandler):
+	def get(self, file):
+		return self.render(str(file) + '.jade')

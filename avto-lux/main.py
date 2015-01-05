@@ -1,6 +1,6 @@
 from app.app import run_instance
-from app.srvconfig import PORT, HOST
+from app.configparser import config
 
 if __name__ == '__main__':
-	run_instance(HOST, PORT)
+	run_instance(config('PORT'), host=config('HOST'))
 
