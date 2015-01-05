@@ -2,16 +2,12 @@ from sqlalchemy import (
 	Column, 
 	String, 
 	Integer, 
-	ForeignKey, 
 	Boolean,
 	DateTime
 	)
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.ext.declarative import declarative_base
-
 from app.configparser import config
+from .dbconnect import Base
 
-Base = declarative_base()
 dbprefix = config('DATABASE')['TABLE_NAME_PREFIX']
 
 
