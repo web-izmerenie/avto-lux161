@@ -1,3 +1,4 @@
 *.pyc
 __pycashe__
 tornadomail
+config.yaml
