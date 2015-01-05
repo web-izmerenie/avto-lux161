@@ -14,8 +14,8 @@ class AvtoLuxApplication(tornado.web.Application):
             ('/test/(.*)', TestRoute)
         ]
         settings = dict(
-            template_path=os.path.join(os.path.dirname(__file__), "templates"),
-            static_path=os.path.join(os.path.dirname(__file__), "static"),
+            template_path=os.path.join(os.getcwd(), config('TEMPLATES_PATH')),
+            static_path=os.path.join(os.getcwd(), config('STATIC_PATH')),
             debug=True,
             xsrf_cookies = False,
             cookie_secret = str(hashlib.sha224(os.urandom(100)).hexdigest()))

@@ -7,3 +7,6 @@ DATABASE:
 	DBNAME: 'dbname'
 	USER: 'username'
 	PASS: '******'
+
+TEMPLATES_PATH: './templates'
+STATIC_PATH: './static'

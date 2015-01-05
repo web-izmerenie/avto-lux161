@@ -1,5 +1,5 @@
 import yaml
-import os, sys
+import os
 
 
 class Config:
@@ -16,6 +16,7 @@ class Config:
 			config['PORT'] = os.environ.get('PORT')
 		if os.environ.get('HOST'):
 			config['HOST'] = os.environ.get('HOST')
+
 		if os.environ.get('DATABASE_PORT'):
 			config['DATABASE']['PORT'] = os.environ.get('DATABASE_PORT')
 		if os.environ.get('DATABASE_HOST'):
@@ -26,6 +27,11 @@ class Config:
 			config['DATABASE']['USER'] = os.environ.get('DATABASE_USER')
 		if os.environ.get('DATABASE_PASS'):
 			config['DATABASE']['PASS'] = os.environ.get('DATABASE_PASS')
+
+		if os.environ.get('TEMPLATES_PATH'):
+			config['TEMPLATES_PATH'] = os.environ.get('TEMPLATES_PATH')
+		if os.environ.get('STATIC_PATH'):
+			config['STATIC_PATH'] = os.environ.get('STATIC_PATH')
 
 		self.config = config
 
