@@ -11,7 +11,7 @@ class AvtoLuxApplication(tornado.web.Application):
     def __init__(self):
         handlers = [
             ('/', MainHandler),
-            ('/test/(.*)', TestRoute)
+            ('/test/(.*).html', TestRoute)
         ]
         settings = dict(
             template_path=os.path.join(os.getcwd(), config('TEMPLATES_PATH')),
