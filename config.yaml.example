@@ -7,6 +7,8 @@ DATABASE:
 	DBNAME: 'dbname'
 	USER: 'username'
 	PASS: '******'
+    TABLE_NAME_PREFIX: 'avtolux'
 
 TEMPLATES_PATH: './templates'
 STATIC_PATH: './static'
+

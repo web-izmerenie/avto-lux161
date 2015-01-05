@@ -32,6 +32,9 @@ class Config:
 			config['TEMPLATES_PATH'] = os.environ.get('TEMPLATES_PATH')
 		if os.environ.get('STATIC_PATH'):
 			config['STATIC_PATH'] = os.environ.get('STATIC_PATH')
+		if os.environ.get('NUBMER_OF_INSTANCES'):
+			config['NUBMER_OF_INSTANCES'] = os.environ.get('NUBMER_OF_INSTANCES')
+
 
 		self.config = config
 

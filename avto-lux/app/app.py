@@ -3,8 +3,8 @@ from tornado.options import define, options
 import hashlib
 from .core.routes.main import MainHandler
 from .core.routes.testroute import TestRoute
-from .models.dbconnect import db_init
 from .configparser import config
+from .models.init_models import init_models
 
 
 class AvtoLuxApplication(tornado.web.Application):
@@ -19,14 +19,15 @@ class AvtoLuxApplication(tornado.web.Application):
             debug=True,
             xsrf_cookies = False,
             cookie_secret = str(hashlib.sha224(os.urandom(100)).hexdigest()))
-        db_init()
 
         tornado.web.Application.__init__(self, handlers, **settings)
 
 def run_instance(port, host=''):
+    # init_models()
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(AvtoLuxApplication())
     http_server.listen(port, address=host)
+
     print("Server run on %s:%s" % (host, port))
     tornado.ioloop.IOLoop.instance().start()
 

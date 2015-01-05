@@ -6,6 +6,4 @@ Base = declarative_base()
 dbc = config('DATABASE')
 engine = create_engine("postgresql://%s:%s@%s/%s" % (dbc['USER'], dbc['PASS'], dbc['HOST'], dbc['DBNAME']))
 
-def db_init():
-	Base.metadata.create_all(engine)
 
