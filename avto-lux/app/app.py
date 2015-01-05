@@ -1,10 +1,10 @@
 import os.path, re, tornado.httpserver, tornado.ioloop, tornado.web
 from tornado.options import define, options
 import hashlib
-from app.core.routes.main import MainHandler
-from app.core.routes.testroute import TestRoute
-
-from app.configparser import config
+from .core.routes.main import MainHandler
+from .core.routes.testroute import TestRoute
+from .models.dbconnect import db_init
+from .configparser import config
 
 
 class AvtoLuxApplication(tornado.web.Application):
@@ -19,6 +19,7 @@ class AvtoLuxApplication(tornado.web.Application):
             debug=True,
             xsrf_cookies = False,
             cookie_secret = str(hashlib.sha224(os.urandom(100)).hexdigest()))
+        db_init()
 
         tornado.web.Application.__init__(self, handlers, **settings)
 
