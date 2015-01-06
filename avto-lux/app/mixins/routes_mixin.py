@@ -5,20 +5,16 @@ class JsonResponseMixin(RequestHandler):
 	def json_response(self, data):
 		return self.write(json.dumps(data))
 
-class ErrorResponseMixin(RequestHandler):
-	def response_403(self):
+
+class ForbiddenPostPutHeadDeleteMixin(RequestHandler):
+	def post(self):
 		return self.send_error(status_code=403)
 
-
-class ForbiddenPostPutHeadDeleteMixin(RequestHandler, ErrorResponseMixin):
-	def post(self):
-		return self.response_403()
-
 	def put(self):
-		return self.response_403()
+		return self.send_error(status_code=403)
 
 	def head(self):
-		return self.response_403()
+		return self.send_error(status_code=403)
 
 	def delete(self):
-		return self.response_403()
+		return self.send_error(status_code=403)

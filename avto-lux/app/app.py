@@ -1,7 +1,7 @@
 import os.path, re, tornado.httpserver, tornado.ioloop, tornado.web
 from tornado.options import define, options
 import hashlib
-from .core.routes.main import MainHandler
+from .core.routes.main import MainRoute
 from .core.routes.testroute import TestRoute
 from .configparser import config
 from .models.init_models import init_models
@@ -10,7 +10,7 @@ from .models.init_models import init_models
 class AvtoLuxApplication(tornado.web.Application):
     def __init__(self):
         handlers = [
-            ('/', MainHandler),
+            ('/', MainRoute),
             ('/test/(.*).html', TestRoute)
         ]
         settings = dict(

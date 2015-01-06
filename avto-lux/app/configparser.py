@@ -1,7 +1,5 @@
 import yaml
 import os
-import Types
-
 
 class Config:
 	def __init__(self):
