@@ -1,15 +1,26 @@
 !!! 5
 html(lang="ru")
 	head
-		title Авто Люкс — аренда и прокат автомобилей с водителем. Заказ микроавтобусов.
+		title.
+			Авто Люкс — аренда и прокат автомобилей с водителем.
+			Заказ микроавтобусов.
 		link(href=static_url('build.css'), type="text/css", rel="stylesheet")
 		script(src=static_url('build.js'), type="text/javascript")
 	body
-		div(class="top-block")
+		div.top-block
 			header
-				div(class="head-block")
-					//
-				nav(class="catalog-menu")
+				div.head-block
+					div.right-part
+						a(href="/", title="На главную страницу")
+							img(alt="Авто Люкс", src=static_url('images/logo.png'))
+						div.slogan.
+							Аренда и прокат автомобилей<br>
+							Заказ микроавтобусов
+						ul.phones
+							li +7(863) 270 66 20
+							li +7(988) 999 39 89
+						button.call_me Заказать звонок
+				nav.catalog-menu
 					//
 
 		footer.

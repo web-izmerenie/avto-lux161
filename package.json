@@ -23,7 +23,7 @@
     "prelude-ls": "1.1.1"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/gulp --production"
+    "postinstall": "./deploy.sh"
   },
 
   "gulp": {

@@ -1,0 +1,46 @@
+/**
+ * header styles
+ *
+ * @author Viacheslav Lotsmanov
+ */
+
+@require 'button-mixin'
+
+.head-block
+	display block
+	min-height $head-block-min-height
+	bg('header-bg.jpg', center 0 no-repeat $bg-color)
+
+.right-part
+	display block
+	margin-left -73px
+	width 300px
+	relative left 72%
+	padding-top 30px
+
+	img
+		display block
+		relative left -25px
+
+	.slogan
+		display block
+		font-metrics 18px 23px
+		margin-top (37px - 23px)
+		color $text-color2
+
+	ul.phones
+		display block
+		margin-top: 10px
+
+		&>li
+			display block
+			font-metrics 24px 32px
+
+	button.call_me
+		button-mixin()
+		margin-top 10px
+
+nav.catalog-menu
+	display block
+	height $catalog-menu-height
+	bg('catalog-menu-bg.png', 0 0 repeat-x $bg-invert-color)

@@ -21,6 +21,7 @@ body
 	background $bg-color
 	color $text-color
 	min-width $min-width
+	font-family $font-family
 
 .top-block
 	display block
@@ -29,15 +30,7 @@ body
 	max-width $max-width
 
 	header
-		.head-block
-			display block
-			min-height $head-block-min-height
-			bg('header-bg.jpg', center 0 no-repeat $bg-color)
-
-		nav.catalog-menu
-			display block
-			height $catalog-menu-height
-			bg('catalog-menu-bg.png', 0 0 repeat-x $bg-invert-color)
+		@require 'header'
 
 	&:after
 		pseudo-block()

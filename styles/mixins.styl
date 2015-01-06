@@ -46,32 +46,6 @@ bg-img($path)
 bg($path, $addit)
 	background: url(img-path($path)) $addit
 
-// position
-
-edge-sizes($top=auto, $right=auto, $bottom=auto, $left=auto)
-	top $top
-	right $right
-	bottom $bottom
-	left $left
-
-relative($top=auto, $right=auto, $bottom=auto, $left=auto)
-	position relative
-	edge-sizes($top, $right, $bottom, $left)
-
-absolute($top=auto, $right=auto, $bottom=auto, $left=auto)
-	position absolute
-	edge-sizes($top, $right, $bottom, $left)
-
-fixed($top=auto, $right=auto, $bottom=auto, $left=auto)
-	position fixed
-	edge-sizes($top, $right, $bottom, $left)
-
-absolute-stretch($amount)
-	edge-sizes($amount, $amount, $amount, $amount)
-
-fixed-stretch($amount)
-	edge-sizes($amount, $amount, $amount, $amount)
-
 // pseudo blocks
 
 pseudo($content='', $display=inline)
