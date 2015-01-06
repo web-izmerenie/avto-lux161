@@ -20,6 +20,7 @@ class StaticPageModel(Base):
 	page_id = Column(Integer, primary_key=True)
 	title = Column(String(4096))
 	content = Column(Text)
+	footer_text = Column(Text)
 	is_visible = Column(Boolean)
 	is_catalog_page = Column(Boolean)
 	alias = Column(String(8192))
