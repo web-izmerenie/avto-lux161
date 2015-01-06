@@ -10,7 +10,7 @@ class ErrorResponseMixin(RequestHandler):
 		return self.send_error(status_code=403)
 
 
-class ForbiddenPostPutHeadDeleteMixin(RequestHandler):
+class ForbiddenPostPutHeadDeleteMixin(RequestHandler, ErrorResponseMixin):
 	def post(self):
 		return self.response_403()
 
