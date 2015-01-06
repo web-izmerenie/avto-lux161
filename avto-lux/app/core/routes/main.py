@@ -11,7 +11,10 @@ class MainRoute(BaseHandler, Custom404Mixin):
 		return self.render("sdfds.jade")
 
 
-class StaticPageRoute(BaseHandler, Custom404Mixin):
+class PageRoute(BaseHandler, Custom404Mixin):
 	def get(self, alias):
 		self.render('xxx.jade')
 
+class ItemRoute(BaseHandler, Custom404Mixin):
+	def get(self, category, item):
+		return self.render('yyy.jade')

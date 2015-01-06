@@ -1,7 +1,11 @@
 import os.path, re, tornado.httpserver, tornado.ioloop, tornado.web
 from tornado.options import define, options
 import hashlib
-from .core.routes.main import MainRoute
+from .core.routes.main import  (
+    MainRoute, 
+    PageRoute,
+    ItemRoute
+)
 from .core.routes.testroute import TestRoute
 from .configparser import config
 from .models.init_models import init_models
@@ -11,7 +15,9 @@ class AvtoLuxApplication(tornado.web.Application):
     def __init__(self):
         handlers = [
             ('/', MainRoute),
-            ('/test/(.*).html', TestRoute)
+            ('/(.*).html', PageRoute),
+            ('/test/(.*).html', TestRoute) ## Only for testing slised pages
+            ('/([a-z0-9\-_])\(.*)', ItemRoute)
         ]
         settings = dict(
             template_path=os.path.join(os.getcwd(), config('TEMPLATES_PATH')),
