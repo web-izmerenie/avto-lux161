@@ -1,6 +1,6 @@
 import tornado.template
 from .base import BaseHandler
-from app.mixins.routes_mixin import ForbiddenPostPutHeadDeleteMixin, Custom404Mixin
+from app.mixins.routes_mixin import Custom404Mixin
 from pyjade.ext.tornado import patch_tornado
 patch_tornado()
 
