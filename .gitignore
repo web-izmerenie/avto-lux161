@@ -4,6 +4,7 @@ tornadomail
 config.yaml
 
 node_modules
+gulp
 static/build.css
 static/build.js
 

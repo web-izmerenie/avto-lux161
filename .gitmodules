@@ -1,3 +1,6 @@
 [submodule "web-front-end-gulp-template"]
 	path = web-front-end-gulp-template
 	url = https://github.com/web-izmerenie/web-front-end-gulp-template
+[submodule "web-front-end-deploy"]
+	path = web-front-end-deploy
+	url = https://github.com/web-izmerenie/web-front-end-deploy
