@@ -33,6 +33,7 @@ class CatalogItemModel(Base):
 	item_id = Column(Integer, primary_key=True)
 	item_title = Column(String(4096))
 	item_description = Column(Text)
+	alias = Column(String(8192))
 	main_image = Column(String(8192))
 	images = Column(ARRAY(String))
 	is_visible = Column(Boolean)

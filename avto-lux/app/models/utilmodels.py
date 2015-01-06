@@ -19,6 +19,7 @@ class CallModel(Base):
 	call_id = Column(Integer, primary_key=True)
 	name = Column(String(4096))
 	phone = Column(String(4096))
+	date  = Column(DateTime)
 
 
 
@@ -30,4 +31,5 @@ class OrderModel(Base):
 	email = Column(String(8192))
 	date = Column(DateTime)
 	phone = Column(String(4096))
+	date = Column(DateTime)
 

@@ -1,11 +1,11 @@
-from tornado.web import RequestHandler
 import hashlib
 import crypt
 from hmac import compare_digest as compare_hash
 
 
+
 ## TODO: test this
-class AmdinBaseHandler(RequestHandler):
+class AmdinBaseHandler(AbstractRouter):
 	def validate_password(self, symbols):
 		return True
 

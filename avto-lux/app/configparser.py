@@ -1,5 +1,6 @@
 import yaml
 import os
+import Types
 
 
 class Config:
@@ -37,6 +38,9 @@ class Config:
 
 
 		self.config = config
+
+	# def check_environ(self, element):
+	# 	if 
 
 	def __call__(self, key):
 		return self.config[key]
