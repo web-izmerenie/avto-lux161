@@ -3,6 +3,10 @@ __pycashe__
 tornadomail
 config.yaml
 
+node_modules
+static/build.css
+static/build.js
+
 # python virtual environment
 .venv*
 .avto-lux
