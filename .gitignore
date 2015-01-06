@@ -2,3 +2,6 @@
 __pycashe__
 tornadomail
 config.yaml
+
+# python virtual environment
+.venv
