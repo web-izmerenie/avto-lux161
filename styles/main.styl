@@ -37,6 +37,17 @@ body
 		height $footer-height
 		clear both
 
+a
+	color $link-text-color
+	transition color $animation-speed $animation-curve,
+		border-bottom-color $animation-speed $animation-curve
+	text-decoration none
+	border-bottom 1px solid $link-line-color
+
+	&:hover
+		color $link-hover-text-color
+		border-bottom-color $link-hover-line-color
+
 footer
 	background $bg-invert-color
 	size 100% $footer-height
