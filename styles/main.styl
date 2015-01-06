@@ -1,7 +1,53 @@
 /**
+ * main styles file
+ *
  * @author Viacheslav Lotsmanov
  */
 
+@require 'nib'
+
+@require 'variables'
+@require 'mixins'
+
+global-reset()
+reset-html5()
+
+html, body
+	reset-box-model()
+	font-metrics 0 0
+	height 100%
+
 body
-	background white
-	color black
+	background $bg-color
+	color $text-color
+	min-width $min-width
+
+.top-block
+	display block
+	margin 0 auto
+	min-height 100%
+	max-width $max-width
+
+	header
+		.head-block
+			display block
+			min-height $head-block-min-height
+			bg('header-bg.jpg', center 0 no-repeat $bg-color)
+
+		nav.catalog-menu
+			display block
+			height $catalog-menu-height
+			bg('catalog-menu-bg.png', 0 0 repeat-x $bg-invert-color)
+
+	&:after
+		pseudo-block()
+		height $footer-height
+		clear both
+
+footer
+	background $bg-invert-color
+	size 100% $footer-height
+	min-width $min-width
+	margin 0 auto
+	margin-top -($footer-height)
+	max-width $max-width
