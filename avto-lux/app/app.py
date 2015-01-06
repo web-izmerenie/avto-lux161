@@ -1,4 +1,5 @@
-import os.path, re, tornado.httpserver, tornado.ioloop, tornado.web
+import sys, re, os.path
+import tornado.httpserver, tornado.ioloop, tornado.web
 from tornado.options import define, options
 import hashlib
 from .core.routes import routes as core_routes
@@ -6,21 +7,26 @@ from .core.routes import routes as core_routes
 from .core.routes.testroute import TestRoute
 from .configparser import config
 from .models.init_models import init_models
-from .utils import collect_handlers
+from .utils import collect_handlers, error_log
 
 
 
 class AvtoLuxApplication(tornado.web.Application):
 	def __init__(self):
-		handlers = collect_handlers(core_routes)
+		handlers = []
+		try:
+			handlers = collect_handlers(core_routes)
+		except Exception as e:
+			error_log(e)
+
 		settings = dict(
 			template_path=os.path.join(os.getcwd(), config('TEMPLATES_PATH')),
 			static_path=os.path.join(os.getcwd(), config('STATIC_PATH')),
 			debug=True,
 			xsrf_cookies = False,
 			cookie_secret = str(hashlib.sha224(os.urandom(100)).hexdigest()))
-
 		tornado.web.Application.__init__(self, handlers, **settings)
+
 
 def run_instance(port, host=''):
 	# init_models()
