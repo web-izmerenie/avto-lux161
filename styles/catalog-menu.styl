@@ -1,0 +1,93 @@
+/**
+ * catalog menu styles
+ *
+ * @author Viacheslav Lotsmanov
+ */
+
+&
+	display block
+	overflow hidden
+	size 100% $catalog-menu-height
+	bg('catalog-menu-bg.png', 0 0 repeat-x $bg-invert-color)
+	text-align center
+
+nav
+	display table
+	size 100% $catalog-menu-height
+	box-sizing border-box
+	max-width ($max-width - 250px)
+	margin 0 auto
+
+	ul
+		display table-row
+		text-align center
+		z-index 5
+
+		&:before, &:after
+			pseudo-block()
+			display table-cell
+			width 7%
+			overflow hidden
+
+		& > li
+			$h = 58px
+			$border-color = #fad982
+			$active-bg-color = #b58837
+
+			$link-text-color = #12100a
+			$link-line-color = #d0c182
+			$link-hover-text-color = #e18501
+			$link-hover-line-color = #f1c75f
+
+			display table-cell
+			size auto $h
+			vertical-align top
+			text-align center
+			padding 0 26px
+			padding-top 23px
+			white-space nowrap
+
+			& > a, & > span
+				display inline-block
+				vertical-align top
+				size auto, $h
+				box-sizing border-box
+				background transparent
+				border 1px solid $border-color
+				border-radius 9px
+				padding 0 17px
+				overflow hidden
+				padding-top 39px - 25px
+
+				& > span
+					font-metrics 24px 26px
+					color $text-invert-color
+
+			& > a
+				cursor pointer
+
+				& > span
+					transition color $animation-speed $animation-curve,
+						border-bottom-color $animation-speed $animation-curve
+					border-bottom 1px solid $link-line-color
+
+				&:hover > span
+					color $link-hover-text-color
+					border-bottom-color $link-hover-line-color
+
+			& > span, &.active > a
+				background $active-bg-color
+
+				& > span
+					color $text-color
+
+			&.active > a
+				& > span
+					border-bottom-color transparent
+
+				&:hover > span
+					color $link-hover-line-color
+					border-bottom-color $link-hover-line-color
+
+			& > span
+				cursor default
