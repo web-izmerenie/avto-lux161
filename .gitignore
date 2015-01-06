@@ -4,5 +4,5 @@ tornadomail
 config.yaml
 
 # python virtual environment
-.venv
+.venv*
 .avto-lux
