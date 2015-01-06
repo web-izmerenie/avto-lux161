@@ -13,8 +13,18 @@ class MainRoute(BaseHandler, Custom404Mixin):
 
 class PageRoute(BaseHandler, Custom404Mixin):
 	def get(self, alias):
-		self.render('xxx.jade')
+		self.render('xxx.jade') ## TODO Replace to page.jade
 
 class ItemRoute(BaseHandler, Custom404Mixin):
 	def get(self, category, item):
-		return self.render('yyy.jade')
+		return self.render('yyy.jade') #Replace to catalog.jade
+
+
+class CallHandler(BaseHandler):
+	def post(self):
+		pass
+
+
+class OrderHandler(BaseHandler):
+	def post(self):
+		pass
