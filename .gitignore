@@ -11,3 +11,8 @@ static/build.js
 # python virtual environment
 .venv*
 .avto-lux
+
+static/tmp
+
+# todo symbolic links via deploy task
+uploaded

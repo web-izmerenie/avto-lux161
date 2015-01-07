@@ -1,0 +1,37 @@
+/**
+ * typical content page styles
+ *
+ * @author Viacheslav Lotsmanov
+ */
+
+.content-page
+	display block
+	max-width $max-content-width
+	margin 46px auto
+
+	&:after
+		pseudo-block()
+		clear both
+
+	ul.cars
+		display block
+
+		$side-offset = 42px
+
+		&.left
+			float left
+			margin-left 42px
+
+		&.right
+			float right
+			margin-right 42px
+
+		& > li
+			display block
+
+			img
+				display block
+				border-radius 8px
+
+			& + li
+				margin-top 15px

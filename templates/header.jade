@@ -1,0 +1,36 @@
+.head-block
+	.right-part
+		unless main_page
+			a(href="/", title="На главную страницу")
+				img(alt="Авто Люкс логотип", src=static_url('images/logo.png'))
+		else
+			img(alt="Авто Люкс логотип", src=static_url('images/logo.png'))
+		.slogan.
+			Аренда и прокат автомобилей<br>
+			Заказ микроавтобусов
+		ul.phones
+			li +7(863) 270 66 20
+			li +7(988) 999 39 89
+		button.call_me Заказать звонок
+		nav.main-menu
+			ul
+				li
+					a(href="#about-company") О компании
+				li.active
+					span Стоимость услуг
+				li.active
+					a(href="#contacts") Контактная информация
+				li
+					a(href="#wedding-advices") Свадебные советы молодоженам
+.catalog-menu
+	nav
+		ul
+			li.active
+				span
+					span Аренда автомобиля
+			li.active
+				a(href="#bus")
+					span Аренда микроавтобуса
+			li
+				a(href="#wedding")
+					span Свадебные укражения

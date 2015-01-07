@@ -1,8 +1,11 @@
+- var main_page = 1
+- var show_h1 = 0
+
+// temporarly
 - var meta_title = 'Авто Люкс — аренда и прокат автомобилей с водителем. Заказ микроавтобусов.'
 - var meta_description = ''
 - var meta_keywords = ''
 - var page_title = ''
-- var main_page = 1
 
 !!! 5
 html(lang="ru")
@@ -19,54 +22,16 @@ html(lang="ru")
 		if meta_keywords
 			meta(name="keywords", content=meta_keywords)
 
+		meta(name="author", content="Viacheslav Lotsmanov")
+		meta(name="author", content="Andrew Fatkulin")
+
 		link(href=static_url('images/favicon.ico'), rel="shortcut icon")
 		link(href=static_url('build.css'), type="text/css", rel="stylesheet")
 		script(src=static_url('build.js'), type="text/javascript")
 	body
 		.top-block
 			header
-				.head-block
-					.right-part
-						unless main_page
-							a(href="/", title="На главную страницу")
-								img(alt="Авто Люкс логотип", src=static_url('images/logo.png'))
-						else
-							img(alt="Авто Люкс логотип", src=static_url('images/logo.png'))
-						.slogan.
-							Аренда и прокат автомобилей<br>
-							Заказ микроавтобусов
-						ul.phones
-							li +7(863) 270 66 20
-							li +7(988) 999 39 89
-						button.call_me Заказать звонок
-						nav.main-menu
-							ul
-								li
-									a(href="#about-company") О компании
-								li.active
-									span Стоимость услуг
-								li.active
-									a(href="#contacts") Контактная информация
-								li
-									a(href="#wedding-advices") Свадебные советы молодоженам
-				.catalog-menu
-					nav
-						ul
-							li.active
-								span
-									span Аренда автомобиля
-							li.active
-								a(href="#bus")
-									span Аренда микроавтобуса
-							li
-								a(href="#wedding")
-									span Свадебные укражения
+				include header
+			block page-specific
 		footer
-			.contacts
-				a.phone(href="tel:+79889993989") +7 988 999 39 89
-				| &#32;
-				a.email(href="mailto:luxxavto@yandex.ru") Avto-lux161@yandex.ru
-			.developer
-				img(alt='Логотип &laquo;Веб измерение&raquo;' src=static_url('images/web-izmerenie-logo.svg'))
-				| Сделано в студии &#32;
-				a(href="http://web-izmerenie.ru" target="_blank") Web izmerenie
+			include footer
