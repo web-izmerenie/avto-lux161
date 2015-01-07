@@ -1,0 +1,18 @@
+/**
+ * content tags margin mixin
+ *
+ * @author Viacheslav Lotsmanov
+ * @license GNU/AGPLv3
+ * @see {@link https://github.com/web-izmerenie/avto-lux161/blob/master/LICENSE-AGPLv3|License}
+ */
+
+margin-mixin()
+	// p margins
+	h1 + p, h1 + main > p:first-child
+		padding-top 16px
+	p + p
+		padding-top 23px
+
+	// h1 margins
+	h1 + h1, h1 + main > h1:first-child, p + h1
+		padding-top 16px

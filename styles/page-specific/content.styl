@@ -4,34 +4,53 @@
  * @author Viacheslav Lotsmanov
  */
 
+@require 'margin-mixin'
+
 .content-page
-	display block
-	max-width $max-content-width
-	margin 46px auto
+	$margin-Y = 46px
+	$content-margin = 39px
+
+	display table
+	width 96%
+	max-width $max-content-page-width
+	margin $margin-Y auto
 
 	&:after
 		pseudo-block()
 		clear both
 
 	ul.cars
-		display block
+		$col-size = 184px
 
-		$side-offset = 42px
-
-		&.left
-			float left
-			margin-left 42px
-
-		&.right
-			float right
-			margin-right 42px
+		display table-cell
+		vertical-align top
+		width $col-size
+		text-align center
 
 		& > li
-			display block
+			display inline-block
+			width $col-size
+
+			&:after
+				pseudo-block()
 
 			img
 				display block
 				border-radius 8px
+				size $col-size auto
 
 			& + li
 				margin-top 15px
+
+	.content
+		display table-cell
+		vertical-align top
+		font $font
+
+		& > h1, & > main
+			display block
+			max-width $max-content-block-width
+			margin 0 auto
+			padding 0 $content-margin
+
+	margin-mixin()
