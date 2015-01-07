@@ -26,7 +26,8 @@ class StaticPageModel(Base):
 	is_catalog_page = Column(Boolean)
 	alias = Column(String(8192))
 	catalog = relationship('CatalogModel', uselist=False)
-	
+	is_footer_slogan = Column(Boolan)
+	footer_slogan = Column(String(8192))
 
 	seo_meta_title = Column(String(4096))
 	seo_meta_keywords = Column(String(4096))
