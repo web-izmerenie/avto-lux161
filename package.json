@@ -32,23 +32,31 @@
       "./node_modules"
     ],
     "styles": {
-      "main": {
+      "client": {
         "type": "stylus",
-        "path": "./styles/",
-        "srcDir": "./styles/",
+        "path": "./front-end-sources/client/styles/",
+        "srcDir": "./front-end-sources/client/styles/",
         "mainSrc": "main.styl",
         "destDir": "./static/",
-        "buildFile": "build.css"
+        "buildFile": "client-build.css"
+      },
+      "admin": {
+        "type": "stylus",
+        "path": "./front-end-sources/admin/styles/",
+        "srcDir": "./front-end-sources/admin/styles/",
+        "mainSrc": "main.styl",
+        "destDir": "./static/",
+        "buildFile": "admin-build.css"
       }
     },
     "scripts": {
-      "main": {
+      "client": {
         "type": "liveify",
-        "path": "./scripts/",
-        "srcDir": "./scripts/",
+        "path": "./front-end-sources/client/scripts/",
+        "srcDir": "./front-end-sources/client/scripts/",
         "mainSrc": "main.ls",
         "destDir": "./static/",
-        "buildFile": "build.js"
+        "buildFile": "client-build.js"
       }
     }
   }

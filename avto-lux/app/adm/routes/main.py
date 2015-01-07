@@ -7,7 +7,7 @@ from app.models.dbconnect import session
 ## Debug
 from app.models.usermodels import User
 from app.models.pagemodels import (
-	StaticPageModel, 
+	StaticPageModel,
 	UrlMapping
 )
 from app.models.catalogmodels import(
@@ -19,7 +19,7 @@ patch_tornado()
 
 class AdminMainRoute(AmdinBaseHandler):
 	def get(self):
-		return self.render('admin.jade') 
+		return self.render('admin/layout.jade')
 
 
 class EmptyHandler(AmdinBaseHandler):

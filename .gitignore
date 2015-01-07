@@ -1,18 +1,26 @@
+*.gz
+*.tar
+*.bz2
+*.zip
+*.rar
 *.sql
+
+# python
 *.pyc
 __pycashe__
 tornadomail
 config.yaml
 .rope*
-
-node_modules
-gulp
-static/build.css
-static/build.js
-
 # python virtual environment
 .venv*
 .avto-lux
+
+# node
+node_modules
+gulp
+
+static/**/*build.css
+static/**/*build.js
 static/tmp
 
 # todo symbolic links via deploy task
