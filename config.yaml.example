@@ -2,13 +2,12 @@ PORT: 8002
 HOST: '127.0.0.1'
 
 DATABASE:
-    HOST: 'localhost'
-    PORT: ''
-    DBNAME: 'dbname'
-    USER: 'username'
-    PASS: '******'
-    TABLE_NAME_PREFIX: 'avtolux'
+  HOST: 'localhost'
+  PORT: ''
+  DBNAME: 'dbname'
+  USER: 'username'
+  PASS: '******'
+  TABLE_NAME_PREFIX: 'avtolux'
 
 TEMPLATES_PATH: './templates'
 STATIC_PATH: './static'
-
