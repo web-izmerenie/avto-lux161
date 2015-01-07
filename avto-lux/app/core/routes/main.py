@@ -1,19 +1,39 @@
 import tornado.template
 from .base import BaseHandler
-from app.mixins.routes_mixin import Custom404Mixin
+from app.mixins.routes_mixin import Custom404Mixin, JsonResponseMixin
 from pyjade.ext.tornado import patch_tornado
+
+from app.models.dbconnect import session
+## Debug
+from app.models.usermodels import User
+from app.models.pagemodel import (
+	StaticPageModel, 
+	UrlMapping
+)
+from app.models.catalogmodels import(
+	CatalogModel,
+	CatalogItemModel
+)
 patch_tornado()
 
 
 class MainRoute(BaseHandler, Custom404Mixin):
 	def get(self):
-		# self.render('layout.jade')
-		return self.render("sdfds.jade")
+		# return self.render('sdfs.jade')
+		self.write('Hello')
+
+
+class UrlToRedirect(BaseHandler):
+	def get(self, first, second):
+		old_url = self.request.uri
+		new_url = session.query(UrlMapping.new_url).filter_by(old_url=str(old_url))
+		return self.redirect(str(new_url[0][0]), permanent=False, status=None)
 
 
 class PageRoute(BaseHandler, Custom404Mixin):
 	def get(self, alias):
 		self.render('xxx.jade') ## TODO Replace to page.jade
+
 
 class ItemRoute(BaseHandler, Custom404Mixin):
 	def get(self, category, item):

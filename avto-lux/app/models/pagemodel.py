@@ -4,7 +4,8 @@ from sqlalchemy import (
 	Integer, 
 	Boolean,
 	DateTime,
-	Text
+	Text,
+	ForeignKey
 	)
 from app.configparser import config
 from .dbconnect import Base
@@ -24,7 +25,8 @@ class StaticPageModel(Base):
 	is_visible = Column(Boolean)
 	is_catalog_page = Column(Boolean)
 	alias = Column(String(8192))
-	catalog_page = relationship('CatalogModel')
+	catalog = relationship('CatalogModel', uselist=False)
+	
 
 	seo_meta_title = Column(String(4096))
 	seo_meta_keywords = Column(String(4096))
@@ -33,4 +35,10 @@ class StaticPageModel(Base):
 
 	create_date = Column(DateTime)
 	last_change = Column(DateTime)
-	changed_by_user = relationship('User')
+
+
+class UrlMapping(Base):
+	__tablename__ = dbprefix + '_oldurls'
+	url_id = Column(Integer, primary_key=True)
+	old_url = Column(String(8192))
+	new_url = Column(String(8192))

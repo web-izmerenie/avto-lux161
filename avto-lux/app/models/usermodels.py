@@ -21,5 +21,5 @@ class User(Base):
 	is_active = Column(Boolean)
 
 	def __repr__(self):
-		return self.name
+		return self.login
 
