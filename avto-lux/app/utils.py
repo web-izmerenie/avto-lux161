@@ -4,7 +4,19 @@ class CollectHandlersException(Exception):
 	def __repr__(self, e, list):
 		return "{0}, {1}".format(e, list)
 
+
+
 def collect_handlers(*args):
+	## TODO: implement sort
+	# def sort_func(x):
+	# 	val = x[0]
+	# 	max_of_positions = 0
+	# 	if val.endwith('/'):
+	# 		nums = val.count - 1
+	# 	else:
+	# 		nums = val.count('/')
+	# 	return val
+
 	routes  = []
 	for item in args:
 		routes += item
@@ -13,7 +25,12 @@ def collect_handlers(*args):
 	if len(duplicated) > 0:
 		raise CollectHandlersException("Duplicate routes! {0}".format(duplicated))
 
+	# print("Sorted: {0}".format(sorted(routes, key=sort_func, reverse=False)))
+
+	# return sorted(routes, key=lambda x: x[0], reverse=True)
 	return routes
+
+
 
 
 def error_log(error):

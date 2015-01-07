@@ -15,16 +15,16 @@ from .testroute import TestRoute
 routes = [
 	('/', MainRoute),
 
-	('/test/(.*).html', TestRoute), ## Only for testing slised pages
-	('/test/(.*)', TestRoute),
+	('/test/(.*?).html', TestRoute), ## Only for testing slised pages
+	('/test/(.*?)', TestRoute),
 	('/api/calls', CallHandler),
 	('/api/orders', OrderHandler),
 
 	('/([-0-9])+(.html)', UrlToRedirect),
-	('/(.*)/item/(.*).html', UrlToRedirect),
+	('/(.*?)/item/(.*?).html', UrlToRedirect),
 
-	('/(.*).html', PageRoute),
-	('/(.*)', PageRoute),
-	('/(.*)/(.*).html', ItemRoute),
-	('/(.*)/(.*)', ItemRoute)
+	('/(.*?).html', PageRoute),
+	('/(.*?)', PageRoute),
+	('/(.*?)/(.*?).html', ItemRoute),
+	('/(.*?)/(.*?)', ItemRoute)
 ]
