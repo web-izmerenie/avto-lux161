@@ -1,5 +1,6 @@
-PyYAML==3.11
+PyYAML>=3.11,<4.0
 SQLAlchemy==0.9.8
-psycopg2==2.5.4
-pyjade==3.0.0
-tornado==4.0.2
+psycopg2>=2.5.4,<3.0
+pyjade>=3.0.0,<4.0
+tornado>=4.0.2,<5.0
+pillow>=2.7.0,<3.0

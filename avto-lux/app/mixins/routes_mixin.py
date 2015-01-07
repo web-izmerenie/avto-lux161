@@ -6,15 +6,8 @@ class JsonResponseMixin(RequestHandler):
 		return self.write(json.dumps(data))
 
 
-class ForbiddenPostPutHeadDeleteMixin(RequestHandler):
-	def post(self):
-		return self.send_error(status_code=403)
-
-	def put(self):
-		return self.send_error(status_code=403)
-
-	def head(self):
-		return self.send_error(status_code=403)
-
-	def delete(self):
-		return self.send_error(status_code=403)
+class Custom404Mixin(RequestHandler):
+	def write_error(self, status_code, **kwargs):
+		print(kwargs["exc_info"])
+		self.set_status(404)
+		return self.write("Not not not!")

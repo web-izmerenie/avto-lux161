@@ -1,17 +1,12 @@
 import hashlib
-import crypt
-from hmac import compare_digest as compare_hash
+from tornado.web import RequestHandler
 
-
-
-## TODO: test this
-class AmdinBaseHandler(AbstractRouter):
+class AmdinBaseHandler(RequestHandler):
 	def validate_password(self, symbols):
 		return True
 
-    def create_password(self, symbols):
-    	return str(hashlib.sha224().hexdigest())
+	def create_password(self, symbols):
+		return str(hashlib.sha512(symbols.encode('utf-8')).hexdigest())
 
-    ## Test
-    def compare_password(self, password, hpasswd):
-    	return compare_hash(hpasswd, crypt.crypt(password, hpasswd))
+	def compare_password(self, hpasswd=None, password=None):
+		return hpasswd == hashlib.sha512(password.encode('utf-8')).hexdigest()
