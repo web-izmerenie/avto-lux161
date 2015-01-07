@@ -1,19 +1,38 @@
+- var meta_title = 'Авто Люкс — аренда и прокат автомобилей с водителем. Заказ микроавтобусов.'
+- var meta_description = ''
+- var meta_keywords = ''
+- var page_title = ''
+- var main_page = 1
+
 !!! 5
 html(lang="ru")
 	head
-		title.
-			Авто Люкс — аренда и прокат автомобилей с водителем.
-			Заказ микроавтобусов.
+		meta(charset="utf-8")
+
+		if meta_title
+			title=meta_title
+		else
+			title=page_title
+
+		if meta_description
+			meta(name="description", content=meta_description)
+		if meta_keywords
+			meta(name="keywords", content=meta_keywords)
+
+		link(href=static_url('images/favicon.ico'), rel="shortcut icon")
 		link(href=static_url('build.css'), type="text/css", rel="stylesheet")
 		script(src=static_url('build.js'), type="text/javascript")
 	body
-		div.top-block
+		.top-block
 			header
-				div.head-block
-					div.right-part
-						a(href="/", title="На главную страницу")
+				.head-block
+					.right-part
+						unless main_page
+							a(href="/", title="На главную страницу")
+								img(alt="Авто Люкс логотип", src=static_url('images/logo.png'))
+						else
 							img(alt="Авто Люкс логотип", src=static_url('images/logo.png'))
-						div.slogan.
+						.slogan.
 							Аренда и прокат автомобилей<br>
 							Заказ микроавтобусов
 						ul.phones
@@ -30,7 +49,7 @@ html(lang="ru")
 									a(href="#contacts") Контактная информация
 								li
 									a(href="#wedding-advices") Свадебные советы молодоженам
-				div.catalog-menu
+				.catalog-menu
 					nav
 						ul
 							li.active
@@ -43,12 +62,11 @@ html(lang="ru")
 								a(href="#wedding")
 									span Свадебные укражения
 		footer
-			div.contacts
+			.contacts
 				a.phone(href="tel:+79889993989") +7 988 999 39 89
-
-				// f**k this shit
+				| &#32;
 				a.email(href="mailto:luxxavto@yandex.ru") Avto-lux161@yandex.ru
-			div.developer
-				img(alt='Логотип "Веб измерение"' src=static_url('images/web-izmerenie-logo.svg'))
-				| Сделано в студии
+			.developer
+				img(alt='Логотип &laquo;Веб измерение&raquo;' src=static_url('images/web-izmerenie-logo.svg'))
+				| Сделано в студии &#32;
 				a(href="http://web-izmerenie.ru" target="_blank") Web izmerenie
