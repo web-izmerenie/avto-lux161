@@ -4,6 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 Base = declarative_base()
 
+dbprefix = config('DATABASE')['TABLE_NAME_PREFIX']
+
 dbc = config('DATABASE')
 engine = create_engine("postgresql://%s:%s@%s/%s" % (dbc['USER'], dbc['PASS'], dbc['HOST'], dbc['DBNAME']))
 

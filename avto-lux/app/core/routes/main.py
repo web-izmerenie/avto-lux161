@@ -6,12 +6,12 @@ from pyjade.ext.tornado import patch_tornado
 from app.models.dbconnect import session
 ## Debug
 from app.models.usermodels import User
-from app.models.pagemodel import (
+from app.models.pagemodels import (
 	StaticPageModel, 
 	UrlMapping
 )
 from app.models.catalogmodels import(
-	CatalogModel,
+	CatalogSectionModel,
 	CatalogItemModel
 )
 patch_tornado()

@@ -6,15 +6,12 @@ from sqlalchemy import (
 	DateTime
 	)
 from app.configparser import config
-from .dbconnect import Base, engine
-	
-dbprefix = config('DATABASE')['TABLE_NAME_PREFIX']
+from .dbconnect import Base, dbprefix
+from .pagemodels import IdMixin
 
+class User(Base, IdMixin):
+	__tablename__ = dbprefix + 'users'
 
-class User(Base):
-	__tablename__ = dbprefix + '_users'
-
-	user_id = Column(Integer, primary_key=True)
 	login = Column(String(128))
 	password = Column(String(4096))
 	last_login = Column(DateTime(timezone=False))

@@ -6,27 +6,23 @@ from sqlalchemy import (
 	DateTime
 	)
 from app.configparser import config
-from .dbconnect import Base
+from .dbconnect import Base, dbprefix
 from sqlalchemy.dialects.postgresql import *
-	
-dbprefix = config('DATABASE')['TABLE_NAME_PREFIX']
+from .pagemodels import IdMixin
 
 
+class CallModel(Base, IdMixin):
+	__tablename__ = dbprefix + 'calls'
 
-class CallModel(Base):
-	__tablename__ = dbprefix + '_calls'
-
-	call_id = Column(Integer, primary_key=True)
 	name = Column(String(4096))
 	phone = Column(String(4096))
 	date  = Column(DateTime)
 
 
 
-class OrderModel(Base):
-	__tablename__ = dbprefix + '_orders'
+class OrderModel(Base, IdMixin):
+	__tablename__ = dbprefix + 'corders'
 
-	order_id = Column(Integer, primary_key=True)
 	name = Column(String(4096))
 	email = Column(String(8192))
 	date = Column(DateTime)

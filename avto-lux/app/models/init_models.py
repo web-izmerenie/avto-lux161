@@ -1,4 +1,4 @@
-from .pagemodel import *
+from .pagemodels import *
 from .catalogmodels import * 
 from .utilmodels import *  
 from .usermodels import *
