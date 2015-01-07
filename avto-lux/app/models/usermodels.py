@@ -5,9 +5,11 @@ from sqlalchemy import (
 	Boolean,
 	DateTime
 	)
+import json
 from app.configparser import config
-from .dbconnect import Base, dbprefix
+from .dbconnect import Base, dbprefix, engine
 from .pagemodels import IdMixin
+
 
 class User(Base, IdMixin):
 	__tablename__ = dbprefix + 'users'

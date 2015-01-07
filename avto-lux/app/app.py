@@ -16,7 +16,8 @@ class AvtoLuxApplication(tornado.web.Application):
 		handlers = []
 		try:
 			#TODO Add sort routes function
-			handlers = collect_handlers(core_routes)
+			# handlers = collect_handlers(core_routes)
+			handlers = core_routes
 		except Exception as e:
 			error_log(e)
 

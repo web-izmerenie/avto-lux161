@@ -1,9 +1,12 @@
+import json
 import tornado.template
 from .base import BaseHandler
 from app.mixins.routes_mixin import Custom404Mixin, JsonResponseMixin
 from pyjade.ext.tornado import patch_tornado
 
 from app.models.dbconnect import session
+from sqlalchemy import select, func
+
 ## Debug
 from app.models.usermodels import User
 from app.models.pagemodels import (
@@ -14,13 +17,16 @@ from app.models.catalogmodels import(
 	CatalogSectionModel,
 	CatalogItemModel
 )
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
 patch_tornado()
 
 
 class MainRoute(BaseHandler, Custom404Mixin):
 	def get(self):
 		# return self.render('sdfs.jade')
-		self.write('Hello')
+		q = session.query(User).all()
+		self.write(json.dumps(str(q)))
 
 
 class UrlToRedirect(BaseHandler):
