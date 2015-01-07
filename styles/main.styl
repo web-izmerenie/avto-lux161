@@ -37,6 +37,9 @@ body
 		height $footer-height
 		clear both
 
+footer
+	@require 'footer'
+
 a
 	color $link-text-color
 	transition color $animation-speed $animation-curve,
@@ -47,11 +50,3 @@ a
 	&:hover
 		color $link-hover-text-color
 		border-bottom-color $link-hover-line-color
-
-footer
-	background $bg-invert-color
-	size 100% $footer-height
-	min-width $min-width
-	margin 0 auto
-	margin-top -($footer-height)
-	max-width $max-width

@@ -1,0 +1,80 @@
+/**
+ * footer styles
+ *
+ * @author Viacheslav Lotsmanov
+ */
+
+&
+	background $bg-invert-color
+	size 100% $footer-height
+	min-width $min-width
+	margin 0 auto
+	margin-top -($footer-height)
+	max-width $max-width
+	relative auto
+	overflow hidden
+
+	$shadow-color = #594717
+	$shadow-color2 = lighten(lightness($shadow-color, 40), 10)
+	$shadow-color3 = saturate($bg-invert-color, 20%)
+
+	&:before, &:after
+		pseudo-block()
+		size $shadow-width 100%
+		z-index 0
+		background red
+
+	gradi($side)
+		background linear-gradient($side,
+			$shadow-color 0%, $shadow-color2 30%, $shadow-color3, $bg-invert-color)
+
+	&:before
+		absolute left 0 top 0
+		gradi(left)
+
+	&:after
+		absolute right 0 top 0
+		gradi(right)
+
+a
+	color $link-text-color2
+	border-bottom-color $link-line-color2
+
+	&:hover
+		color $link-hover-text-color2
+		border-bottom-color $link-hover-line-color2
+
+$side-blocks-shift = 50%
+$side-blocks-offset = -450px
+
+.contacts, .developer
+	display block
+	font-metrics 12px 18px
+	color $text-invert-color
+	z-index 20
+
+.contacts
+	absolute left $side-blocks-shift top 30px
+	margin-left $side-blocks-offset
+
+	a.phone, a.phone:hover
+		color $text-invert-color
+		border-bottom 0
+		font-size 10px
+
+		&:after
+			pseudo-block()
+			height (24px - 19px)
+
+.developer
+	absolute right $side-blocks-shift top 35px
+	margin-right $side-blocks-offset
+
+	a:before
+		pseudo-block()
+
+	img
+		$s = 35px
+		display block
+		absolute left (-($s + 10px)) top 1px
+		size $s

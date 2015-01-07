@@ -34,11 +34,6 @@ nav
 			$border-color = #fad982
 			$active-bg-color = #b58837
 
-			$link-text-color = #12100a
-			$link-line-color = #d0c182
-			$link-hover-text-color = #e18501
-			$link-hover-line-color = #f1c75f
-
 			display table-cell
 			size auto $h
 			vertical-align top
@@ -61,7 +56,7 @@ nav
 
 				& > span
 					font-metrics 24px 26px
-					color $text-invert-color
+					color $link-text-color2
 
 			& > a
 				cursor pointer
@@ -69,11 +64,11 @@ nav
 				& > span
 					transition color $animation-speed $animation-curve,
 						border-bottom-color $animation-speed $animation-curve
-					border-bottom 1px solid $link-line-color
+					border-bottom 1px solid $link-line-color2
 
 				&:hover > span
-					color $link-hover-text-color
-					border-bottom-color $link-hover-line-color
+					color $link-hover-text-color2
+					border-bottom-color $link-hover-line-color2
 
 			& > span, &.active > a
 				background $active-bg-color
@@ -86,8 +81,8 @@ nav
 					border-bottom-color transparent
 
 				&:hover > span
-					color $link-hover-line-color
-					border-bottom-color $link-hover-line-color
+					color $link-hover-line-color2
+					border-bottom-color $link-hover-line-color2
 
 			& > span
 				cursor default

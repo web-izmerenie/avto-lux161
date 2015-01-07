@@ -12,7 +12,7 @@ html(lang="ru")
 				div.head-block
 					div.right-part
 						a(href="/", title="На главную страницу")
-							img(alt="Авто Люкс", src=static_url('images/logo.png'))
+							img(alt="Авто Люкс логотип", src=static_url('images/logo.png'))
 						div.slogan.
 							Аренда и прокат автомобилей<br>
 							Заказ микроавтобусов
@@ -42,5 +42,13 @@ html(lang="ru")
 							li
 								a(href="#wedding")
 									span Свадебные укражения
-		footer.
-			111
+		footer
+			div.contacts
+				a.phone(href="tel:+79889993989") +7 988 999 39 89
+
+				// f**k this shit
+				a.email(href="mailto:luxxavto@yandex.ru") Avto-lux161@yandex.ru
+			div.developer
+				img(alt='Логотип "Веб измерение"' src=static_url('images/web-izmerenie-logo.svg'))
+				| Сделано в студии
+				a(href="http://web-izmerenie.ru" target="_blank") Web izmerenie
