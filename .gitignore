@@ -3,6 +3,7 @@
 __pycashe__
 tornadomail
 config.yaml
+.rope*
 
 node_modules
 gulp
