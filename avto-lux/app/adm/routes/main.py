@@ -19,11 +19,11 @@ patch_tornado()
 
 class AdminMainRoute(AmdinBaseHandler):
 	def get(self):
-		return self.render('zzz.jade') 
+		return self.render('admin.jade') 
 
 
 class EmptyHandler(AmdinBaseHandler):
 	def get(self):
-		self.write(str(self.compare_password(hpasswd=self.create_password(('123')), password='123')))
+		self.write("Lolka")
 	def post(self):
 		return self.write("Hello!")
