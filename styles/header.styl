@@ -30,12 +30,17 @@
 		color $text-color2
 
 	ul.phones
+		reset-box-model()
 		display block
 		margin-top: 10px
 
-		&>li
+		& > li
+			reset-box-model()
 			display block
 			font-metrics 24px 32px
+
+			&:before
+				display none
 
 	button.call_me
 		button-mixin()
@@ -47,14 +52,21 @@
 
 		// TODO active menu items
 
+		ul
+			reset-box-model()
+
 		ul > li
 			$h = 28px
 			$lh = (($h/2) + 2px)
 			$pX = (($h - $lh) / 2)
 
+			reset-box-model()
 			display block
 			font-metrics 14px $lh
 			padding $pX 0
+
+			&:before
+				display none
 
 .catalog-menu
 	@require 'catalog-menu'

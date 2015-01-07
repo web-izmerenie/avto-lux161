@@ -7,12 +7,27 @@
  */
 
 margin-mixin()
-	// p margins
-	h1 + p, h1 + main > p:first-child
-		padding-top 16px
-	p + p
-		padding-top 23px
+	$par = 23px
+	$h1 = 16px
 
-	// h1 margins
-	h1 + h1, h1 + main > h1:first-child, p + h1
-		padding-top 16px
+	// p
+	h1 + p, h1 + main > p:first-child
+		padding-top $h1
+	p + p, ul + p, ol + p
+		padding-top $par
+
+	// h1
+	h1 + h1, h1 + main > h1:first-child, p + h1,
+	ul + h1, ol + h1
+		padding-top $h1
+
+	// ul
+	p + ul, ul + ul, ol + ul, li > ul
+		padding-top $par
+	h1 + ul, h1 + main > ul:first-child
+		padding-top $h1
+	// ol
+	p + ol, ol + ol, ul + ol, li > ol
+		padding-top $par
+	h1 + ol, h1 + main > ol:first-child
+		padding-top $h1

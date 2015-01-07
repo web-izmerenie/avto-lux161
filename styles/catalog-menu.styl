@@ -21,6 +21,7 @@ nav
 	margin 0 auto
 
 	ul
+		reset-box-model()
 		display table-row
 		text-align center
 		z-index 5
@@ -36,6 +37,7 @@ nav
 			$border-color = #fad982
 			$active-bg-color = #b58837
 
+			reset-box-model()
 			display table-cell
 			size auto $h
 			vertical-align top
@@ -43,6 +45,9 @@ nav
 			padding 0 26px
 			padding-top 23px
 			white-space nowrap
+
+			&:before
+				display none
 
 			& > a, & > span
 				display inline-block

@@ -1,0 +1,49 @@
+/**
+ * typical content styles
+ *
+ * @author Viacheslav Lotsmanov
+ * @license GNU/AGPLv3
+ * @see {@link https://github.com/web-izmerenie/avto-lux161/blob/master/LICENSE-AGPLv3|License}
+ */
+
+@require 'black-tags'
+
+h1
+	display block
+	font-metrics 26px 30px
+	font-weight bold
+
+$marked-list-shift = 40px
+
+ul, ol
+	display block
+	margin-left $marked-list-shift
+
+	& > li
+		repair-white-tag()
+
+		display block
+		relative auto
+
+		& + li
+			margin-top 23px
+
+		&:before
+			$s = 10px
+			pseudo-block()
+			size $s
+			background $mark-list-marker-color
+			absolute left -22px top 6px
+			border-radius ($s/2)
+
+ol
+	counter-reset: customlistcounter;
+
+	& > li:before
+		content: counter(customlistcounter, decimal) '.';
+		counter-increment: customlistcounter;
+		background none
+		color $mark-list-marker-color
+		width ($marked-list-shift)
+		text-align right
+		absolute left (-($marked-list-shift + 10px)) top 0

@@ -22,14 +22,19 @@
 	ul.cars
 		$col-size = 184px
 
+		reset-box-model()
 		display table-cell
 		vertical-align top
 		width $col-size
 		text-align center
 
 		& > li
+			reset-box-model()
 			display inline-block
 			width $col-size
+
+			&:before
+				display none
 
 			&:after
 				pseudo-block()

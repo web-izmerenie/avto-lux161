@@ -1,0 +1,36 @@
+/**
+ * black tags blocker
+ * get this or die, bitches!
+ *
+ * @author Viacheslav Lotsmanov
+ * @license GNU/AGPLv3
+ * @see {@link https://github.com/web-izmerenie/avto-lux161/blob/master/LICENSE-AGPLv3|License}
+ */
+
+$black-tags = 'font,li,ul>*,ol>*,[align],[border],[color],[size],[bgcolor]'
+$black-tags = $black-tags+',[background],[cellpadding],[cellspacing],[frame]'
+$black-tags = $black-tags+',frame,frameset,marquee,center,blink,bgsound'
+$black-tags = $black-tags+',basefont,[face],applet,object'
+
+{$black-tags}
+	&:after
+		pseudo-block('Invalid HTML code!')
+		background white
+		color red
+		font-metrics 36px 40px
+		font-weight bold
+		padding 10px
+
+html[lang=ru]
+	{$black-tags}
+		&:after
+			content 'Некорректный HTML код!'
+
+repair-white-tag()
+	&:after
+		reset-box-model()
+		pseudo('', none)
+		background none
+		color inherit
+		font-metrics 0 0
+		font-weight normal
