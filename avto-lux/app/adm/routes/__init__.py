@@ -6,6 +6,6 @@ from .main import (
 )
 
 routes = [
-	('/adm', AdminMainRoute),
+	('/adm/?', AdminMainRoute),
 	('/adm/auth', EmptyHandler),
 ]
