@@ -1,5 +1,5 @@
 import tornado.template
-from .base import BaseHandler
+from .base import AmdinBaseHandler
 from app.mixins.routes_mixin import Custom404Mixin, JsonResponseMixin
 from pyjade.ext.tornado import patch_tornado
 
@@ -17,6 +17,13 @@ from app.models.catalogmodels import(
 patch_tornado()
 
 
-class AdminMainRoute(RequestHandler):
+class AdminMainRoute(AmdinBaseHandler):
 	def get(self):
-		return render('zzz.jade') 
+		return self.render('zzz.jade') 
+
+
+class EmptyHandler(AmdinBaseHandler):
+	def get(self):
+		self.write(str(self.compare_password(hpasswd=self.create_password(('123')), password='123')))
+	def post(self):
+		return self.write("Hello!")

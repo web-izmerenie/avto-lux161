@@ -3,6 +3,7 @@ import tornado.httpserver, tornado.ioloop, tornado.web
 from tornado.options import define, options
 import hashlib
 from .core.routes import routes as core_routes
+from .adm.routes import routes as admin_routes
 
 from .core.routes.testroute import TestRoute
 from .configparser import config
@@ -16,8 +17,7 @@ class AvtoLuxApplication(tornado.web.Application):
 		handlers = []
 		try:
 			#TODO Add sort routes function
-			# handlers = collect_handlers(core_routes)
-			handlers = core_routes
+			handlers = collect_handlers(admin_routes, core_routes)
 		except Exception as e:
 			error_log(e)
 
