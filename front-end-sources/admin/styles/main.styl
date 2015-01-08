@@ -4,7 +4,46 @@
  * @author Viacheslav Lotsmanov
  */
 
-@require 'bootstrap'
+$static-path = '/static/'
+$icon-font-path = pathjoin($static-path, 'icons-fonts/')
 
-body
-	background black
+@require 'bootstrap'
+@require 'nib'
+
+html, body
+	height 100%
+
+.container#login-form
+
+	h1
+		font-size inherit
+		line-height inherit
+		font-weight bold
+
+	// vertical centering
+	@media (min-width $screen-md-min)
+		height 100%
+		text-align center
+
+		.row
+			height 100%
+			text-align center
+
+		.col-md-4.column
+			display inline-block
+			width 33%
+			vertical-align middle
+			float none
+			text-align left
+
+			&:first-child
+				display inline-block
+				height 100%
+
+	form
+		$p = 10px
+		padding-top $p
+		padding-bottom $p
+
+		label
+			width 100%
