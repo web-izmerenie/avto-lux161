@@ -17,7 +17,7 @@ config.yaml
 
 # node
 node_modules
-gulp
+front-end-gulp
 
 static/**/*build.css
 static/**/*build.js
