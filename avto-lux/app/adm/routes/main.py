@@ -1,6 +1,14 @@
 import tornado.template
-from .base import AmdinBaseHandler
-from app.mixins.routes_mixin import Custom404Mixin, JsonResponseMixin
+from .base import (
+	AmdinBaseHandler, 
+	AuthMixin
+)
+
+from app.mixins.routes_mixin import (
+	Custom404Mixin, 
+	JsonResponseMixin
+)
+
 from pyjade.ext.tornado import patch_tornado
 
 from app.models.dbconnect import session
@@ -27,3 +35,8 @@ class EmptyHandler(AmdinBaseHandler):
 		self.write("Lolka")
 	def post(self):
 		return self.write("Hello!")
+
+
+class AuthHandler(AmdinBaseHandler, AuthMixin):
+	def post(self):
+		pass
