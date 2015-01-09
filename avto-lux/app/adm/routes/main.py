@@ -5,7 +5,6 @@ from .base import (
 )
 
 from app.mixins.routes_mixin import (
-	Custom404Mixin, 
 	JsonResponseMixin
 )
 
@@ -37,6 +36,16 @@ class EmptyHandler(AmdinBaseHandler):
 		return self.write("Hello!")
 
 
-class AuthHandler(AmdinBaseHandler, AuthMixin):
+class AuthHandler(AmdinBaseHandler, AuthMixin, JsonResponseMixin):
 	def post(self):
-		pass
+		self.set_secure_cookie('user', 'lolka')
+		return self.json_response({'status': 'success'})
+
+	def get_current_user(self):
+		return self.get_secure_cookie('user')
+
+
+class AdminMainHandler(AmdinBaseHandler, JsonResponseMixin):
+	def post(self):
+		print(self.request)
+		return json_response({'status': 'lol'})

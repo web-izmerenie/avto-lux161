@@ -6,7 +6,7 @@ class AmdinBaseHandler(RequestHandler):
 		return True
 
 
-def AuthMixin:
+class AuthMixin:
 	def create_password(self, symbols):
 		return str(hashlib.sha512(symbols.encode('utf-8')).hexdigest())
 

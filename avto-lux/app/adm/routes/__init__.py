@@ -8,4 +8,5 @@ from .main import (
 routes = [
 	('/adm/?', AdminMainRoute),
 	('/adm/auth', EmptyHandler),
+	('adm/data.json', EmptyHandler)
 ]
