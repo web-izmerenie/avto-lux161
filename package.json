@@ -26,7 +26,7 @@
         "destDir": "./static/",
         "buildFile": "client-build.css",
         "shim": [
-          "./nib-shim"
+          "./shim/nib"
         ]
       },
       "admin": {
@@ -37,8 +37,8 @@
         "destDir": "./static/",
         "buildFile": "admin-build.css",
         "shim": [
-          "./nib-shim",
-          "./bootstrap-stylus-shim"
+          "./shim/nib",
+          "./shim/bootstrap-stylus"
         ]
       }
     },
