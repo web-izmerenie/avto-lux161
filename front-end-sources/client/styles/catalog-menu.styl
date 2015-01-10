@@ -6,12 +6,33 @@
 
 // TODO double sides gradient
 
+$gradi-color1-c1 = alpha(black, 70%)
+$gradi-color1-c2 = alpha(black, 0%)
+
+gradi1($side)
+	background linear-gradient($side, $gradi-color1-c1, $gradi-color1-c2)
+
 &
 	display block
 	overflow hidden
 	size 100% $catalog-menu-height
 	bg('catalog-menu-bg.png', 0 0 repeat-x $bg-invert-color)
 	text-align center
+	relative auto
+	z-index 1
+
+	&:before, &:after
+		pseudo-block()
+		size ($shadow-width/2) 100%
+		z-index -1
+
+	&:before
+		absolute left 0 top 0
+		gradi1(left)
+
+	&:after
+		absolute right 0 top 0
+		gradi1(right)
 
 nav
 	display table
@@ -19,6 +40,7 @@ nav
 	box-sizing border-box
 	max-width ($max-width - 250px)
 	margin 0 auto
+	z-index 5
 
 	ul
 		reset-box-model()
