@@ -1,14 +1,18 @@
 - var main_page = 1
 - var show_h1 = 0
-
-// temporarly
+- var aphorism_block = 1
 - var meta_title = 'Авто Люкс — аренда и прокат автомобилей с водителем. Заказ микроавтобусов.'
 - var meta_description = ''
 - var meta_keywords = ''
 - var page_title = ''
 
+- var html_classes = ''
+
+if aphorism_block
+	- var html_classes = html_classes + 'aphorism'
+
 !!! 5
-html(lang="ru")
+html(lang="ru" class=html_classes)
 	head
 		meta(charset="utf-8")
 

@@ -1,5 +1,6 @@
 /**
  * footer styles
+ * & - <footer>
  *
  * @author Viacheslav Lotsmanov
  */
@@ -13,6 +14,10 @@
 	max-width $max-width
 	relative auto
 	overflow hidden
+
+	html.aphorism &
+		height $footer2-height
+		margin-top -($footer2-height)
 
 	$shadow-color = #594717
 	$shadow-color2 = lighten(lightness($shadow-color, 40), 10)
@@ -52,6 +57,10 @@ $side-blocks-offset = -450px
 	font-metrics 12px 18px
 	color $text-invert-color
 	z-index 20
+	height $footer-height
+
+	html.aphorism &
+		margin-top $aphorism-block-height
 
 .contacts
 	absolute left $side-blocks-shift top 30px
@@ -78,3 +87,41 @@ $side-blocks-offset = -450px
 		display block
 		absolute left (-($s + 10px)) top 1px
 		size $s
+
+html.aphorism & .aphorism-block
+	display block
+	height $aphorism-block-height
+	bg('aphorism-block-bg.png', center 0 repeat-x)
+	relative auto
+	z-index 10
+	text-align center
+
+	gradi($side)
+		$c1 = alpha(black, 70%)
+		$c2 = alpha(black, 0%)
+		background linear-gradient($side, $c1, $c2)
+
+	&:before, &:after
+		pseudo-block()
+		size ($shadow-width/1.8) $aphorism-block-height
+
+	$a = 65%
+
+	&:before
+		absolute left 0 top 0
+		black-gradi-shadow(left, $a)
+
+	&:after
+		absolute right 0 top 0
+		black-gradi-shadow(right, $a)
+
+	.aphorism-text
+		display table
+		size 800px $aphorism-block-height
+		margin 0 auto
+
+		blockquote
+			display table-cell
+			vertical-align middle
+			font-metrics 30px 36px
+			color $text-invert-color2

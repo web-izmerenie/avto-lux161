@@ -12,6 +12,11 @@
 global-reset()
 reset-html5()
 
+black-gradi-shadow($side, $a=70%)
+	$c1 = alpha(black, $a)
+	$c2 = alpha(black, 0%)
+	background linear-gradient($side, $c1, $c2)
+
 html, body
 	reset-box-model()
 	font-metrics 0 0
@@ -36,6 +41,9 @@ body
 		pseudo-block()
 		height $footer-height
 		clear both
+
+		html.aphorism &
+			height $footer2-height
 
 footer
 	@require 'footer'
