@@ -4,30 +4,37 @@
  * @author Viacheslav Lotsmanov
  */
 
-@require 'margin-mixin'
+@import 'button-mixin'
+@import 'margin-mixin'
 
 .catalog-page
 	$w = 284px
+	$margin-X = 43px
+	$sections-p = 31px
+	$detail-p = 15px
 
 	display block
-	margin $content-margin-Y 43px
 
 	main
 		display block
 
-		ul.catalog-sections
+	&.sections
+		margin $content-margin-Y ($margin-X - $sections-p) $content-margin-Y $margin-X
+
+		h1
+			padding-right $sections-p
+
+		main ul.catalog-sections
 			reset-box-model()
 			display block
 			size 100% auto
+			padding-top (28px - 6px)
 
 			& > li
 				reset-box-model()
 				display inline-block
-				margin-left 32px
+				margin-right $sections-p
 				vertical-align top
-
-				&:nth-child(4n-3)
-					margin-left 0
 
 				&:before
 					display none
@@ -61,4 +68,54 @@
 						size $w auto
 						border-radius 10px
 
-	margin-mixin()
+	&.detail
+		margin $content-margin-Y ($margin-X - $detail-p) $content-margin-Y $margin-X
+
+		h1
+			font-metrics 21px 23px
+			padding-right $detail-p
+
+		main
+			.order
+				button-mixin(true)
+				margin-top 20px
+
+			.catalog-detail-item
+				display block
+				margin-top 21px
+
+				img.big-pic
+					display block
+					float left
+					margin-bottom 32px
+					margin-right 45px
+					border-radius 10px
+
+				.description
+					display block
+					margin-bottom 32px
+					padding-right $detail-p
+					font $font
+					margin-mixin()
+
+				ul.photos
+					reset-box-model()
+					display block
+
+					&:before
+						pseudo-block()
+						clear both
+
+					& > li
+						reset-box-model()
+						display inline-block
+						size $w auto
+						margin $detail-p $detail-p 0 0
+
+						&:before
+							display none
+
+						img
+							display block
+							size $w auto
+							border-radius 10px
