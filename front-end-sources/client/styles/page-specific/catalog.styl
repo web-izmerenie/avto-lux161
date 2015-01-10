@@ -21,7 +21,7 @@
 	&.sections
 		margin $content-margin-Y ($margin-X - $sections-p) $content-margin-Y $margin-X
 
-		h1
+		.content > h1
 			padding-right $sections-p
 
 		main ul.catalog-sections
@@ -71,7 +71,7 @@
 	&.detail
 		margin $content-margin-Y ($margin-X - $detail-p) $content-margin-Y $margin-X
 
-		h1
+		.content > h1
 			font-metrics 21px 23px
 			padding-right $detail-p
 
@@ -84,16 +84,18 @@
 				display block
 				margin-top 21px
 
+				$first-block-bottom = (32px - $detail-p)
+
 				img.big-pic
 					display block
 					float left
-					margin-bottom 32px
+					margin-bottom $first-block-bottom
 					margin-right 45px
 					border-radius 10px
 
 				.description
 					display block
-					margin-bottom 32px
+					margin-bottom $first-block-bottom
 					padding-right $detail-p
 					font $font
 					margin-mixin()
