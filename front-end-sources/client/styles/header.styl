@@ -42,6 +42,10 @@
 			&:before
 				display none
 
+			& > a
+				border-bottom 0
+				color $text-color
+
 	button.call_me
 		button-mixin()
 		margin-top 10px
@@ -49,8 +53,6 @@
 	nav.main-menu
 		display block
 		margin-top 10px
-
-		// TODO active menu items
 
 		ul
 			reset-box-model()
