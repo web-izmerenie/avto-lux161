@@ -1,0 +1,64 @@
+/**
+ * catalog pages styles
+ *
+ * @author Viacheslav Lotsmanov
+ */
+
+@require 'margin-mixin'
+
+.catalog-page
+	$w = 284px
+
+	display block
+	margin $content-margin-Y 43px
+
+	main
+		display block
+
+		ul.catalog-sections
+			reset-box-model()
+			display block
+			size 100% auto
+
+			& > li
+				reset-box-model()
+				display inline-block
+				margin-left 32px
+				vertical-align top
+
+				&:nth-child(4n-3)
+					margin-left 0
+
+				&:before
+					display none
+
+				a
+					display block
+					size $w auto
+					border-bottom 0
+					text-align center
+					overflow hidden
+
+					span
+						display inline
+						font $font
+						border-bottom 1px solid $link-text-color
+						transition border-bottom-color $animation-speed $animation-curve
+
+						&:before
+							pseudo-block()
+							height 14px
+
+						&:after
+							pseudo-block()
+							height 24px
+
+					&:hover > span
+						border-bottom-color $link-hover-text-color
+
+					img
+						display block
+						size $w auto
+						border-radius 10px
+
+	margin-mixin()

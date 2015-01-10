@@ -7,13 +7,10 @@
 @require 'margin-mixin'
 
 .content-page
-	$margin-Y = 46px
-	$content-margin = 39px
-
 	display table
 	width 96%
 	max-width $max-content-page-width
-	margin $margin-Y auto
+	margin $content-margin-Y auto
 
 	&:after
 		pseudo-block()
@@ -56,6 +53,6 @@
 			display block
 			max-width $max-content-block-width
 			margin 0 auto
-			padding 0 $content-margin
+			padding 0 $content-margin-X
 
 	margin-mixin()
