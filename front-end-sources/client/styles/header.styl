@@ -64,9 +64,47 @@
 			display block
 			font-metrics 14px $lh
 			padding $pX 0
+			z-index 0
 
 			&:before
 				display none
+
+			&.active > span, &.active > a
+				$p-X = 8px
+				$p-Y = 4px
+
+				relative auto
+				color $text-invert-color2
+				z-index 1
+				border-bottom 0
+
+				&:before
+					pseudo-block()
+					absolute left (-($p-X)) top (-($p-Y))
+					padding $p-Y $p-X
+					size 100%
+					background $text-color2
+					z-index -2
+
+			&.active > span
+				cursor default
+
+			&.active > a
+				&:after
+					pseudo-block()
+					absolute left 0 bottom -1px
+					size 100% 1px
+					background $link-line-color2
+					overflow hidden
+					font-metrics 0 0
+					z-index 0
+					transition background $animation-speed $animation-curve
+
+				&:hover
+					color $link-hover-text-color2
+
+					&:after
+						background $link-hover-line-color2
 
 .catalog-menu
 	@require 'catalog-menu'
