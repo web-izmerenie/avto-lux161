@@ -4,9 +4,13 @@
  * @author Viacheslav Lotsmanov
  */
 
+html.form-popup body
+	overflow hidden
+
 body > form
-	display block
-	absolute left 50% top 50%
+	display none
+	opacity 0
+	fixed left 50% top 50%
 	background $bg-invert-color
 	size 270px 210px
 	z-index 200
@@ -76,3 +80,11 @@ body > form
 
 	input[placeholder]
 		text-overflow ellipsis
+
+body > .form-overlay
+	display block
+	fixed left 0 top 0
+	size 100%
+	background alpha(black, 60%)
+	z-index 190
+	opacity 0
