@@ -23,9 +23,9 @@ form#order-form(action="/api/forms/", method="post")
 	div.time
 		span Время
 		label.number
-			input(type="number", name="hours", value="0", maxlength="2", placeholder="Часы")
+			input(type="number", name="hours", value="0", maxlength="2", min="0", max="23", placeholder="Часы")
 		label.number
-			input(type="number", name="minutes", value="0", maxlength="2", placeholder="Минуты")
+			input(type="number", name="minutes", value="0", maxlength="2", min="0", max="59", placeholder="Минуты")
 	// for bots
 	input(type="text", name="message", value="", style="display:none;", class="b")
 	label.submit
