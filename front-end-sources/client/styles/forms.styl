@@ -47,7 +47,7 @@ body > form
 			bg('form-closer.svg', center center no-repeat)
 			size $w $h
 
-	label.text > input
+	label.text > input, label.number > input
 		reset-box-model()
 		display block
 		backgroun white
@@ -107,6 +107,60 @@ body > form
 		display block
 		font $font
 
+	label.date
+		display block
+		margin-top 9px
+		relative auto
+
+		&:before
+			pseudo-block()
+			size 19px 22px
+			bg('calendar.svg', center center no-repeat)
+			absolute left 0 top 5px
+
+		input
+			reset-box-model()
+			display block
+			background $bg-invert-color
+			color $text-invert-color
+			font $font
+			font-weight bold
+			padding 4px 4px 4px 25px
+			width 100%
+			box-sizing border-box
+
+	.time
+		display block
+		margin-top 4px
+
+		& > span
+			font $font
+			font-weight bold
+			vertical-align middle
+			margin-right 12px
+			padding-left 25px
+			relative auto
+
+			&:before
+				pseudo-block()
+				size 19px 20px
+				bg('clock.svg', center center no-repeat)
+				absolute left 0 top -1px
+
+		label.number
+			display inline-block
+			width 50px
+			vertical-align middle
+			relative auto
+
+			& + label.number
+				margin-left 15px
+
+				&:before
+					pseudo-block(':')
+					font $font
+					absolute left -10px top 3px
+
 body > .form-overlay
 	display block
 	fixed left 0 top 0
@@ -114,3 +168,6 @@ body > .form-overlay
 	background alpha(black, 60%)
 	z-index 190
 	opacity 0
+
+form#order-form
+	width 300px
