@@ -46,7 +46,7 @@ body > form
 			bg('form-closer.svg', center center no-repeat)
 			size $w $h
 
-	input[type=text], input[type=tel]
+	label.text > input
 		reset-box-model()
 		display block
 		backgroun white
@@ -58,11 +58,8 @@ body > form
 		font-metrics 15px 17px
 		color black
 
-		& + input
-			margin-top 8px
-
-		& + input[type=submit]
-			margin-top 22px
+	label.text + label.text > input
+		margin-top 8px
 
 	input[type=submit]
 		$h = 35px
@@ -77,9 +74,33 @@ body > form
 		font-metrics 14px 19px
 		border-radius 10px
 		cursor pointer
+		margin-top 22px
 
 	input[placeholder]
 		text-overflow ellipsis
+
+	label
+		display block
+		relative auto
+
+		input
+			transition border-color 0.5s $animation-curve
+
+		.err-msg
+			display block
+			background alpha(white, 60%)
+			color red
+			font $font
+			font-metrics 11px 13px
+			box-sizing border-box
+			padding 4px
+			absolute top 100% left 0
+			white-space nowrap
+			z-index 210
+			opacity 0
+
+			& + input
+				border-color red
 
 body > .form-overlay
 	display block

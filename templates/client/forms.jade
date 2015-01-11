@@ -1,8 +1,10 @@
 form#call-me-form(action="/api/forms/", method="post")
 	h2 Заказать звонок
 	input(type="hidden", name="action", value="call")
-	input(type="text", name="name", value="", placeholder="Имя")
-	input(type="tel", name="phone", value="", placeholder="Телефон")
+	label.text
+		input(type="text", name="name", value="", placeholder="Имя")
+	label.text
+		input(type="tel", name="phone", value="", placeholder="Телефон")
 	// for bots
 	input(type="text", name="message", value="", style="display:none;")
 	input(type="submit", value="Отправить")
