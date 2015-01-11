@@ -66,7 +66,6 @@ body > form
 		$h = 35px
 		reset-box-model()
 		display block
-		background linear-gradient(top, #dc6a0d, #a04300)
 		size auto $h
 		padding 0 15px
 		box-sizing border-box
@@ -76,6 +75,13 @@ body > form
 		border-radius 10px
 		cursor pointer
 		margin-top 22px
+		background linear-gradient(top, #dc6a0d, #a04300, #dc6a0d)
+		background-size 100% 200%
+		background-position 0 0
+		transition background-position $animation-speed $animation-curve
+
+		&:hover
+			background-position 0 -100%
 
 	input[placeholder]
 		text-overflow ellipsis
