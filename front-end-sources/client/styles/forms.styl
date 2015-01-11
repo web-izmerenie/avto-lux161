@@ -62,26 +62,51 @@ body > form
 	label.text + label.text > input
 		margin-top 8px
 
-	input[type=submit]
+	label.submit
 		$h = 35px
-		reset-box-model()
-		display block
-		size auto $h
-		padding 0 15px
-		box-sizing border-box
-		color white
-		font $font
-		font-metrics 14px 19px
-		border-radius 10px
-		cursor pointer
-		margin-top 22px
-		background linear-gradient(top, #dc6a0d, #a04300, #dc6a0d)
-		background-size 100% 200%
-		background-position 0 0
-		transition background-position $animation-speed $animation-curve
 
-		&:hover
-			background-position 0 -100%
+		display inline-block
+		relative auto
+		cursor pointer
+
+		&:after
+			pseudo-block()
+			size 100% $h
+			bg('spinner.png', center center no-repeat)
+			absolute left 0 bottom 0
+			z-index 250
+			opacity 0
+			transition opacity $animation-speed $animation-curve
+
+		input[type=submit]
+			reset-box-model()
+			display inline-block
+			size auto $h
+			padding 0 15px
+			box-sizing border-box
+			color white
+			font $font
+			font-metrics 14px 19px
+			border-radius 10px
+			cursor pointer
+			margin-top 22px
+			background linear-gradient(top, #dc6a0d, #a04300, #dc6a0d)
+			background-size 100% 200%
+			background-position 0 0
+			opacity 1
+			transition background-position $animation-speed $animation-curve,
+				color $animation-speed $animation-curve,
+				opacity $animation-speed $animation-curve
+
+			&:hover
+				background-position 0 -100%
+
+	&.ajax-process
+		label.submit:after
+			opacity 1
+		label.submit input[type=submit]
+			color alpha(white, 0%)
+			opacity 0.7
 
 	input[placeholder]
 		text-overflow ellipsis

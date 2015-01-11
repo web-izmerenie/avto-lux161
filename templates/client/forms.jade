@@ -7,7 +7,8 @@ form#call-me-form(action="/api/forms/", method="post")
 		input(type="tel", name="phone", value="", placeholder="Телефон")
 	// for bots
 	input(type="text", name="message", value="", style="display:none;", class="b")
-	input(type="submit", value="Отправить")
+	label.submit
+		input(type="submit", value="Отправить")
 
 form#order-form(action="/api/forms/", method="post")
 	h2='Сделать заказ ' + page_title
@@ -26,4 +27,5 @@ form#order-form(action="/api/forms/", method="post")
 			input(type="number", name="minutes", value="0", maxlength="2", placeholder="Минуты")
 	// for bots
 	input(type="text", name="message", value="", style="display:none;", class="b")
-	input(type="submit", value="Отправить")
+	label.submit
+		input(type="submit", value="Отправить")

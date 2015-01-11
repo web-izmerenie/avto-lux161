@@ -69,10 +69,14 @@ $forms.each !->
 	$ @ .prepend $closer
 
 	reset-form = ~> reset-form-bind .call @
+	free = !~>
+		$ @ .remove-class \ajax-process
+		process := false
 
 	<- $ @ .submit
 	return false if process
 	process := true
+	$ @ .add-class \ajax-process
 
 	reset-form!
 
@@ -87,7 +91,7 @@ $forms.each !->
 		success: (json)!~>
 			unless json.status?
 				window.alert local.forms.err.server_data
-				process := false
+				free!
 				return
 
 			switch json.status
@@ -100,21 +104,21 @@ $forms.each !->
 				$wrap.slide-down speed
 			| _ =>
 				window.alert local.forms.err.server_data
-				process := false
+				free!
 				return
 
-			process := false
+			free!
 		error: (xhr, status, err)!~>
 			if xhr.responseJSON and xhr.responseJSON.status
 				switch xhr.responseJSON.status
 				| \unknown_form =>
 					window.alert local.forms.err.unknown_form
-					process := false
+					free!
 					return
 				| \error =>
 					unless xhr.responseJSON.error_fields?
 						window.alert local.forms.err.server_data
-						process := false
+						free!
 						return
 
 					f-arr = []
@@ -124,7 +128,7 @@ $forms.each !->
 						if $field.length <= 0
 							$ @ .find 'label > .err-msg' .remove!
 							window.alert local.forms.err.field_not_found
-							process := false
+							free!
 							return
 						$err-msg = $ '<span/>'
 							.add-class \err-msg
@@ -143,22 +147,22 @@ $forms.each !->
 								item.$field .off \focus
 							false
 
-					process := false
+					free!
 					return
 				| \system_fail =>
 					window.alert local.forms.err.system_fail
-					process := false
+					free!
 					return
 				| _ =>
 					window.alert local.forms.err.server_data
-					process := false
+					free!
 					return
 
 			if err instanceof SyntaxError
 				window.alert local.forms.err.server_data
 			else
 				window.alert local.forms.err.ajax
-			process := false
+			free!
 	}
 
 	false
