@@ -71,6 +71,11 @@ $forms.each !->
 
 	$ @ .prepend $closer
 
+	$ @ .find 'input[type=date]' .each !->
+		require './datepicker-init'
+		$ @ .attr \type \text
+		$ @ .datepicker!
+
 	reset-form = ~> reset-form-bind .call @
 	free = !~>
 		$ @ .remove-class \ajax-process

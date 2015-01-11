@@ -67,6 +67,11 @@
           "jquery.colorbox": {
             "path": "./node_modules/jquery-colorbox",
             "exports": ""
+          },
+          "jquery-ui.datepicker": {
+            "path": "./bower_components/jquery-ui/ui/datepicker.js",
+            "exports": "",
+            "depends": { "jquery": "jQuery" }
           }
         }
       }

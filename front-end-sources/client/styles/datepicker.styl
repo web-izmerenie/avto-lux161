@@ -1,0 +1,98 @@
+/**
+ * datepicker styles
+ *
+ * @author Viacheslav Lotsmanov
+ */
+
+#ui-datepicker-div
+	display block
+	z-index 400 !important
+	font $font
+	font-metrics 11px 13px
+	background linear-gradient(top, #111, #222)
+	border 3px solid #ccc
+	border-top-color #eaeaea
+	border-bottom-color #aaa
+	border-radius 6px
+	box-shadow 0 0 2px 2px alpha(black, 50%)
+	padding 10px
+
+	.ui-datepicker-header
+		display block
+		relative auto
+		size 100% auto
+		padding-bottom 10px
+
+		.ui-datepicker-prev, .ui-datepicker-next
+			display block
+			font-metrics 0 0
+			text-decoration none
+			border-bottom 0
+			cursor pointer
+			padding 6px
+			margin-top -9px
+
+			&, &:before
+				size 11px 13px
+
+			&:before
+				pseudo-block()
+				absolute left 3px top 6px
+				transition opacity $animation-speed $animation-curve
+				opacity 1
+
+			&:hover:before
+				opacity 0.7
+
+		.ui-datepicker-prev
+			absolute left -1px top 2px
+
+			&:before
+				bg('backward.svg', center center no-repeat)
+
+		.ui-datepicker-next
+			absolute right -3px top 2px
+
+			&:before
+				bg('forward.svg', center center no-repeat)
+
+		.ui-datepicker-title
+			display block
+			text-align center
+			padding 0 25px
+			color $text-color2
+
+	table.ui-datepicker-calendar
+		display table
+		size 100% auto
+
+		tr
+			display table-row
+
+		tr td, tr th
+			display table-cell
+			text-align center
+			vertical-align middle
+			text-transform uppercase
+
+		tr th
+			padding 2px 5px
+			color alpha($text-color, 50%)
+
+		tr td
+			a
+				display block
+				text-align center
+				border-bottom 0
+				padding 2px 5px
+				border-radius 5px
+				background alpha(black, 0%)
+				transition background-color $animation-speed $animation-curve,
+					color $animation-speed $animation-curve
+
+			&.ui-datepicker-current-day, &.ui-datepicker-today
+				a
+					color $text-color2
+
+			&.ui-datepicker-current-day a, a.ui-state-hover
+				background black
