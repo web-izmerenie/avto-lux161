@@ -22,6 +22,12 @@ reset-form-bind = !->
 		$ @ .closest \label .find \input .off \focus
 		$ @ .animate opacity: 0, speed, !-> $ @ .remove!
 
+restore-form-bind = !->
+	return if $ @ .find '.success-msg' .length <= 0
+	$ @ .find '>label, >input' .not '.b' .slide-down speed
+	$ @ .find 'input:text, input[type=tel]' .val ''
+	$ @ .find \.success-msg .remove!
+
 $forms.each !->
 	id = $ @ .attr \id
 	$closer = $ '<button/>' .add-class \closer .html \Закрыть
@@ -43,6 +49,8 @@ $forms.each !->
 
 		false
 
+	restore-form = ~> restore-form-bind .call @
+
 	$closer .click ~>
 		return false if process
 		process := true
@@ -52,6 +60,7 @@ $forms.each !->
 			.off \click
 		$ @ .animate opacity: 0, speed, !->
 			$ @ .css \display, \none
+			restore-form!
 			$html .remove-class \form-popup
 			process := false
 
