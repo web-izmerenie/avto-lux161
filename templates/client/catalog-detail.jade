@@ -1,0 +1,67 @@
+extends layout
+
+block page-specific
+	- var show_h1 = 1
+	- var page_title = 'Тойота Камри'
+
+	.catalog-page.detail
+		.content
+			if show_h1
+				if page_title
+					h1=page_title
+			main
+				a.order(href="#order-form") Сделать заказ
+				.catalog-detail-item
+					img.big-pic(alt="Фото Тойота Камри" src=static_url('tmp/car_big.jpg'))
+					.description
+						h1 Аренда Toyota Camry (2013) с водителем
+						h2 Аренда Toyota Camry (2013) с водителем
+						h3 Аренда Toyota Camry (2013) с водителем
+						p.
+							Цвет: белый;<br>
+							Салон: черный, кожаный, климат-контроль.
+						p Цена: <strong>800</strong> - <strong>1000</strong> руб/час (мин 3 часа);
+						p Трансфер: Дневной (7.00-23.00) - <strong>1200 руб</strong>; Ночной (23.00-7.00) - <strong>1500</strong> руб
+					ul.photos
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big2.png'), title="Nigga nigga nigga Nigga nigga nigga Nigga nigga nigga Nigga nigga nigga Nigga nigga nigga")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))
+						li
+							a(href=static_url('tmp/car_big.jpg'), title="Toyota Camry")
+								img(alt="Фото Тойота Камри" src=static_url('tmp/car.jpg'))

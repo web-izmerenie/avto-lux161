@@ -1,10 +1,9 @@
 /**
  * catalog menu styles
+ * & - <header> .catalog-menu
  *
  * @author Viacheslav Lotsmanov
  */
-
-// TODO double sides gradient
 
 &
 	display block
@@ -12,6 +11,21 @@
 	size 100% $catalog-menu-height
 	bg('catalog-menu-bg.png', 0 0 repeat-x $bg-invert-color)
 	text-align center
+	relative auto
+	z-index 1
+
+	&:before, &:after
+		pseudo-block()
+		size ($shadow-width/2) 100%
+		z-index -1
+
+	&:before
+		absolute left 0 top 0
+		black-gradi-shadow(left)
+
+	&:after
+		absolute right 0 top 0
+		black-gradi-shadow(right)
 
 nav
 	display table
@@ -19,6 +33,7 @@ nav
 	box-sizing border-box
 	max-width ($max-width - 250px)
 	margin 0 auto
+	z-index 5
 
 	ul
 		reset-box-model()
