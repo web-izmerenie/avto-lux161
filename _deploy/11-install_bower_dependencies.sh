@@ -1,0 +1,1 @@
+../web-front-end-deploy/tasks/11-install_bower_dependencies.sh

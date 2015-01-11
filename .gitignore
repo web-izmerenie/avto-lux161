@@ -17,6 +17,7 @@ config.yaml
 
 # node
 node_modules
+bower_components
 front-end-gulp
 
 static/**/*build.css
