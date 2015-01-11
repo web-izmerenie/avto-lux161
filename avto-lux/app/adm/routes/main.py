@@ -38,6 +38,7 @@ class EmptyHandler(AmdinBaseHandler):
 
 class AuthHandler(AmdinBaseHandler, AuthMixin, JsonResponseMixin):
 	def post(self):
+		print(self.request.body)
 		self.set_secure_cookie('user', 'lolka')
 		return self.json_response({'status': 'success'})
 
@@ -46,6 +47,15 @@ class AuthHandler(AmdinBaseHandler, AuthMixin, JsonResponseMixin):
 
 
 class AdminMainHandler(AmdinBaseHandler, JsonResponseMixin):
+	actions = {
+		'name': {
+			'func': 'func',
+			'args': 'args',
+			'kwargs': {}
+		}
+	}
+
 	def post(self):
 		print(self.request)
-		return json_response({'status': 'lol'})
+		self.json_response({'status': 'lol'})
+		print(self.request_time())

@@ -1,7 +1,7 @@
 from sqlalchemy import (
-	Column, 
-	String, 
-	Integer, 
+	Column,
+	String,
+	Integer,
 	Boolean,
 	DateTime,
 	Text,
@@ -12,7 +12,8 @@ from sqlalchemy.dialects.postgresql import *
 from sqlalchemy.orm import relationship
 from .dbconnect import Base, dbprefix
 from .pagemodels import PageMixin, IdMixin
-	
+from sqlalchemy.dialects.postgresql import JSON
+
 
 class CatalogSectionModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'catalog'
@@ -30,7 +31,7 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 
 	desctiption = Column(Text)
 	main_image = Column(String(8192))
-	images = Column(ARRAY(String))
+	images = Column(JSON)
 
 	section_id = Column(Integer, ForeignKey(dbprefix + 'catalog.id'))
 
