@@ -34,6 +34,8 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 	images = Column(JSON)
 
 	section_id = Column(Integer, ForeignKey(dbprefix + 'catalog.id'))
+	order_id = ForeignKey('OrderModel')
+
 
 	# Inheritance from catalog
 

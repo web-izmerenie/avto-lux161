@@ -13,7 +13,7 @@ def collect_handlers(*args):
 	routes  = []
 	for item in args:
 		routes += item
-	routeslist = [x[0] for x in routes]
+	routeslist = [(lambda y: y + '/' if not y.endswith('/') else y)(x[0]) for x in routes]
 	duplicated = { x for x in routeslist if routeslist.count(x) > 1 }
 	if len(duplicated) > 0:
 		raise CollectHandlersException("Duplicate routes! {0}".format(duplicated))

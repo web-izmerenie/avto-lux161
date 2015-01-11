@@ -3,12 +3,14 @@ from sqlalchemy import (
 	String,
 	Integer,
 	Boolean,
-	DateTime
+	DateTime,
+	ForeignKey
 	)
 from app.configparser import config
 from .dbconnect import Base, dbprefix
 from sqlalchemy.dialects.postgresql import *
 from .pagemodels import IdMixin
+from .catalogmodels import CatalogItemModel
 
 
 class CallModel(Base, IdMixin):
@@ -19,15 +21,14 @@ class CallModel(Base, IdMixin):
 	date  = Column(DateTime)
 
 
-
 class OrderModel(Base, IdMixin):
 	__tablename__ = dbprefix + 'orders'
 
 	name = Column(String(4096))
 	email = Column(String(8192))
-	date = Column(DateTime)
 	phone = Column(String(4096))
 	date = Column(DateTime)
+	orders = Column(Integer, ForeignKey(dbprefix + 'catalog_items.id'))
 
 
 class PhoneModel(Base, IdMixin):

@@ -2,23 +2,21 @@ __all__ = ['base', 'main']
 
 
 from .main import (
-	MainRoute, 
+	MainRoute,
 	PageRoute,
 	ItemRoute,
-	CallHandler,
-	OrderHandler,
-	UrlToRedirect
+	UrlToRedirect,
+	FormsHandler
 )
 
 from .testroute import TestRoute
 
 routes = [
 	('/', MainRoute),
+	('/api/forms/', FormsHandler),
 
 	('/test/(.*?).html', TestRoute), ## Only for testing slised pages
 	('/test/(.*?)', TestRoute),
-	('/api/calls', CallHandler),
-	('/api/orders', OrderHandler),
 
 	('/([-0-9])+(.html)', UrlToRedirect),
 	('/(.*?)/item/(.*?).html', UrlToRedirect),

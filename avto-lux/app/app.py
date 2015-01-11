@@ -25,13 +25,14 @@ class AvtoLuxApplication(tornado.web.Application):
 			template_path=os.path.join(os.getcwd(), config('TEMPLATES_PATH')),
 			static_path=os.path.join(os.getcwd(), config('STATIC_PATH')),
 			debug=True,
+			autoreload=False,
 			xsrf_cookies = False,
 			cookie_secret = str(hashlib.sha224(os.urandom(100)).hexdigest()))
 		tornado.web.Application.__init__(self, handlers, **settings)
 
 
 def run_instance(port, host=''):
-	# init_models()
+	init_models()
 	tornado.options.parse_command_line()
 	http_server = tornado.httpserver.HTTPServer(AvtoLuxApplication())
 	http_server.listen(port, address=host)
