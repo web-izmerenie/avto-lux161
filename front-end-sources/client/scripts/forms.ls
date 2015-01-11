@@ -17,6 +17,8 @@ process = false
 
 (local) <-! (require './get-local')
 
+hide-form-selector = '>label, >input:not(.b), >.time'
+
 reset-form-bind = !->
 	$ @ .find 'label > .err-msg' .each !->
 		$ @ .closest \label .find \input .off \focus
@@ -24,8 +26,9 @@ reset-form-bind = !->
 
 restore-form-bind = !->
 	return if $ @ .find '.success-msg' .length <= 0
-	$ @ .find '>label, >input' .not '.b' .slide-down speed
-	$ @ .find 'input:text, input[type=tel]' .val ''
+	$ @ .find hide-form-selector .slide-down speed
+	$ @ .find 'input:text, input[type=tel], input[type=date]' .val ''
+	$ @ .find 'input[type=number]' .val '0'
 	$ @ .find \.success-msg .remove!
 
 $forms.each !->
@@ -83,6 +86,8 @@ $forms.each !->
 	data-to-send = $ @ .serialize-array!
 	data-to-send.push name: \ajax, value: \Y
 
+	action = $ @ .find 'input[name=action]' .val!
+
 	$ .ajax {
 		url: $ @ .attr \action
 		method: \POST
@@ -97,9 +102,9 @@ $forms.each !->
 			switch json.status
 			| \success =>
 				$wrap = $ '<div/>' .add-class \success-msg .hide!
-				$msg = $ '<p/>' .html local.forms.response.call.success
+				$msg = $ '<p/>' .html local.forms.response[action].success
 				$wrap .append $msg
-				$ @ .find '>label, >input' .slide-up speed
+				$ @ .find hide-form-selector .slide-up speed
 				$ @ .append $wrap
 				$wrap.slide-down speed
 			| _ =>
