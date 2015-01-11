@@ -3,6 +3,5 @@
   "name": "avto-lux161",
   "version": "0.0.0",
   "dependencies": {
-    "jQueryFormStyler": "git://github.com/Dimox/jQueryFormStyler.git#1.6.1"
   }
 }

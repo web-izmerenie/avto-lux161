@@ -1,0 +1,78 @@
+/**
+ * forms styles
+ *
+ * @author Viacheslav Lotsmanov
+ */
+
+body > form
+	display block
+	absolute left 50% top 50%
+	background $bg-invert-color
+	size 270px 210px
+	z-index 200
+	transform translate(-50%, -50%)
+	padding (37px - 19px) 36px 0 30px
+	box-sizing border-box
+	color $text-invert-color
+	border-radius 12px
+
+	$border-color = #d3d3d3
+
+	h2
+		font-metrics 21px 23px
+		padding-bottom 20px
+
+	.closer
+		$w = 16px
+		$h = 16px
+
+		reset-box-model()
+		display block
+		absolute right 8px top 8px
+		color transparent
+		background transparent
+		size $w $h
+		font-metrics 0 0
+		overflow hidden
+		cursor pointer
+
+		&:before
+			pseudo-block()
+			absolute top 0 right 0
+			bg('form-closer.svg', center center no-repeat)
+			size $w $h
+
+	input[type=text], input[type=tel]
+		reset-box-model()
+		display block
+		backgroun white
+		border 1px solid $border-color
+		size 100% 31px
+		box-sizing border-box
+		padding 6px
+		font $font
+		font-metrics 15px 17px
+		color black
+
+		& + input
+			margin-top 8px
+
+		& + input[type=submit]
+			margin-top 22px
+
+	input[type=submit]
+		$h = 35px
+		reset-box-model()
+		display block
+		background linear-gradient(top, #dc6a0d, #a04300)
+		size auto $h
+		padding 0 15px
+		box-sizing border-box
+		color white
+		font $font
+		font-metrics 14px 19px
+		border-radius 10px
+		cursor pointer
+
+	input[placeholder]
+		text-overflow ellipsis
