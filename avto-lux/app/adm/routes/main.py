@@ -1,6 +1,8 @@
+import os
+from app.configparser import config
 import tornado.template
 from .base import (
-	AmdinBaseHandler, 
+	AmdinBaseHandler,
 	AuthMixin
 )
 
@@ -48,14 +50,22 @@ class AuthHandler(AmdinBaseHandler, AuthMixin, JsonResponseMixin):
 
 class AdminMainHandler(AmdinBaseHandler, JsonResponseMixin):
 	actions = {
-		'name': {
-			'func': 'func',
-			'args': 'args',
-			'kwargs': {}
-		}
+
+		# 'name': {
+		# 	'func': 'func',
+		# 	'args': 'args',
+		# 	'kwargs': {}
+		# }
 	}
 
 	def post(self):
 		print(self.request)
 		self.json_response({'status': 'lol'})
 		print(self.request_time())
+
+
+class ImageLoadHandler(AmdinBaseHandler, JsonResponseMixin):
+	def post(self):
+		files = (x for x in request.files)
+
+		return json_response()

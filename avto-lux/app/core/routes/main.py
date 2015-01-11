@@ -10,7 +10,7 @@ from sqlalchemy import select, func
 ## Debug
 from app.models.usermodels import User
 from app.models.pagemodels import (
-	StaticPageModel, 
+	StaticPageModel,
 	UrlMapping
 )
 from app.models.catalogmodels import(
@@ -45,12 +45,7 @@ class ItemRoute(BaseHandler, Custom404Mixin):
 	def get(self, category, item):
 		return self.render('yyy.jade') #Replace to catalog.jade
 
-
-class CallHandler(BaseHandler):
+class FormHandler(BaseHandler, JsonResponseMixin):
 	def post(self):
-		pass
-
-
-class OrderHandler(BaseHandler):
-	def post(self):
-		pass
+		action = request.body
+		return json_response({})
