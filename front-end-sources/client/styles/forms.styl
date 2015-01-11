@@ -12,13 +12,14 @@ body > form
 	opacity 0
 	fixed left 50% top 50%
 	background $bg-invert-color
-	size 270px 210px
+	size 270px auto
 	z-index 200
 	transform translate(-50%, -50%)
-	padding (37px - 19px) 36px 0 30px
+	padding (37px - 19px) 36px 22px 30px
 	box-sizing border-box
 	color $text-invert-color
 	border-radius 12px
+	transition height 0.5s $animation-curve
 
 	$border-color = #d3d3d3
 
@@ -101,6 +102,10 @@ body > form
 
 			& + input
 				border-color red
+
+	.success-msg
+		display block
+		font $font
 
 body > .form-overlay
 	display block

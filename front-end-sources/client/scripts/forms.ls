@@ -17,6 +17,11 @@ process = false
 
 (local) <-! (require './get-local')
 
+reset-form-bind = !->
+	$ @ .find 'label > .err-msg' .each !->
+		$ @ .closest \label .find \input .off \focus
+		$ @ .animate opacity: 0, speed, !-> $ @ .remove!
+
 $forms.each !->
 	id = $ @ .attr \id
 	$closer = $ '<button/>' .add-class \closer .html \Закрыть
@@ -54,13 +59,13 @@ $forms.each !->
 
 	$ @ .prepend $closer
 
+	reset-form = ~> reset-form-bind .call @
+
 	<- $ @ .submit
 	return false if process
 	process := true
 
-	$ @ .find 'label > .err-msg' .each !->
-		$ @ .closest \label .find \input .off \focus
-		$ @ .animate opacity: 0, speed, !-> $ @ .remove!
+	reset-form!
 
 	data-to-send = $ @ .serialize-array!
 	data-to-send.push name: \ajax, value: \Y
@@ -78,7 +83,12 @@ $forms.each !->
 
 			switch json.status
 			| \success =>
-				console.log 2222
+				$wrap = $ '<div/>' .add-class \success-msg .hide!
+				$msg = $ '<p/>' .html local.forms.response.call.success
+				$wrap .append $msg
+				$ @ .find '>label, >input' .slide-up speed
+				$ @ .append $wrap
+				$wrap.slide-down speed
 			| _ =>
 				window.alert local.forms.err.server_data
 				process := false
