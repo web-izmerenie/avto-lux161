@@ -8,7 +8,7 @@ from .adm.routes import routes as admin_routes
 from .core.routes.testroute import TestRoute
 from .configparser import config
 from .models.init_models import init_models
-from .utils import collect_handlers, error_log
+from .utils import collect_handlers, error_log, get_json_localization
 
 
 

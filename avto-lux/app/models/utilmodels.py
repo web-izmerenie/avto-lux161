@@ -25,10 +25,9 @@ class OrderModel(Base, IdMixin):
 	__tablename__ = dbprefix + 'orders'
 
 	name = Column(String(4096))
-	email = Column(String(8192))
-	phone = Column(String(4096))
+	callback = Column(String(8192))
 	date = Column(DateTime)
-	orders = Column(Integer, ForeignKey(dbprefix + 'catalog_items.id'))
+	item_id = Column(Integer, ForeignKey(dbprefix + 'catalog_items.id'))
 
 
 class PhoneModel(Base, IdMixin):

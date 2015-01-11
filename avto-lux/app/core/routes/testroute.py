@@ -6,4 +6,4 @@ patch_tornado()
 
 class TestRoute(BaseHandler):
 	def get(self, file):
-		return self.render(str(file) + '.jade')
+		return self.render(str(file) + '.jade', show_h1=1)

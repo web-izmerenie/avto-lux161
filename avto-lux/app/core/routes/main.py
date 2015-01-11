@@ -25,8 +25,12 @@ from app.models.utilmodels import (
 	OrderModel
 )
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-import time
-import datetime
+from datetime import date, time, datetime
+from app.utils import (
+	get_json_localization,
+	send_mail
+)
+from app.configparser import config
 
 patch_tornado()
 
@@ -55,8 +59,11 @@ class ItemRoute(BaseHandler, Custom404Mixin):
 		return self.render('yyy.jade') #Replace to catalog.jade
 
 
+
 class FormsHandler(JsonResponseMixin):
 	def post(self):
+		is_ajax = False
+		localization = get_json_localization()['ru']['forms']
 		actions = {
 			'call' : {
 				'fn': self.save_call,
@@ -65,78 +72,103 @@ class FormsHandler(JsonResponseMixin):
 				'fn': self.save_order,
 			}
 		}
-		is_ajax = None
+
 		try:
-			is_ajax = self.get_argument('json')
+			is_ajax = self.get_argument('ajax')
 		except MissingArgumentError:
 			pass
 
 		body = str(self.request.body)
 		action = self.get_argument('action')
 
+
 		if action not in actions.keys():
 			if is_ajax:
-				self.set_status(500)
-				return self.json_response({'status': 'systemfail'})
+				self.set_status(400)
+				return self.json_response({'status': 'unknown_form'})
 			return self.write("Lol, request isn't correct")
 
+		p_title = localization['response_page'][action]
 		fn = actions[action]['fn']
 		args = dict([ x.split('=') for x in body.split('&') if 'action' not in x ])
 
-		if self.validate_fields(args):
+		errors = self.validate_fields(args)
+		if len(errors) == 0:
 			try:
 				fn(args)
 			except Exception as e:
 				print(e)
 				self.set_status(500)
-				return self.json_response({'status': 'systemfail'})\
+				return self.json_response({'status': 'system_fail'})\
 					if is_ajax\
-					else self.write('Here should be a 500 page')
+					else self.write('Internal server Error')
 
 			if is_ajax:
 				return self.json_response({'status': 'success'})
-			self.write('Lol, it is not ajax. Loosers.')
 
+			kwrgs = self.set_kwargs(
+				success_msg_list=['lol', 'you','are', 'nigga'],
+				title=p_title)
+			return self.render('client/content-page.jade', **kwargs)
+
+		else:
+			if is_ajax:
+				self.set_status(400)
+				self.json_response({
+					'status': 'error',
+					'error_fields': { x: 'required' for x in errors }
+					})
+			else:
+				err_list = [localization['err']['required_page'].format(localization['fields'][x]) \
+					for x in errors ]
+				kwrgs = self.set_kwargs(
+					error_msg_list=err_list,
+					title=p_title)
+				self.render('client/content-page.jade', **kwrgs)
+
+
+	def set_kwargs(self, success_msg_list=[], error_msg_list=[], title=''):
+		return {
+				'page_content':'',
+				'show_h1': 1,
+				'page_title': title,
+				'success_msg_list': success_msg_list,
+				'error_msg_list':error_msg_list
+			}
 
 	def validate_fields(self, fields):
-		print(fields)
-		required_fields = ['name', 'phone', '']
 		err_stack = []
+		all_required_fields = ['name', 'phone', 'callback']
 
 		for key in fields:
-			if key in required_fields and fields[key] is '':
+			if key in all_required_fields and fields[key] is '':
 				err_stack.append(key)
 
-		if len(err_stack) > 0:
-			self.json_response({
-				'status': 'error',
-				'errorlist': [{x: 'reuqired' for x in err_stack}]
-				})
-			return False
-		return True
+		return err_stack
 
 
 	def save_call(self, d):
 		call = CallModel(
 			name = d['name'],
 			phone = d['phone'],
-			date = datetime.datetime.now()
+			date = datetime.utcnow()
 			)
 		session.add(call)
 		session.commit()
+		send_mail(msg="Call sent")
 
 
 	def save_order(self, d):
-		car = session.query(CatalogItemModel).filter_by(id=d['id'])
+		print(d['date'], d['hours'], d['minutes'])
+		dt = d['date'].split('.')
+		item = session.query(CatalogItemModel.id).filter_by(id=d['id']).one()
 		order = OrderModel(
 			name=d['name'],
-			email=d['email'],
-			phone=d['phone'],
-			# date = datetime.combine(call_date, call_time)
-			date=datetime.datetime.now()
+			callback=d['callback'],
+			date = datetime.combine(date(int(dt[2]), int(dt[1]), int(dt[0])), time(int(d['hours']), int(d['minutes']))),
+			item_id=item.id
 			)
-		car.orders.append(order)
 
-		session.add(car)
 		session.add(order)
 		session.commit()
+		send_mail('Order sent')

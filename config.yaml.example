@@ -1,13 +1,26 @@
 PORT: 8002
-HOST: '127.0.0.1'
+HOST: '0.0.0.0'
 
 DATABASE:
   HOST: 'localhost'
   PORT: ''
-  DBNAME: 'dbname'
-  USER: 'username'
-  PASS: '******'
-  TABLE_NAME_PREFIX: 'avtolux'
+  DBNAME: 'avtolux'
+  USER: 'avtolux'
+  PASS: 'avtolux'
+  TABLE_NAME_PREFIX: 'avtolux_'
 
 TEMPLATES_PATH: './templates'
 STATIC_PATH: './static'
+
+IMAGE_TMP_PATH: ''
+IMAGE_PERM_PATH: ''
+
+IMAGE_SIZES: ''
+
+MAIL:
+  SMTP_PROVIDER:
+    PORT: 587
+    HOST: 'smtp.gmail.com'
+  MAIN_RECIPIENT: 'fn.andrw@gmail.com'
+  USER: 'fn.andrw'
+  PASS: 'iostream912'
