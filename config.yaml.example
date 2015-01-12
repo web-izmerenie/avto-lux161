@@ -1,4 +1,4 @@
-DEVSERVER:
+DEV_SERVER:
   PORT: 8002
   HOST: '0.0.0.0'
 
@@ -27,9 +27,9 @@ MAIL:
   SMTP_PROVIDER:
     PORT: 587
     HOST: 'smtp.gmail.com'
-  MAIN_RECIPIENT: 'fn.andrw@gmail.com'
-  USER: 'fn.andrw'
-  PASS: 'iostream912'
+  MAIN_RECIPIENT: 'username@gmail.com'
+  USER: 'username'
+  PASS: '******'
 
 LOCALIZATION:
   LANG: 'ru'

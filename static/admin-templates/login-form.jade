@@ -2,13 +2,9 @@
 	.col-md-4.column
 	.col-md-4.column
 		.text-center
-			h1= title
+			h1= local.get('page_title')
 		form(role="form")
-			.alert.alert-danger(role="alert")
-				span.glyphicon.glyphicon-exclamation-sign(aria-hidden="true")
-				span.sr-only Ошибка:
-				=' '
-				| Некорректный логин или пароль
+			.message
 			.form-group
 				label
 					span Логин
