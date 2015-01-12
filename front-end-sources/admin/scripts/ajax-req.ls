@@ -7,16 +7,14 @@
 
 require! {
 	\jquery : $
-	'./view/fatal-error' : FatalErrorView
+	'./throw-fatal-error'
 }
 
 module.exports = (app, options)!->
 	options = {
 		data-type: \json
 		method: \POST
-		error: (xhr, status, err)!->
-			app .get-region \container .show new FatalErrorView exception: err
-			throw err
+		error: (xhr, status, err)!-> throw-fatal-error app, err
 	} <<<< options
 
 	$ .ajax options
