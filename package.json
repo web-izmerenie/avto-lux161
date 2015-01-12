@@ -9,8 +9,7 @@
 
     "nib": "^1.0.4",
     "bootstrap-styl": "^4",
-    "jquery": "2.1.3",
-    "jquery-colorbox": "1.5.10",
+    "jade": "^1.8.2",
 
     "bower": "^1"
   },
@@ -61,11 +60,11 @@
         "jshintDisabled": true,
         "shim": {
           "jquery": {
-            "path": "./node_modules/jquery",
-            "exports": ""
+            "path": "./bower_components/jquery/dist/jquery.js",
+            "exports": "jQuery"
           },
-          "jquery.colorbox": {
-            "path": "./node_modules/jquery-colorbox",
+          "jquery-colorbox": {
+            "path": "./bower_components/jquery-colorbox/jquery.colorbox.js",
             "exports": ""
           },
           "jquery-ui.datepicker": {
@@ -87,7 +86,7 @@
         "jshintDisabled": true,
         "shim": {
           "jquery": {
-            "path": "./node_modules/jquery",
+            "path": "./bower_components/jquery/dist/jquery.js",
             "exports": ""
           },
           "marionette": {
