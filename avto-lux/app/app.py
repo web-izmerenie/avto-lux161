@@ -27,7 +27,7 @@ class AvtoLuxApplication(tornado.web.Application):
 			debug=True,
 			autoreload=False,
 			xsrf_cookies = False,
-			cookie_secret = str(hashlib.sha224(os.urandom(100)).hexdigest()))
+			cookie_secret = str(hashlib.sha512(os.urandom(300)).hexdigest()))
 		tornado.web.Application.__init__(self, handlers, **settings)
 
 
