@@ -18,21 +18,20 @@ $html = $ \html
 require! {
 	\marionette : M
 	'./template'
+	'./basic-model' : BasicModel
 }
 
 M.TemplateCache.prototype.load-template = template.load
 M.TemplateCache.prototype.compileTemplate = template.compile
 M.Renderer.render = template.render
 
-book = new B.Model {
-	title: \Test
-}
+layout-model = new BasicModel!
 
 LoginFormView = M.LayoutView .extend {
 	id: 'login-form'
 	class-name: 'container'
 	template: \login-form
-	model: book
+	model: layout-model
 }
 
 App = M.Application.extend {
