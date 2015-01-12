@@ -7,16 +7,40 @@
 require! {
 	\jquery : $
 	\backbone : B
-	\jade : jade
 }
-
 B.$ = $
 
-require! \marionette : M
+<-! $ # dom ready
 
-My-App = new M.Application
+$html = $ \html
 
-My-App .add-initializer (options)!->
-	B.history .start!
+require! {
+	\marionette : M
+	'./template': template
+}
 
-My-App .start!
+M.TemplateCache.prototype.load-template = template.load
+M.TemplateCache.prototype.compileTemplate = template.compile
+M.Renderer.render = template.render
+
+LoginFormView = M.LayoutView .extend {
+	id: 'login-form'
+	class-name: 'container'
+	template: \login-form
+}
+
+App = M.Application.extend {
+	initialize: (options)!->
+		@.login-form-view = new LoginFormView
+		@.login-form-view.render!
+
+	regions:
+		body: \body
+
+	start: (options)!->
+		B.history .start!
+		@ .get-region \body .show @.login-form-view
+}
+
+app = new App container: \body
+app .start!
