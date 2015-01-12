@@ -4,6 +4,7 @@
 *.zip
 *.rar
 *.sql
+*.log
 
 # python
 *.pyc
