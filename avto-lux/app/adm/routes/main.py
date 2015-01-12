@@ -29,7 +29,7 @@ patch_tornado()
 
 class AdminMainRoute(AmdinBaseHandler):
 	def get(self):
-		localization = get_json_localization()['ru']
+		localization = get_json_localization('ADMIN')['ru']
 		kwrgs = {'page_title' : localization['page_title']}
 		return self.render('admin/layout.jade', **kwrgs)
 

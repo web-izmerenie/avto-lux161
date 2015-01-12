@@ -9,7 +9,7 @@ class JsonResponseMixin(RequestHandler):
 
 class Custom404Mixin(RequestHandler):
 	def write_error(self, status_code, **kwargs):
-		localization = get_json_localization()['ru']['titles']
+		localization = get_json_localization('CLIENT')['ru']['titles']
 		print(kwargs["exc_info"])
 		self.set_status(404)
 		kwrgs = {

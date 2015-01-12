@@ -30,9 +30,12 @@ def error_log(error):
 	sys.exit(1)
 
 
-def get_json_localization():
-	print(os.getcwd())
-	f = open(os.getcwd() + '/static/client-local.json', 'r')
+def get_json_localization(side):
+	pathc = config('LOCALIZATION')['SOURCES']
+	if side is None and not pathc[side]:
+		raise Exception("Incorrect localization source")
+
+	f = open(os.path.join(os.getcwd(), pathc[side]), 'r')
 	jn = json.loads(''.join([line for line in f]))
 	f.close()
 	return jn

@@ -63,7 +63,7 @@ class ItemRoute(BaseHandler, Custom404Mixin):
 class FormsHandler(JsonResponseMixin):
 	def post(self):
 		is_ajax = False
-		localization = get_json_localization()['ru']['forms']
+		localization = get_json_localization('CLIENT')['ru']['forms']
 		actions = {
 			'call' : {
 				'fn': self.save_call,
