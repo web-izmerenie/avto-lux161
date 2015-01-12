@@ -26,6 +26,7 @@ MAIL:
   PASS: 'iostream912'
 
 LOCALIZATION:
+  LANG: 'ru'
   SOURCES:
     CLIENT: 'static/client-local.json'
     ADMIN: 'static/admin-local.json'
