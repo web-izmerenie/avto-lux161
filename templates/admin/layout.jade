@@ -12,27 +12,7 @@ html(lang="ru")
 
 		link(href=static_url('images/favicon.ico'), rel="shortcut icon")
 		link(href=static_url('admin-build.css'), type="text/css", rel="stylesheet")
-		//script(src=static_url('admin-build.js'), type="text/javascript")
+		script(src=static_url('admin-build.js'), type="text/javascript")
 	body
-		#login-form.container
-			.row.clearfix
-				.col-md-4.column
-				.col-md-4.column
-					.text-center
-						h1= title
-					form(role="form")
-						.alert.alert-danger(role="alert")
-							span.glyphicon.glyphicon-exclamation-sign(aria-hidden="true")
-							span.sr-only Ошибка:
-							=' '
-							| Некорректный логин или пароль
-						.form-group
-							label
-								span Логин
-								input.form-control(type="text", name="user")
-						.form-group
-							label
-								span Пароль
-								input.form-control(type="password", name="pass")
-						button.btn.btn-primary Войти
-				.col-md-4.column
+		script#login-form-tpl(type="text/template")
+			include login-form

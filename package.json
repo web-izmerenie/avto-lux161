@@ -74,6 +74,43 @@
             "depends": { "jquery": "jQuery" }
           }
         }
+      },
+      "admin": {
+        "type": "browserify",
+        "path": "./front-end-sources/admin/scripts/",
+        "srcDir": "./front-end-sources/admin/scripts/",
+        "mainSrc": "main.ls",
+        "destDir": "./static/",
+        "buildFile": "admin-build.js",
+        "transform": ["liveify-stable"],
+        "extensions": [".ls"],
+        "jshintDisabled": true,
+        "shim": {
+          "jquery": {
+            "path": "./node_modules/jquery",
+            "exports": ""
+          },
+          "marionette": {
+            "path": "./bower_components/marionette/lib/backbone.marionette.js",
+            "exports": ""
+          },
+          "backbone": {
+            "path": "./bower_components/backbone/backbone.js",
+            "exports": ""
+          },
+          "underscore": {
+            "path": "./bower_components/underscore/underscore.js",
+            "exports": ""
+          },
+          "backbone.babysitter": {
+            "path": "./bower_components/backbone.babysitter/lib/backbone.babysitter.js",
+            "exports": ""
+          },
+          "backbone.wreqr": {
+            "path": "./bower_components/backbone.wreqr/lib/backbone.wreqr.js",
+            "exports": ""
+          }
+        }
       }
     }
   }
