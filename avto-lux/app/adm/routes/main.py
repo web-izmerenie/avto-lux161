@@ -1,5 +1,6 @@
 import os
 from app.configparser import config
+from app.utils import get_json_localization
 import tornado.template
 from .base import (
 	AmdinBaseHandler,
@@ -28,7 +29,9 @@ patch_tornado()
 
 class AdminMainRoute(AmdinBaseHandler):
 	def get(self):
-		return self.render('admin/layout.jade')
+		localization = get_json_localization()['ru']['admin']
+		kwrgs = {'page_title' : localization['page_title']}
+		return self.render('admin/layout.jade', **kwrgs)
 
 
 class EmptyHandler(AmdinBaseHandler):
