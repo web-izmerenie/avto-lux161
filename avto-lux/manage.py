@@ -5,7 +5,7 @@ from app.app import run_instance
 from app.models.init_models import init_models
 import multiprocessing
 
-devserver = config('DEVSERVER')
+devserver = config('DEV_SERVER')
 prserver = config('PRODUCTION_SERVER')
 
 def error_handler(fn):
