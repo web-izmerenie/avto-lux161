@@ -46,12 +46,12 @@ if __name__ == '__main__':
 		raise Exception("Missed required argument")
 
 	actions = {
-		'runserver':{
+		'run':{
 			'fn': server,
 			'kwrgs': {},
 			'options': []
 		},
-		'devserver': {
+		'dev-server': {
 			'fn': devserver,
 			'kwrgs': {},
 			'options': []
