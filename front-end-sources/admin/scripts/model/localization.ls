@@ -10,10 +10,18 @@ require! {
 	\backbone : B
 }
 
+lang = $ \html .attr \lang
+local = {}
+
 Localization = B.Model.extend {
-	lang: $ \html .attr \lang
-	initialize: !->
-		local = null
+	lang: lang
+	initialize: (options={})!->
+		@.lang = options.lang if options.lang?
+
+		if local[@.lang]?
+			@ .set local[@.lang]
+			return
+
 		$ .ajax {
 			url: $ \html .attr \data-local-file
 			method: \GET
@@ -24,11 +32,12 @@ Localization = B.Model.extend {
 				unless json[@.lang]?
 					throw new Error "
 						Can't get localization data by this lang: #{@.lang}"
-				local := json[@.lang]
+				local[@.lang] := json[@.lang]
 			error: (xhr, status, err)!->
 				throw err
 		}
-		@ .set local
+
+		@ .set local[@.lang]
 }
 
 module.exports = Localization
