@@ -2,11 +2,12 @@ __all__ = ['base', 'main']
 
 from .main import (
 	AdminMainRoute,
-	EmptyHandler
+	EmptyHandler,
+	AuthHandler
 )
 
 routes = [
 	('/adm/?', AdminMainRoute),
-	('/adm/auth', EmptyHandler),
+	('/adm/auth/', AuthHandler),
 	('adm/data.json', EmptyHandler),
 ]

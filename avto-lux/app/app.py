@@ -31,10 +31,9 @@ class AvtoLuxApplication(tornado.web.Application):
 		tornado.web.Application.__init__(self, handlers, **settings)
 
 
-def run_instance(port, host=''):
-	# init_models()
+def run_instance(port, host):
 	tornado.options.parse_command_line()
-	http_server = tornado.httpserver.HTTPServer(AvtoLuxApplication())
-	http_server.listen(port, address=host)
+	srv = tornado.httpserver.HTTPServer(AvtoLuxApplication())
+	srv.listen(port, address=host)
 	print("Server run on %s:%s" % (host, port))
 	tornado.ioloop.IOLoop.instance().start()
