@@ -1,5 +1,6 @@
-PORT: 8002
-HOST: '0.0.0.0'
+DEVSERVER:
+  PORT: 8002
+  HOST: '0.0.0.0'
 
 DATABASE:
   HOST: 'localhost'
