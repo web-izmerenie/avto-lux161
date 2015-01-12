@@ -1,4 +1,4 @@
-import os
+import os, json
 from app.configparser import config
 from app.utils import get_json_localization
 import tornado.template
@@ -31,9 +31,11 @@ class AdminMainRoute(AmdinBaseHandler):
 	def get(self):
 		lang = config('LOCALIZATION')['LANG']
 		localization = get_json_localization('ADMIN')[lang]
+
 		kwrgs = {
 			'page_title' : localization['page_title'],
-			'lang': lang
+			'lang': lang,
+			'local': localization
 			}
 		return self.render('admin/layout.jade', **kwrgs)
 
