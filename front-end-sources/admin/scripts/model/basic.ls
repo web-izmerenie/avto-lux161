@@ -1,5 +1,5 @@
 /**
- * Localization model
+ * Basic model
  *
  * @author Viacheslav Lotsmanov
  * @author Andrew Fatkulin

@@ -7,7 +7,7 @@
 
 require! {
 	\jquery : $
-	'./fatal-error-view' : FatalErrorView
+	'./view/fatal-error' : FatalErrorView
 }
 
 module.exports = (app, options)!->

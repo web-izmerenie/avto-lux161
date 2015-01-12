@@ -18,9 +18,9 @@ $html = $ \html
 require! {
 	\marionette : M
 	'./template'
-	'./basic-model' : BasicModel
-	'./smooth-view' : SmoothView
 	'./ajax-req'
+	'./model/basic' : BasicModel
+	'./view/smooth' : SmoothView
 }
 
 M.TemplateCache.prototype.load-template = template.load

@@ -1,6 +1,6 @@
 require! {
-	'./smooth-view' : SmoothView
-	'./basic-model' : BasicModel
+	'./smooth' : SmoothView
+	'../model/basic' : BasicModel
 }
 
 FatalErrorView = SmoothView .extend {
