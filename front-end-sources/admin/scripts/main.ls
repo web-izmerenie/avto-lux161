@@ -7,6 +7,7 @@
 require! {
 	\jquery : $
 	\backbone : B
+	\jade : jade
 }
 
 B.$ = $

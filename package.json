@@ -108,6 +108,10 @@
           "backbone.wreqr": {
             "path": "./bower_components/backbone.wreqr/lib/backbone.wreqr.js",
             "exports": ""
+          },
+          "jade": {
+            "path": "./node_modules/jade",
+            "exports": ""
           }
         }
       }
