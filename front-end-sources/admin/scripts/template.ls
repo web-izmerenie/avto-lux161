@@ -1,7 +1,8 @@
 /**
- * load-template handler
+ * template handlers
  *
  * @author Viacheslav Lotsmanov
+ * @author Andrew Fatkulin
  */
 
 require! {
@@ -33,6 +34,5 @@ module.exports.compile = (raw-template)->
 	return raw-template
 
 module.exports.render = (template, data)->
-	console.log data
 	raw-template = M.TemplateCache .get template
 	jade.render raw-template, data
