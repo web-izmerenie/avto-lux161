@@ -24,3 +24,8 @@ MAIL:
   MAIN_RECIPIENT: 'fn.andrw@gmail.com'
   USER: 'fn.andrw'
   PASS: 'iostream912'
+
+LOCALIZATION:
+  SOURCES:
+    CLIENT: 'static/client-local.json'
+    ADMIN: 'static/admin-local.json'
