@@ -32,7 +32,7 @@ class AdminMainRoute(AmdinBaseHandler):
 		lang = config('LOCALIZATION')['LANG']
 		localization = get_json_localization('ADMIN')[lang]
 		kwrgs = {
-			'page_title' : localization['page_title']
+			'page_title' : localization['page_title'],
 			'lang': lang
 			}
 		return self.render('admin/layout.jade', **kwrgs)
