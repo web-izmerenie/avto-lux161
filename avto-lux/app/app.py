@@ -32,7 +32,7 @@ class AvtoLuxApplication(tornado.web.Application):
 
 
 def run_instance(port, host=''):
-	init_models()
+	# init_models()
 	tornado.options.parse_command_line()
 	http_server = tornado.httpserver.HTTPServer(AvtoLuxApplication())
 	http_server.listen(port, address=host)
