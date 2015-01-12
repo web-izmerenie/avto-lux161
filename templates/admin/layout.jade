@@ -14,3 +14,7 @@ html(lang=lang,
 		link(href=static_url('admin-build.css'), type="text/css", rel="stylesheet")
 		script(src=static_url('admin-build.js'), type="text/javascript")
 	body
+		.loading.container
+			.wrap
+				.spinner.glyphicon.glyphicon-refresh
+				.text= local['page_loading']

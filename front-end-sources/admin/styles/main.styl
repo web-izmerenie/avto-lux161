@@ -13,8 +13,20 @@ $icon-font-path = pathjoin($static-path, 'icons-fonts/')
 html, body
 	height 100%
 
-.container#login-form
+.loading
+	display table
+	size 100%
 
+	.wrap
+		display table-cell
+		white-space nowrap
+		text-align center
+		vertical-align middle
+
+.fatal-error
+	padding 50px
+
+.login-form.container
 	h1
 		font-size inherit
 		line-height inherit

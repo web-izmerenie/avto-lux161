@@ -12,7 +12,7 @@ require! {
 
 BasicModel = B.Model.extend {
 	initialize: !->
-		@ .set \local, new Localization!.toJSON!
+		@ .set \local, new Localization!
 }
 
 module.exports = BasicModel

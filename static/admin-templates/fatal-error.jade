@@ -1,0 +1,5 @@
+.alert.alert-danger(role="alert")
+	span.glyphicon.glyphicon-exclamation-sign(aria-hidden="true")
+	span.sr-only= local.get('error') + ': '
+	span= ' ' + local.get('fatal_error')
+	.exception= exception
