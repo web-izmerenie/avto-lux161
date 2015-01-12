@@ -44,6 +44,8 @@ LoginFormView = SmoothView .extend {
 		message: \.message
 	ui:
 		form: 'form[role=form]'
+		user: 'input[name=user]'
+		pass: 'input[name=pass]'
 	events:
 		'submit @ui.form': \form-handler
 	\form-handler : ->
@@ -53,7 +55,8 @@ LoginFormView = SmoothView .extend {
 		ajax-req app, {
 			url: '/adm/auth/'
 			data:
-				...
+				user: @.ui.user .val!
+				pass: @.ui.pass .val!
 			success: (json)!->
 				void
 		}
