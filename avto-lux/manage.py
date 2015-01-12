@@ -3,15 +3,24 @@ import getopt
 from app.configparser import config
 from app.app import run_instance
 from app.models.init_models import init_models
+import multiprocessing
 
 devserver = config('DEVSERVER')
+prserver = config('PRODUCTION_SERVER')
 
 def error_handler(fn):
 	pass
 
 def devserver(port=devserver['PORT'], host=devserver['HOST']):
-	run_instance(port=port, host=host)
+	run_instance(port, host)
 
+
+def server(instances=prserver['INSTANCES']):
+	port = prserver['MAIN_PORT']
+	host = prserver['HOST']
+	for ins in range(prserver['INSTANCES']):
+		process = multiprocessing.Process(target=run_instance, args=(port + ins, host))
+		process.start()
 
 def dbsync():
 	try:
@@ -37,6 +46,11 @@ if __name__ == '__main__':
 		raise Exception("Missed required argument")
 
 	actions = {
+		'runserver':{
+			'fn': server,
+			'kwrgs': {},
+			'options': []
+		},
 		'devserver': {
 			'fn': devserver,
 			'kwrgs': {},
