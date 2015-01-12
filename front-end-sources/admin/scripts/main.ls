@@ -32,14 +32,13 @@ LoginFormView = M.LayoutView .extend {
 App = M.Application.extend {
 	initialize: (options)!->
 		@.login-form-view = new LoginFormView
-		@.login-form-view.render!
+		@.login-form-view.render title: \lololo
 
-	regions:
-		body: \body
+		@ .add-regions container: options.container
 
 	start: (options)!->
 		B.history .start!
-		@ .get-region \body .show @.login-form-view
+		@ .get-region \container .show @.login-form-view
 }
 
 app = new App container: \body
