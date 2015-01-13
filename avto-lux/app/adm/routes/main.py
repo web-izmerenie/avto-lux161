@@ -38,7 +38,8 @@ class AdminMainRoute(AdminBaseHandler):
 			'page_title' : localization['page_title'],
 			'lang': lang,
 			'local': localization,
-			'is_auth': (lambda: 1 if self.get_current_user() else 0)()
+			'is_auth': (lambda: 1 if self.get_current_user() else 0)(),
+			'is_debug': 1 ## TODO: get this from ...
 			}
 		return self.render('admin/layout.jade', **kwrgs)
 
