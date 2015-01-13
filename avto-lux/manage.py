@@ -62,7 +62,7 @@ if __name__ == '__main__':
 			'fn': dbsync,
 			'kwrgs': {},
 			'options': []
-		},
+		}
 	}
 
 	if action not in actions:
