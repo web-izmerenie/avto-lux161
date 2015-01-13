@@ -29,19 +29,21 @@ patch_tornado()
 
 
 
-class AdminMainRoute(AdminBaseHandler):
-	def get(self):
+class AdminMainRoute(AdminBaseHandler, JsonResponseMixin):
+	def get(self, *args):
+
 		lang = config('LOCALIZATION')['LANG']
 		localization = get_json_localization('ADMIN')[lang]
-
+		print()
 		kwrgs = {
 			'page_title' : localization['page_title'],
 			'lang': lang,
 			'local': localization,
 			'is_auth': (lambda: 1 if self.get_current_user() else 0)(),
-			'is_debug': 1 ## TODO: get this from ...
+			'is_debug': (lambda: 1 if self.application.settings.get('debug') else 0)()
 			}
 		return self.render('admin/layout.jade', **kwrgs)
+
 
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
@@ -58,7 +60,8 @@ class EmptyHandler(AdminBaseHandler):
 
 class AuthHandler(AdminBaseHandler, AuthMixin, JsonResponseMixin):
 	def post(self):
-		print(str(self.request.body))
+		if self.get_current_user():
+			return self.json_response({'status': 'success'}) ## TODO : Change status to already auth
 		try:
 			usr = session.query(User).filter_by(login=self.get_argument('user')).one()
 		except Exception as e:
@@ -71,6 +74,7 @@ class AuthHandler(AdminBaseHandler, AuthMixin, JsonResponseMixin):
 			self.set_secure_cookie('user', usr.login)
 			return self.json_response({'status': 'success'})
 		return self.json_response({'status': 'error', 'error_code': 'incorrect_password'})
+
 
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
@@ -102,7 +106,6 @@ class CreateUser(AdminBaseHandler, AuthMixin):
 
 class AdminMainHandler(AdminBaseHandler, JsonResponseMixin):
 	actions = {
-
 		# 'name': {
 		# 	'func': 'func',
 		# 	'args': 'args',
@@ -111,13 +114,20 @@ class AdminMainHandler(AdminBaseHandler, JsonResponseMixin):
 	}
 
 	def post(self):
+		if not self.get_current_user():
+			self.set_status(403)
+			return self.json_response({'status': 'unauthorized'})
+
 		print(self.request)
-		self.json_response({'status': 'lol'})
-		print(self.request_time())
+		return self.json_response({'status': 'lol'})
+
+	def get_current_user(self):
+		return self.get_secure_cookie('user')
+
 
 
 class ImageLoadHandler(AdminBaseHandler, JsonResponseMixin):
 	def post(self):
 		files = (x for x in request.files)
 
-		return json_response()
+		return self.json_response()

@@ -36,3 +36,6 @@ LOCALIZATION:
   SOURCES:
     CLIENT: 'static/client-local.json'
     ADMIN: 'static/admin-local.json'
+
+AUTO_RELOAD: 0
+XSRF: 0

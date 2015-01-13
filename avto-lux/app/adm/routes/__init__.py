@@ -9,9 +9,10 @@ from .main import (
 )
 
 routes = [
-	('/adm/?', AdminMainRoute),
-	('/adm/auth/', AuthHandler),
-	('/adm/logout/', LogoutHandler),
-	('adm/data.json', EmptyHandler),
+	('/adm/', AdminMainRoute),
+
+	('/adm/auth', AuthHandler),
+	('/adm/logout', LogoutHandler),
+	('/adm/data.json', EmptyHandler),
 	('/adm/create.user', CreateUser)
 ]
