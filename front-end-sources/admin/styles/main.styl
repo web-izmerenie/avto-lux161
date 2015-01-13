@@ -14,48 +14,13 @@ html, body
 	height 100%
 
 .loading
-	display table
-	size 100%
-
-	.wrap
-		display table-cell
-		white-space nowrap
-		text-align center
-		vertical-align middle
+	@import 'view/loading'
 
 .fatal-error
-	padding 50px
+	@import 'view/fatal-error'
 
-.login-form.container
-	h1
-		font-size inherit
-		line-height inherit
-		font-weight bold
+.login-form
+	@import 'view/login-form'
 
-	// vertical centering
-	@media (min-width $screen-md-min)
-		height 100%
-		text-align center
-
-		.row
-			height 100%
-			text-align center
-
-		.col-md-4.column
-			display inline-block
-			width 33%
-			vertical-align middle
-			float none
-			text-align left
-
-			&:first-child
-				display inline-block
-				height 100%
-
-	form
-		$p = 10px
-		padding-top $p
-		padding-bottom $p
-
-		label
-			width 100%
+.panel
+	@import 'view/panel'

@@ -9,13 +9,13 @@ require! {
 	\backbone : B
 	\marionette : M
 	'./view/loader' : LoaderView
-	'./router' : AppRouter
-	'./controller/app-router' : AppRouterController
 }
 
 App = M.Application.extend {
-	container: \body
 	get-option: M.proxy-get-option
+
+	container: \body
+	is-auth: false
 
 	initialize: !->
 		@.loader-view = new LoaderView
@@ -23,17 +23,12 @@ App = M.Application.extend {
 
 		@ .add-regions container: @.get-option \container
 
-		@.router-controller = new AppRouterController app: @
-		@.router = new AppRouter app: @, controller: @.router-controller
-
 	start: (options)!->
-		B.history .start push-state: true
+		B.history .start root: '/adm/'
 
 	on-destroy: !->
 		B.history .stop!
 		@.loader-view .destroy!
-		@.router-controller .destroy!
-		@.router = void
 }
 
 module.exports = App

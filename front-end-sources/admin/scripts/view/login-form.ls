@@ -6,6 +6,7 @@
  */
 
 require! {
+	\backbone : B
 	\marionette : M
 	\backbone.wreqr : W
 	'../model/basic' : BasicModel
@@ -27,7 +28,7 @@ LoginFormErrorView = SmoothView .extend {
 }
 
 LoginFormView = SmoothView .extend {
-	auth-url: '/adm/auth/'
+	\auth-url : '/adm/auth' # TODO try get with prefix from B
 	get-option: M.proxy-get-option
 
 	initialize: !->
@@ -61,7 +62,8 @@ LoginFormView = SmoothView .extend {
 		@ .get-region \message .show err-view
 
 	on-json-success : (json)!->
-		console.log \success, json
+		@ .get-option \app .is-auth = true
+		B.history .navigate '#panel', trigger: true
 
 	\form-handler : ->
 		return false if @.is-processing!
