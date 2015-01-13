@@ -7,14 +7,15 @@
 
 require! {
 	\jquery : $
-	'./throw-fatal-error'
+	\backbone.wreqr : W
 }
 
-module.exports = (app, options)!->
+module.exports = (options)!->
 	options = {
 		data-type: \json
 		method: \POST
-		error: (xhr, status, err)!-> throw-fatal-error app, err
+		error: (xhr, status, err)!->
+			W.radio.commands .execute \police, \panic, err
 	} <<<< options
 
 	$ .ajax options
