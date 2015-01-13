@@ -5,7 +5,9 @@ import getopt
 from app.configparser import config
 from app.app import run_instance
 from app.models.init_models import init_models
+from app.models.usermodels import create_init_user
 import multiprocessing
+
 
 devserver = config('DEV_SERVER')
 prserver = config('PRODUCTION_SERVER')
@@ -30,6 +32,10 @@ def dbsync():
 		init_models()
 	except Exception as e:
 		print(e)
+
+
+def createadmin():
+	return create_init_user()
 
 
 
@@ -60,6 +66,11 @@ if __name__ == '__main__':
 		},
 		'dbsync': {
 			'fn': dbsync,
+			'kwrgs': {},
+			'options': []
+		},
+		'create-admin': {
+			'fn': createadmin,
 			'kwrgs': {},
 			'options': []
 		}

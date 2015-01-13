@@ -4,8 +4,8 @@ from app.utils import get_json_localization
 import tornado.template
 from .base import (
 	AdminBaseHandler,
-	AuthMixin
 )
+from app.mixins import AuthMixin
 
 from app.mixins.routes_mixin import (
 	JsonResponseMixin
@@ -28,6 +28,7 @@ import datetime
 patch_tornado()
 
 
+
 class AdminMainRoute(AdminBaseHandler):
 	def get(self):
 		lang = config('LOCALIZATION')['LANG']
@@ -45,11 +46,13 @@ class AdminMainRoute(AdminBaseHandler):
 		return self.get_secure_cookie('user')
 
 
+
 class EmptyHandler(AdminBaseHandler):
 	def get(self):
 		self.write("Lolka")
 	def post(self):
 		return self.write("Hello!")
+
 
 
 class AuthHandler(AdminBaseHandler, AuthMixin, JsonResponseMixin):
