@@ -8,10 +8,9 @@
 require! {
 	\backbone : B
 	\marionette : M
-	\backbone.wreqr : W
-	'./template-handlers'
 	'./view/loader' : LoaderView
-	'./view/login-form' : LoginFormView
+	'./router' : AppRouter
+	'./controller/app-router' : AppRouterController
 }
 
 App = M.Application.extend {
@@ -22,14 +21,13 @@ App = M.Application.extend {
 		@.loader-view = new LoaderView
 		@.loader-view.render!
 
-		@.login-form-view = new LoginFormView
-		@.login-form-view.render!
-
 		@ .add-regions container: @.get-option \container
 
+		@.router-controller = new AppRouterController app: @
+		@.router = new AppRouter app: @, controller: @.router-controller
+
 	start: (options)!->
-		B.history .start!
-		@ .get-region \container .show @.login-form-view
+		B.history .start push-state: true
 
 	on-destroy: !->
 		B.history .stop!
