@@ -32,7 +32,8 @@ App = M.Application.extend {
 	on-destroy: !->
 		B.history .stop!
 		@.loader-view .destroy!
-		@.login-form-view .destroy!
+		@.router-controller .destroy!
+		@.router = void
 }
 
 module.exports = App

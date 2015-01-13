@@ -18,6 +18,9 @@ AppRouterController = M.Controller.extend {
 
 		@.login-form-view .render!
 		@ .get-option \app .get-region \container .show @.login-form-view
+
+	on-destroy: !->
+		@.login-form-view .destroy!
 }
 
 module.exports = AppRouterController
