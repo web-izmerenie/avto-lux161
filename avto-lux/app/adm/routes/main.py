@@ -24,9 +24,23 @@ from app.models.catalogmodels import(
 	CatalogSectionModel,
 	CatalogItemModel
 )
+from sqlalchemy.orm.exc import NoResultFound
 import datetime
 patch_tornado()
 
+
+def query_except_handler(fn):
+	def wrap(self, *args, **kwargs):
+		try:
+			return fn(args, kwargs)
+		except NoResultFound as n:
+			print(n)
+			return self.json_response({'status': 'not_found'})
+		except Exception as e:
+			print(e)
+			return self.json_response({'status': 'error', 'error_code': 'system_fail'})
+	wrap.__name__ = fn.__name__
+	return wrap
 
 
 class AdminMainRoute(AdminBaseHandler, JsonResponseMixin):
@@ -105,24 +119,46 @@ class CreateUser(AdminBaseHandler, AuthMixin):
 
 
 class AdminMainHandler(AdminBaseHandler, JsonResponseMixin):
-	actions = {
-		# 'name': {
-		# 	'func': 'func',
-		# 	'args': 'args',
-		# 	'kwargs': {}
-		# }
-	}
-
 	def post(self):
 		if not self.get_current_user():
 			self.set_status(403)
 			return self.json_response({'status': 'unauthorized'})
 
-		print(self.request)
-		return self.json_response({'status': 'lol'})
+		action = self.get_argument('action')
+		# kwrgs = self.get_argument('args')
+		kwrgs = {'lol': 'not lol'}
+		print(kwrgs)
+
+		actions = {
+			'get_pages_list': {
+				'fn': self.get_list,
+				'model': StaticPageModel
+			}
+			# 'get_page': {
+			# 	'fn': get_item,
+			# 	'model': StaticPageModel
+			# }
+		}
+
+		if action not in actions.keys():
+			return self.json_response({'status': 'lol'})
+		act = actions[action]
+		func = act['fn']
+		return func(act['model'])
+
 
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
+
+	# @query_except_handler
+	def get_list(self, model):
+		print(model)
+		data = session.query(model).all()
+		print(data[0].title)
+		return self.json_response({
+			'status': 'success',
+			'data_list': [{'title': x.title, 'id': x.id} for x in data]
+			})
 
 
 
@@ -131,3 +167,5 @@ class ImageLoadHandler(AdminBaseHandler, JsonResponseMixin):
 		files = (x for x in request.files)
 
 		return self.json_response()
+
+

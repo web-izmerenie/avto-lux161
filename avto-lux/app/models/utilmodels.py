@@ -39,13 +39,3 @@ class PhoneModel(Base, IdMixin):
 
 	def __repr__(self):
 		return self.phone
-
-
-class UploadedFiles(Base, IdMixin):
-	__tablename__ = dbprefix + 'files'
-
-	filetype = Column(String(200))
-	path = Column(String(4000))
-	alt = Column(String(8196))
-
-

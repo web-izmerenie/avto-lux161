@@ -1,12 +1,13 @@
 from .dbconnect import Base
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy import (
-	Column, 
-	String, 
-	Integer, 
+	Column,
+	String,
+	Integer,
 	Boolean,
 	DateTime
 )
+from sqlalchemy.dialects.postgresql import JSON
 
 class PageMixin:
 
@@ -54,6 +55,9 @@ class PageMixin:
 	def last_change(cls):
 		return Column(DateTime)
 
+	@declared_attr
+	def files(cls):
+		return Column(JSON)
 
 class IdMixin:
 	@declared_attr

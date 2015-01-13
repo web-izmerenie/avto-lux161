@@ -1,11 +1,11 @@
 from tornado.web import RequestHandler
 import json
-from app.utils import get_json_localization
+from app.utils import get_json_localization, is_date
 from app.configparser import config
 
 class JsonResponseMixin(RequestHandler):
 	def json_response(self, data):
-		return self.write(json.dumps(data))
+		return self.write(json.dumps(data, default=is_date))
 
 
 class Custom404Mixin(RequestHandler):

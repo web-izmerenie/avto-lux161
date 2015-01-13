@@ -1,6 +1,7 @@
 import os, sys, json
 import smtplib
 from app.configparser import config
+import decimal, datetime
 
 class CollectHandlersException(Exception):
 	def __repr__(self, e, list):
@@ -56,3 +57,12 @@ def send_mail(msg=None):
 	msg = msg or ''
 	smtpserver.sendmail(gmail_user, to, msg)
 	smtpserver.close()
+
+
+
+def is_date(obj):
+	if isinstance(obj, datetime.date):
+		return obj.isoformat()
+
+def to_json(obj):
+	return json.dumps([dict(x) for x in obj], default=is_date)
