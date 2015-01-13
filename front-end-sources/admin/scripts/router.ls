@@ -9,11 +9,15 @@ require! {
 	\marionette : M
 }
 
-AppRouter = M.AppRouter.extend {
+class AppRouter extends M.AppRouter
 	app-routes:
-		'' : \main
+		'' : \main # login form
+
 		'panel' : \panel
-		'*defaults' : \unknown
-}
+		'panel/pages' : \panel
+		'panel/catalog' : \panel
+		'panel/redirect' : \panel
+
+		'*defaults' : \unknown # route not found
 
 module.exports = AppRouter

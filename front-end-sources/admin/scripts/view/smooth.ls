@@ -9,11 +9,10 @@ require! {
 	\marionette : M
 }
 
-SmoothView = M.LayoutView .extend {
+class SmoothView extends M.LayoutView
 	initialize: !->
 		@.$el .css \opacity, 0
 	on-before-show: !->
 		@.$el .animate opacity: 1
-}
 
 module.exports = SmoothView

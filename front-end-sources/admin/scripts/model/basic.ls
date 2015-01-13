@@ -7,12 +7,11 @@
 
 require! {
 	\backbone : B
-	'./localization' : Localization
+	'./localization' : LocalizationModel
 }
 
-BasicModel = B.Model.extend {
+class BasicModel extends B.Model
 	initialize: !->
-		@ .set \local, new Localization!
-}
+		@ .set \local, new LocalizationModel!
 
 module.exports = BasicModel

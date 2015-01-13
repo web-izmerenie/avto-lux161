@@ -10,24 +10,23 @@ require! {
 	\marionette : M
 	\backbone.wreqr : W
 	'../model/basic' : BasicModel
-	'../model/localization' : Localization
+	'../model/localization' : LocalizationModel
 	'./smooth' : SmoothView
 	'./loader' : LoaderView
 	'../ajax-req'
 }
 
-localization = new Localization!
+localization-model = new LocalizationModel!
 
-LoginFormErrorView = SmoothView .extend {
+class LoginFormErrorView extends SmoothView
 	initialize: (options)!->
 		SmoothView.prototype.initialize ...
 		@.model = new BasicModel {
 			message: options.message or ''
 		}
 	template: \err-msg
-}
 
-LoginFormView = SmoothView .extend {
+class LoginFormView extends SmoothView
 	\auth-url : '/adm/auth' # TODO try get with prefix from B
 	get-option: M.proxy-get-option
 
@@ -57,13 +56,13 @@ LoginFormView = SmoothView .extend {
 				new Error 'Unknown "error_code"'
 
 		err-view = new LoginFormErrorView {
-			message: localization .get \forms .err[json.error_code]
+			message: localization-model .get \forms .err[json.error_code]
 		}
 		@ .get-region \message .show err-view
 
 	on-json-success : (json)!->
 		@ .get-option \app .is-auth = true
-		B.history .navigate '#panel', trigger: true
+		B.history .navigate '#panel', { trigger: true, replace: true }
 
 	\form-handler : ->
 		return false if @.is-processing!
@@ -84,6 +83,5 @@ LoginFormView = SmoothView .extend {
 		}
 
 		false
-}
 
 module.exports = LoginFormView

@@ -3,7 +3,7 @@ require! {
 	'../model/basic' : BasicModel
 }
 
-FatalErrorView = SmoothView .extend {
+class FatalErrorView extends SmoothView
 	initialize: (options)!->
 		SmoothView.prototype.initialize ...
 		@.model = new BasicModel {
@@ -11,6 +11,5 @@ FatalErrorView = SmoothView .extend {
 		}
 	class-name: 'fatal-error container'
 	template: \fatal-error
-}
 
 module.exports = FatalErrorView

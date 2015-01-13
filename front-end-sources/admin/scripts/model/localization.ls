@@ -13,7 +13,7 @@ require! {
 lang = $ \html .attr \lang
 local = {}
 
-Localization = B.Model.extend {
+class LocalizationModel extends B.Model
 	lang: lang
 	initialize: (options={})!->
 		@.lang = options.lang if options.lang?
@@ -38,6 +38,5 @@ Localization = B.Model.extend {
 		}
 
 		@ .set local[@.lang]
-}
 
-module.exports = Localization
+module.exports = LocalizationModel

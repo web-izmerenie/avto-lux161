@@ -10,7 +10,7 @@ require! {
 	\backbone.wreqr : W
 }
 
-module.exports = (options)!->
+module.exports = (options)->
 	options = {
 		data-type: \json
 		method: \POST
