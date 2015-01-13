@@ -20,7 +20,7 @@ module.exports.load = (template-id)->
 		url: static-url + template-id + '.jade'
 		method: \GET
 		async: false
-		cache: false
+		cache: not ($ \html .attr \data-is-debug .to-string! is \1)
 		data-type: \text
 		success: (data)!->
 			template := data

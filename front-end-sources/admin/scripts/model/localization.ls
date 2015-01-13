@@ -25,7 +25,7 @@ Localization = B.Model.extend {
 		$ .ajax {
 			url: $ \html .attr \data-local-file
 			method: \GET
-			cache: false
+			cache: true # cache mark by back-end
 			async: false
 			data-type: \json
 			success: (json)!~>

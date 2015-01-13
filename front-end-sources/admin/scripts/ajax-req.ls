@@ -14,6 +14,7 @@ module.exports = (options)!->
 	options = {
 		data-type: \json
 		method: \POST
+		cache: false
 		error: (xhr, status, err)!->
 			W.radio.commands .execute \police, \panic, err
 	} <<<< options
