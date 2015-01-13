@@ -30,6 +30,11 @@ App = M.Application.extend {
 	start: (options)!->
 		B.history .start!
 		@ .get-region \container .show @.login-form-view
+
+	on-destroy: !->
+		B.history .stop!
+		@.loader-view .destroy!
+		@.login-form-view .destroy!
 }
 
 module.exports = App

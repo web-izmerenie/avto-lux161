@@ -49,11 +49,24 @@ LoginFormView = SmoothView .extend {
 	events:
 		'submit @ui.form': \form-handler
 
+	on-json-error : (json)!->
+		if not json.error_code?
+		or not (json.error_code |> (in <[ user_not_found incorrect_password ]>))
+			W.radio.commands .execute \police, \panic,
+				new Error 'Unknown "error_code"'
+
+		err-view = new LoginFormErrorView {
+			message: localization .get \forms .err[json.error_code]
+		}
+		@ .get-region \message .show err-view
+
+	on-json-success : (json)!->
+		console.log \success, json
+
 	\form-handler : ->
 		return false if @.is-processing!
 		@ .set-processing true
 
-		app = void
 		ajax-req {
 			url: @ .get-option \auth-url
 			data:
@@ -61,18 +74,10 @@ LoginFormView = SmoothView .extend {
 				pass: @.ui.pass .val!
 			success: (json)!~>
 				switch json.status
-				| \success =>
-					void
-				| \error =>
-					if not json.error_code?
-					or not (json.error_code |> (in <[ user_not_found incorrect_password ]>))
-						W.radio.commands .execute \police, \panic, new Error 'Unknown "error_code"'
-
-					err-view = new LoginFormErrorView {
-						message: localization .get \forms .err[json.error_code]
-					}
-					@ .get-region \message .show err-view
-				| _ => W.radio.commands .execute \police, \panic, new Error 'Unknown response JSON status'
+				| \success => @ .trigger-method \jsonSuccess, json
+				| \error => @ .trigger-method \jsonError, json
+				| _ => W.radio.commands .execute \police, \panic,
+					new Error 'Unknown response JSON status'
 				@ .set-processing false
 		}
 

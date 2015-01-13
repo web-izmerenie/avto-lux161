@@ -33,6 +33,7 @@ police = W.radio .channel \police
 
 police.commands .set-handler \panic, (err)!->
 	app .get-region \container .show new FatalErrorView exception: err
+	app .destroy!
 	throw err
 
 app .start!
