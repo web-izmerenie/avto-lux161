@@ -1,7 +1,7 @@
 from sqlalchemy import (
-	Column, 
-	String, 
-	Integer, 
+	Column,
+	String,
+	Integer,
 	Boolean,
 	DateTime,
 	Text,
@@ -11,14 +11,22 @@ from app.configparser import config
 from sqlalchemy.orm import relationship
 from .dbconnect import Base, dbprefix
 from .mixins import PageMixin, IdMixin
-	
+
 
 class StaticPageModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'pages'
 
-	content = Column(String(80192))	
+	content = Column(String(80192))
 	show_h1 = Column(Boolean)
 	is_main_page = Column(Boolean)
+
+	@property
+	def static_list(self):
+		return {
+			'title': self.title,
+			'id': self.id,
+			'alias': self.alias
+			}
 
 
 

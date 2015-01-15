@@ -6,8 +6,8 @@ from .main import (
 	AuthHandler,
 	LogoutHandler,
 	CreateUser,
-	AdminMainHandler
 )
+from .actions import AdminMainHandler
 
 routes = [
 	('/adm/', AdminMainRoute),
