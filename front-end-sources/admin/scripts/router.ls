@@ -16,7 +16,7 @@ class AppRouter extends M.AppRouter
 		'panel' : \panel
 		'panel/pages' : \pages-elements-list
 		'panel/catalog' : \catalog-sections-list
-		'panel/catalog/section_:id/' : \catalog-subsections-list
+		'panel/catalog/section_:id/' : \catalog-elements-list
 
 		'*defaults' : \unknown # route not found
 

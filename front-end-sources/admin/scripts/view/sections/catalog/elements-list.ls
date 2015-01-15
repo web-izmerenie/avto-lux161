@@ -1,5 +1,5 @@
 /**
- * Catalog Sub-Sections List View
+ * Catalog Elements List View
  *
  * @author Viacheslav Lotsmanov
  * @author Andrew Fatkulin
@@ -20,27 +20,27 @@ require! {
 
 class ItemView extends M.ItemView
 	tag-name: \tr
-	template: 'catalog/subsections-list-item'
+	template: 'catalog/elements-list-item'
 
 class TableListView extends M.CompositeView
 	class-name: 'panel panel-default'
-	template: 'catalog/subsections-list'
+	template: 'catalog/elements-list'
 	model: new BasicModel!
 	child-view-container: \tbody
 	child-view: ItemView
 
 class PageView extends M.LayoutView
 	model: new BasicModel!
-	template: 'catalog/subsections-list-main'
+	template: 'catalog/elements-list-main'
 	regions:
 		\header : \.header
 		\main : \.main
 
 class HeaderView extends M.LayoutView
 	model: new BasicModel!
-	template: 'catalog/subsections-list-header'
+	template: 'catalog/elements-list-header'
 
-class CatalogSubSectionsListView extends SmoothView
+class CatalogElementsListView extends SmoothView
 	initialize: !->
 		SmoothView.prototype.initialize ...
 
@@ -51,7 +51,7 @@ class CatalogSubSectionsListView extends SmoothView
 
 		@ajax = ajax-req {
 			data:
-				action: \get_catalog_subsections
+				action: \get_catalog_elements
 				args: JSON.stringify {
 					id: @get-option \section-id
 				}
@@ -62,9 +62,12 @@ class CatalogSubSectionsListView extends SmoothView
 
 				new-data-list = []
 				for item in json.data_list
+					ref = '#panel/catalog/section_'
+					ref += @get-option \section-id
+					ref += '/' + item.id + '.html'
 					new-data-list.push {
 						id: item.id
-						ref: '#panel/catalog/section_' + item.id + '/'
+						ref: ref
 						name: item.title
 						count: item.count
 					}
@@ -86,10 +89,10 @@ class CatalogSubSectionsListView extends SmoothView
 	regions:
 		\main : '.main'
 
-	class-name: 'catalog-sections-list v-stretchy'
+	class-name: 'catalog-elements-list v-stretchy'
 	template: 'main'
 
 	on-destroy: !->
 		@ajax.abort! if @ajax?
 
-module.exports = CatalogSubSectionsListView
+module.exports = CatalogElementsListView
