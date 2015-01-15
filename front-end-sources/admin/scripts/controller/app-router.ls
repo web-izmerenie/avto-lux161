@@ -15,9 +15,8 @@ require! {
 	'../view/sections/pages/elements-list' : PagesElementsListView
 	'../view/sections/catalog/sections-list' : CatalogSectionsListView
 	'../view/sections/catalog/elements-list' : CatalogElementsListView
+	'../view/sections/redirect/list' : RedirectListView
 }
-
-# TODO save url if unauthorized and go to this url after authorization
 
 auth-handler = (obj)->
 	unless obj.get-option \app .is-auth
@@ -80,6 +79,15 @@ class AppRouterController extends M.Controller
 
 		@get-option \app .get-region \container .show panel-view
 		panel-view.get-option \work-area .show catalog-view
+
+	\redirect-list : !->
+		return unless auth-handler @
+
+		panel-view = (new PanelView!).render!
+		redirect-view = (new RedirectListView!).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show redirect-view
 
 	unknown: !->
 		W.radio.commands .execute \police, \panic,

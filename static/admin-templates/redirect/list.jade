@@ -1,0 +1,9 @@
+.panel-heading= local.get('sections').redirect.redirect_list
+table.table
+	thead
+		tr
+			th= local.get('sections').redirect.id
+			th= local.get('sections').redirect.status
+			th= local.get('sections').redirect.old_url
+			th= local.get('sections').redirect.new_url
+	tbody
