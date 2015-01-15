@@ -1,0 +1,7 @@
+th(scope="row")= id
+if is_active
+	td= local.get('sections').accounts.is_active_yes
+else
+	td= local.get('sections').accounts.is_active_no
+td
+	a(href=ref)= login

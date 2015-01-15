@@ -1,0 +1,8 @@
+.panel-heading= local.get('sections').accounts.accounts_list
+table.table
+	thead
+		tr
+			th= local.get('sections').accounts.id
+			th= local.get('sections').accounts.is_active
+			th= local.get('sections').accounts.login
+	tbody

@@ -1,5 +1,5 @@
 /**
- * Redirect List View
+ * Accounts List View
  *
  * @author Viacheslav Lotsmanov
  * @author Andrew Fatkulin
@@ -20,16 +20,18 @@ require! {
 
 class ItemView extends M.ItemView
 	tag-name: \tr
-	template: 'redirect/list-item'
+	template: 'accounts/list-item'
 
 class TableListView extends M.CompositeView
 	class-name: 'panel panel-default'
-	template: 'redirect/list'
+	template: 'accounts/list'
 	model: new BasicModel!
 	child-view-container: \tbody
 	child-view: ItemView
+	child-view-options: (model, index)~>
+		model.set \local , @model.get \local
 
-class RedirectListView extends SmoothView
+class AccountsListView extends SmoothView
 	initialize: !->
 		SmoothView.prototype.initialize ...
 
@@ -40,7 +42,7 @@ class RedirectListView extends SmoothView
 
 		@ajax = ajax-req {
 			data:
-				action: \get_redirect_list
+				action: \get_accounts_list
 			success: (json)!~>
 				if json.status is not \success or not json.data_list?
 					W.radio.commands .execute \police, \panic,
@@ -50,10 +52,9 @@ class RedirectListView extends SmoothView
 				for item in json.data_list
 					new-data-list.push {
 						id: item.id
-						ref: '#panel/redirect/edit_' + item.id + '.html'
-						old_url: item.old_url
-						new_url: item.new_url
-						status: item.status
+						ref: '#panel/accounts/edit_' + item.id + '.html'
+						login: item.login
+						is_active: item.is_active
 					}
 
 				list = new B.Collection new-data-list
@@ -73,5 +74,4 @@ class RedirectListView extends SmoothView
 	on-destroy: !->
 		@ajax.abort! if @ajax?
 
-module.exports = RedirectListView
-
+module.exports = AccountsListView

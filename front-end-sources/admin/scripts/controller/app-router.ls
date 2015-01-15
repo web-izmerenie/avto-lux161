@@ -16,6 +16,7 @@ require! {
 	'../view/sections/catalog/sections-list' : CatalogSectionsListView
 	'../view/sections/catalog/elements-list' : CatalogElementsListView
 	'../view/sections/redirect/list' : RedirectListView
+	'../view/sections/accounts/list' : AccountsListView
 }
 
 auth-handler = (obj)->
@@ -33,7 +34,7 @@ auth-handler = (obj)->
 class AppRouterController extends M.Controller
 	get-option: M.proxy-get-option
 
-	main: !->
+	\main : !->
 		if @get-option \app .is-auth
 			B.history .navigate '#panel', { trigger: true, replace: true }
 			return
@@ -43,7 +44,7 @@ class AppRouterController extends M.Controller
 
 		@get-option \app .get-region \container .show login-form-view
 
-	panel: !->
+	\panel : !->
 		return unless auth-handler @
 
 		if B.history.fragment is \panel
@@ -89,7 +90,16 @@ class AppRouterController extends M.Controller
 		@get-option \app .get-region \container .show panel-view
 		panel-view.get-option \work-area .show redirect-view
 
-	unknown: !->
+	\accounts : !->
+		return unless auth-handler @
+
+		panel-view = (new PanelView!).render!
+		accounts-view = (new AccountsListView!).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show accounts-view
+
+	\unknown : !->
 		W.radio.commands .execute \police, \panic,
 			new Error 'Route not found'
 

@@ -30,6 +30,14 @@
         "status": "Код статуса",
         "old_url": "Старый путь",
         "new_url": "Новый путь"
+      },
+      "accounts": {
+        "accounts_list": "Список аккаунтов",
+        "id": "ID",
+        "is_active": "Активен",
+        "is_active_yes": "Да",
+        "is_active_no": "Нет",
+        "login": "Логин"
       }
     }
   }
