@@ -9,6 +9,14 @@
         "user_not_found": "Пользователь не найден в базе",
         "incorrect_password": "Неправильный пароль"
       }
+    },
+    "sections": {
+      "pages_list": {
+        "pages_list": "Список страниц",
+        "id": "ID",
+        "name": "Название",
+        "url": "URL"
+      }
     }
   }
 }

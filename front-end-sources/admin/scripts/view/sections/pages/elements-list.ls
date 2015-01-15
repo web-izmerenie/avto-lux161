@@ -11,19 +11,22 @@ require! {
 	\backbone.wreqr : W
 	'../../../ajax-req'
 
+	'../../../model/basic' : BasicModel
+
 	# views
 	'../../smooth' : SmoothView
 	'../../loader' : LoaderView
 }
 
 class PagesItemView extends M.ItemView
-	tag-name: \li
-	class-name: \list-group-item
-	template: 'menu-item'
+	tag-name: \tr
+	template: 'pages/elements-list-item'
 
-class PagesListView extends M.CollectionView
-	tag-name: \ul
-	class-name: \list-group
+class TableListView extends M.CompositeView
+	class-name: 'panel panel-default'
+	template: 'pages/elements-list'
+	model: new BasicModel!
+	child-view-container: \tbody
 	child-view: PagesItemView
 
 class PagesElementsListView extends SmoothView
@@ -46,14 +49,17 @@ class PagesElementsListView extends SmoothView
 				new-data-list = []
 				for item in json.data_list
 					new-data-list.push {
+						id: item.id
 						ref: '#panel/pages/edit_' + item.id + '.html'
-						title: item.title
+						name: item.title
+						url: item.alias
 					}
 
 				list = new B.Collection new-data-list
-				view = new PagesListView collection: list
-				view.render!
-				@get-region \main .show view
+				table-view = new TableListView collection: list
+				table-view.render!
+
+				@get-region \main .show table-view
 		}
 
 	regions:
@@ -61,6 +67,7 @@ class PagesElementsListView extends SmoothView
 
 	class-name: 'pages-elements-list v-stretchy'
 	template: 'main'
+	model: new BasicModel!
 
 	on-destroy: !->
 		@ajax.abort! if @ajax?

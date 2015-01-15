@@ -13,8 +13,9 @@ $icon-font-path = pathjoin($static-path, 'icons-fonts/')
 html, body
 	height 100%
 
-.v-stretchy
-	height 100%
+@media (min-width $screen-md-min)
+	.v-stretchy
+		height 100%
 
 .loading
 	@import 'view/loading'
@@ -25,5 +26,5 @@ html, body
 .login-form
 	@import 'view/login-form'
 
-.panel
+.panel-view
 	@import 'view/panel'

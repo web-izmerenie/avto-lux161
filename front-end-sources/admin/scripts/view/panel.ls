@@ -20,7 +20,7 @@ class PanelView extends M.LayoutView
 	on-show: !->
 		@get-region \menu .show @menu-list-view
 
-	class-name: 'panel container'
+	class-name: 'panel-view container'
 	template: \panel
 	model: new BasicModel!
 	regions:
