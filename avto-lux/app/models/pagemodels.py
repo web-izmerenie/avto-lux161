@@ -28,6 +28,10 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 			'alias': self.alias
 			}
 
+	@property
+	def one_page(self):
+		return vars(self).items()
+
 
 
 class UrlMapping(Base, IdMixin):

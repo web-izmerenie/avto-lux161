@@ -62,7 +62,6 @@ class AdminMainHandler(JsonResponseMixin):
 
 		actions = {
 			'get_pages_list': self.get_pages_list,
-			'get_static_page': self.get_static_page,
 			'get_catalog_sections': self.get_catalog_sections,
 			'get_catalog_elements': self.get_catalog_elements,
 			'get_redirect_list': self.get_redirect_list,
@@ -88,16 +87,6 @@ class AdminMainHandler(JsonResponseMixin):
 			'status': 'success',
 			'data_list': [ x.static_list for x in data ]
 			})
-
-	@query_except_handler
-	def get_static_page(self, id=None):
-		print(id)
-		if not id:
-			return self.json_response({'status': 'error'})
-		session = Session()
-		data = session.query(
-			StaticPageModel
-			).filter_by(id=id)
 
 	## TODO : Optimize and using join
 	@query_except_handler
@@ -171,10 +160,10 @@ class AdminMainHandler(JsonResponseMixin):
 	@query_except_handler
 	def get_static_page(self, id):
 		session = Session()
-		data = session.query(StaticPageModel).filter_by(id=id)
+		data = session.query(StaticPageModel).filter_by(id=id).one()
 		return self.json_response({
 			'status': 'success',
-			'data': []
+			'data': data.one_page
 			})
 
 	@query_except_handler
