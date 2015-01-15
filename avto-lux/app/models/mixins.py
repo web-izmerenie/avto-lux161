@@ -19,9 +19,10 @@ class PageMixin:
 	def is_active(cls):
 		return Column(Boolean)
 
+	# Should be tested!!
 	@declared_attr
 	def alias(cls):
-		return Column(String(8192))
+		return Column(String(8192), unique=True)
 
 	@declared_attr
 	def has_footer_slogan(cls):

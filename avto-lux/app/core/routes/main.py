@@ -6,7 +6,7 @@ from .base import BaseHandler
 from app.mixins.routes_mixin import Custom404Mixin, JsonResponseMixin
 from pyjade.ext.tornado import patch_tornado
 
-from app.models.dbconnect import session
+from app.models.dbconnect import Session
 from sqlalchemy import select, func
 
 ## Debug

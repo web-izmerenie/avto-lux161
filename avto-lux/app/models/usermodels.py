@@ -7,7 +7,7 @@ from sqlalchemy import (
 	)
 import json
 from app.configparser import config
-from .dbconnect import Base, dbprefix, engine, session
+from .dbconnect import Base, dbprefix, engine, Session
 from .pagemodels import IdMixin
 from .init_models import init_models
 from app.mixins import AuthMixin
