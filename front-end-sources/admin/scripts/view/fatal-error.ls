@@ -1,3 +1,10 @@
+/**
+ * Fatal Error view
+ *
+ * @author Viacheslav Lotsmanov
+ * @author Andrew Fatkulin
+ */
+
 require! {
 	'./smooth' : SmoothView
 	'../model/basic' : BasicModel
