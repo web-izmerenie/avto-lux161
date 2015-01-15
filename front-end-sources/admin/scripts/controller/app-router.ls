@@ -19,6 +19,18 @@ require! {
 
 # TODO save url if unauthorized and go to this url after authorization
 
+auth-handler = (obj)->
+	unless obj.get-option \app .is-auth
+		obj.store-ref = B.history.fragment
+		B.history.navigate '#', { trigger: true, replace: true }
+		return false
+	else if obj.store-ref?
+		ref = delete obj.store-ref
+		B.history.navigate "##ref", { trigger: true, replace: true }
+		return false
+
+	true
+
 class AppRouterController extends M.Controller
 	get-option: M.proxy-get-option
 
@@ -33,9 +45,7 @@ class AppRouterController extends M.Controller
 		@get-option \app .get-region \container .show login-form-view
 
 	panel: !->
-		unless @get-option \app .is-auth
-			B.history .navigate '#', { trigger: true, replace: true }
-			return
+		return unless auth-handler @
 
 		if B.history.fragment is \panel
 			# go to first menu item
@@ -44,9 +54,7 @@ class AppRouterController extends M.Controller
 			return
 
 	\pages-elements-list : !->
-		unless @get-option \app .is-auth
-			B.history .navigate '#', { trigger: true, replace: true }
-			return
+		return unless auth-handler @
 
 		panel-view = (new PanelView!).render!
 		pages-view = (new PagesElementsListView!).render!
@@ -55,9 +63,7 @@ class AppRouterController extends M.Controller
 		panel-view.get-option \work-area .show pages-view
 
 	\catalog-sections-list : !->
-		unless @get-option \app .is-auth
-			B.history .navigate '#', { trigger: true, replace: true }
-			return
+		return unless auth-handler @
 
 		panel-view = (new PanelView!).render!
 		catalog-view = (new CatalogSectionsListView!).render!
@@ -66,9 +72,7 @@ class AppRouterController extends M.Controller
 		panel-view.get-option \work-area .show catalog-view
 
 	\catalog-elements-list : (section-id)!->
-		unless @get-option \app .is-auth
-			B.history .navigate '#', { trigger: true, replace: true }
-			return
+		return unless auth-handler @
 
 		panel-view = (new PanelView!).render!
 		catalog-view = new CatalogElementsListView \section-id : section-id
