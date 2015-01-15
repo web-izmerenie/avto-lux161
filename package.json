@@ -19,8 +19,9 @@
 
   "gulp": {
     "distclean": [
-      "./gulp",
-      "./node_modules"
+      "./front-end-gulp",
+      "./node_modules",
+      "./bower_components"
     ],
     "styles": {
       "client": {
