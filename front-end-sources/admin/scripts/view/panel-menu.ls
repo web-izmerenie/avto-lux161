@@ -1,5 +1,5 @@
 /**
- * Pages view
+ * Panel menu view
  *
  * @author Viacheslav Lotsmanov
  * @author Andrew Fatkulin

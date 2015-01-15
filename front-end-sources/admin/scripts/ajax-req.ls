@@ -12,6 +12,7 @@ require! {
 
 module.exports = (options)->
 	options = {
+		url: 'data.json'
 		data-type: \json
 		method: \POST
 		cache: false

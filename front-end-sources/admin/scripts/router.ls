@@ -14,9 +14,8 @@ class AppRouter extends M.AppRouter
 		'' : \main # login form
 
 		'panel' : \panel
-		'panel/pages' : \panel
-		'panel/catalog' : \panel
-		'panel/redirect' : \panel
+		'panel/pages' : \pages-elements-list
+		'panel/catalog' : \catalog-sections-list
 
 		'*defaults' : \unknown # route not found
 

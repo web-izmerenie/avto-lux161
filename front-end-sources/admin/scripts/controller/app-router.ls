@@ -9,9 +9,11 @@ require! {
 	\backbone : B
 	\marionette : M
 	\backbone.wreqr : W
+	'../collection/panel-menu' : panel-menu-list
 	'../view/login-form' : LoginFormView
 	'../view/panel' : PanelView
-	'../collection/panel-menu' : panel-menu-list
+	'../view/sections/pages/elements-list' : PagesElementsListView
+	'../view/sections/catalog/sections-list' : CatalogSectionsListView
 }
 
 # TODO save url if unauthorized and go to this url after authorization
@@ -24,20 +26,15 @@ class AppRouterController extends M.Controller
 			B.history .navigate '#panel', { trigger: true, replace: true }
 			return
 
-		unless @login-form-view?
-			@login-form-view = new LoginFormView app: @get-option \app
+		login-form-view = new LoginFormView app: @get-option \app
+		login-form-view .render!
 
-		@login-form-view .render!
-		@get-option \app .get-region \container .show @login-form-view
+		@get-option \app .get-region \container .show login-form-view
 
 	panel: !->
 		unless @get-option \app .is-auth
 			B.history .navigate '#', { trigger: true, replace: true }
 			return
-
-		@panel-view.destroy! if @panel-view?
-
-		# subrouting
 
 		if B.history.fragment is \panel
 			# go to first menu item
@@ -45,28 +42,30 @@ class AppRouterController extends M.Controller
 			B.history .navigate first-ref, { trigger: true, replace: true }
 			return
 
-		page = B.history.fragment
-		panel-page =
-			| (page .index-of 'panel/pages') is 0 => \pages
-			| (page .index-of 'panel/catalog') is 0 => \catalog
-			| _ => null
+	\pages-elements-list : !->
+		unless @get-option \app .is-auth
+			B.history .navigate '#', { trigger: true, replace: true }
+			return
 
-		unless panel-page?
-			W.radio.commands .execute \police, \panic,
-				new Error 'Subroute of panel not found'
+		panel-view = (new PanelView!).render!
+		pages-view = (new PagesElementsListView!).render!
 
-		@panel-view = new PanelView {
-			app: @get-option \app
-			page: panel-page
-		}
-		@panel-view.render!
-		@get-option \app .get-region \container .show @panel-view
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show pages-view
+
+	\catalog-sections-list : !->
+		unless @get-option \app .is-auth
+			B.history .navigate '#', { trigger: true, replace: true }
+			return
+
+		panel-view = (new PanelView!).render!
+		catalog-view = (new CatalogSectionsListView!).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show catalog-view
 
 	unknown: !->
 		W.radio.commands .execute \police, \panic,
 			new Error 'Route not found'
-
-	on-destroy: !->
-		@login-form-view .destroy! if @login-form-view?
 
 module.exports = AppRouterController
