@@ -11,11 +11,17 @@
       }
     },
     "sections": {
-      "pages_list": {
+      "pages": {
         "pages_list": "Список страниц",
         "id": "ID",
         "name": "Название",
         "url": "URL"
+      },
+      "catalog": {
+        "sections_list": "Список разделов",
+        "id": "ID",
+        "name": "Название",
+        "elements_count": "Кол-во элементов"
       }
     }
   }
