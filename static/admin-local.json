@@ -19,8 +19,10 @@
       },
       "catalog": {
         "sections_list": "Список разделов",
+        "subsections_list": "Список подразделов",
         "id": "ID",
         "name": "Название",
+        "subsections_count": "Кол-во подразделов",
         "elements_count": "Кол-во элементов"
       }
     }

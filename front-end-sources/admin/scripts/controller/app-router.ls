@@ -14,6 +14,7 @@ require! {
 	'../view/panel' : PanelView
 	'../view/sections/pages/elements-list' : PagesElementsListView
 	'../view/sections/catalog/sections-list' : CatalogSectionsListView
+	'../view/sections/catalog/subsections-list' : CatalogSubSectionsListView
 }
 
 # TODO save url if unauthorized and go to this url after authorization
@@ -60,6 +61,18 @@ class AppRouterController extends M.Controller
 
 		panel-view = (new PanelView!).render!
 		catalog-view = (new CatalogSectionsListView!).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show catalog-view
+
+	\catalog-subsections-list : (section-id)!->
+		unless @get-option \app .is-auth
+			B.history .navigate '#', { trigger: true, replace: true }
+			return
+
+		panel-view = (new PanelView!).render!
+		catalog-view = new CatalogSubSectionsListView \section-id : section-id
+		catalog-view.render!
 
 		@get-option \app .get-region \container .show panel-view
 		panel-view.get-option \work-area .show catalog-view
