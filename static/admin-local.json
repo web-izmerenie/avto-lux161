@@ -15,21 +15,28 @@
         "pages_list": "Список страниц",
         "id": "ID",
         "name": "Название",
-        "url": "URL"
+        "url": "URL",
+        "add": "Добавить страницу",
+        "refresh": "Обновить"
       },
       "catalog": {
         "sections_list": "Список разделов",
-        "subsections_list": "Список подразделов",
+        "elements_list": "Список элементов",
         "id": "ID",
         "name": "Название",
-        "elements_count": "Кол-во элементов"
+        "elements_count": "Кол-во элементов",
+        "add_section": "Добавить раздел",
+        "add_element": "Добавить элемент",
+        "refresh": "Обновить"
       },
       "redirect": {
         "redirect_list": "Список редиректов",
         "id": "ID",
         "status": "Код статуса",
         "old_url": "Старый путь",
-        "new_url": "Новый путь"
+        "new_url": "Новый путь",
+        "add": "Добавить редирект",
+        "refresh": "Обновить"
       },
       "accounts": {
         "accounts_list": "Список аккаунтов",
@@ -37,7 +44,9 @@
         "is_active": "Активен",
         "is_active_yes": "Да",
         "is_active_no": "Нет",
-        "login": "Логин"
+        "login": "Логин",
+        "add": "Добавить аккаунт",
+        "refresh": "Обновить"
       }
     }
   }

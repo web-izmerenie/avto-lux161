@@ -1,4 +1,15 @@
-.panel-heading= local.get('sections').catalog.subsections_list
+.panel-heading
+	.row
+		.col.col-md-6
+			h1.h5= local.get('sections').catalog.elements_list
+		.col.col-md-6.align-right
+			.btn-group
+				button.refresh.btn.btn-default
+					span.glyphicon.glyphicon-transfer
+					= ' ' + local.get('sections').catalog.refresh
+				button.add.btn.btn-default.btn-success
+					span.glyphicon.glyphicon-plus
+					= ' ' + local.get('sections').catalog.add_element
 table.table
 	thead
 		tr
