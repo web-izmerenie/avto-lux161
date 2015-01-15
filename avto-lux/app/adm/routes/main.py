@@ -30,9 +30,10 @@ patch_tornado()
 
 
 def query_except_handler(fn):
-	def wrap(self, *args, **kwargs):
+	def wrap(*args, **kwargs):
+		self = args[0]
 		try:
-			return fn(args, kwargs)
+			return fn(*args, **kwargs)
 		except NoResultFound as n:
 			print(n)
 			return self.json_response({'status': 'not_found'})
@@ -126,14 +127,11 @@ class AdminMainHandler(AdminBaseHandler, JsonResponseMixin):
 
 		action = self.get_argument('action')
 		# kwrgs = self.get_argument('args')
-		kwrgs = {'lol': 'not lol'}
-		print(kwrgs)
+		# fields = self.get_argument('fields')
 
 		actions = {
-			'get_pages_list': {
-				'fn': self.get_list,
-				'model': StaticPageModel
-			}
+			'get_pages_list': self.get_pages_list,
+
 			# 'get_page': {
 			# 	'fn': get_item,
 			# 	'model': StaticPageModel
@@ -142,19 +140,16 @@ class AdminMainHandler(AdminBaseHandler, JsonResponseMixin):
 
 		if action not in actions.keys():
 			return self.json_response({'status': 'lol'})
-		act = actions[action]
-		func = act['fn']
-		return func(act['model'])
+		func = actions[action]
+		return func()
 
 
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
 
-	# @query_except_handler
-	def get_list(self, model):
-		print(model)
-		data = session.query(model).all()
-		print(data[0].title)
+	@query_except_handler
+	def get_pages_list(self):
+		data = session.query(StaticPageModel).all()
 		return self.json_response({
 			'status': 'success',
 			'data_list': [{'title': x.title, 'id': x.id} for x in data]
