@@ -21,6 +21,8 @@ class AppRouter extends M.AppRouter
 		'panel/redirect' : \redirect-list
 		'panel/accounts' : \accounts
 
+		'logout' : \logout
+
 		'*defaults' : \unknown # route not found
 
 module.exports = AppRouter

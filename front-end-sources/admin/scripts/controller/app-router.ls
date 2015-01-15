@@ -9,6 +9,9 @@ require! {
 	\backbone : B
 	\marionette : M
 	\backbone.wreqr : W
+
+	'../ajax-req'
+
 	'../collection/panel-menu' : panel-menu-list
 	'../view/login-form' : LoginFormView
 	'../view/panel' : PanelView
@@ -19,9 +22,9 @@ require! {
 	'../view/sections/accounts/list' : AccountsListView
 }
 
-auth-handler = (obj)->
+auth-handler = (obj, store-ref=true)->
 	unless obj.get-option \app .is-auth
-		obj.store-ref = B.history.fragment
+		obj.store-ref = B.history.fragment if store-ref
 		B.history.navigate '#', { trigger: true, replace: true }
 		return false
 	else if obj.store-ref?
@@ -98,6 +101,20 @@ class AppRouterController extends M.Controller
 
 		@get-option \app .get-region \container .show panel-view
 		panel-view.get-option \work-area .show accounts-view
+
+	\logout : !->
+		return unless auth-handler @, false
+
+		ajax-req {
+			url: '/adm/logout'
+			success: (json)!~>
+				unless json.status is \logout
+					W.radio.commands .execute \police, \panic,
+						new Error 'Logout error'
+
+				@get-option \app .is-auth = false
+				B.history.navigate '#', { trigger: true, replace: true }
+		}
 
 	\unknown : !->
 		W.radio.commands .execute \police, \panic,
