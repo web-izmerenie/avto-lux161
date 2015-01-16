@@ -65,7 +65,8 @@ class AdminMainHandler(JsonResponseMixin):
 			'get_catalog_sections': self.get_catalog_sections,
 			'get_catalog_elements': self.get_catalog_elements,
 			'get_redirect_list': self.get_redirect_list,
-			'get_accounts_list': self.get_accounts_list
+			'get_accounts_list': self.get_accounts_list,
+			'get_fields': self.get_fields
 		}
 
 		if action not in actions.keys():
@@ -82,7 +83,6 @@ class AdminMainHandler(JsonResponseMixin):
 	def get_pages_list(self):
 		session = Session()
 		data = session.query(StaticPageModel).all()
-
 		return self.json_response({
 			'status': 'success',
 			'data_list': [ x.static_list for x in data ]
@@ -134,14 +134,18 @@ class AdminMainHandler(JsonResponseMixin):
 		session = Session()
 		data = session.query(UrlMapping).all()
 		return self.json_response({
-			'status': 'success',
-			'data_list': [{
-				'new_url': x.new_url,
-				'old_url': x.old_url,
-				'id': x.id,
-				'status': 301 ## TODO :: Change model
- 				} for x in data ]
+			'status':'success',
+			'data_list': [x.item for x in data]
 			})
+		# return self.json_response({
+		# 	'status': 'success',
+		# 	'data_list': [{
+		# 		'new_url': x.new_url,
+		# 		'old_url': x.old_url,
+		# 		'id': x.id,
+		# 		'status': 301 ## TODO :: Change model
+ 	# 			} for x in data ]
+		# 	})
 
 	@query_except_handler
 	def get_accounts_list(self):
@@ -161,9 +165,10 @@ class AdminMainHandler(JsonResponseMixin):
 	def get_static_page(self, id):
 		session = Session()
 		data = session.query(StaticPageModel).filter_by(id=id).one()
+		print(data.one_record)
 		return self.json_response({
 			'status': 'success',
-			'data': data.one_page
+			'data': data.item
 			})
 
 	@query_except_handler
@@ -174,8 +179,16 @@ class AdminMainHandler(JsonResponseMixin):
 	def create_static_page(self):
 		pass
 
-
-
+	@query_except_handler
+	def get_fields(self, model):
+		session = Session()
+		models = {
+			'static_page': StaticPageModel
+		}
+		return self.json_response({
+			'status': 'success',
+			'fields_list': session.query(models[model]).first().fields
+			})
 
 class ImageLoadHandler(JsonResponseMixin):
 	def post(self):

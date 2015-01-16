@@ -16,8 +16,8 @@ from .mixins import PageMixin, IdMixin
 class StaticPageModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'pages'
 
-	content = Column(String(80192))
-	show_h1 = Column(Boolean)
+	content_text = Column(Text)
+	is_h1_show = Column(Boolean)
 	is_main_page = Column(Boolean)
 
 	@property
@@ -29,8 +29,10 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 			}
 
 	@property
-	def one_page(self):
-		return vars(self).items()
+	def item(self):
+		return vars(self)
+
+
 
 
 
@@ -39,3 +41,9 @@ class UrlMapping(Base, IdMixin):
 
 	old_url = Column(String(8192))
 	new_url = Column(String(8192))
+	status = Column(Integer)
+
+	@property
+	def item(self):
+		print(vars(self))
+		return vars(self)

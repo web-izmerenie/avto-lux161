@@ -28,6 +28,7 @@ class User(Base, IdMixin):
 
 def create_init_user():
 	try:
+		session = Session()
 		usr = session.query(User).filter_by(login='admin').one()
 		print("Superuser exists")
 		return False

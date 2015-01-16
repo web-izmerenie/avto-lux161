@@ -29,12 +29,14 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 class CatalogItemModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'catalog_items'
 
-	desctiption = Column(Text)
+	desctiption_text = Column(Text)
 	main_image = Column(String(8192))
 	images = Column(JSON)
 
 	section_id = Column(Integer, ForeignKey(dbprefix + 'catalog.id'))
 	orders = relationship('OrderModel')
+
+
 
 
 	# Inheritance from catalog
