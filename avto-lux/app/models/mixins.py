@@ -62,11 +62,9 @@ class PageMixin:
 
 	@property
 	def fields(cls):
-		return [x for x in cls.__dict__.keys() if x != '_sa_instance_state']
+		return (x for x in cls.__dict__.keys() if x != '_sa_instance_state')
 
 class IdMixin:
 	@declared_attr
 	def id(cls):
 		return Column(Integer, primary_key=True)
-
-

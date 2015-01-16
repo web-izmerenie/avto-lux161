@@ -137,15 +137,7 @@ class AdminMainHandler(JsonResponseMixin):
 			'status':'success',
 			'data_list': [x.item for x in data]
 			})
-		# return self.json_response({
-		# 	'status': 'success',
-		# 	'data_list': [{
-		# 		'new_url': x.new_url,
-		# 		'old_url': x.old_url,
-		# 		'id': x.id,
-		# 		'status': 301 ## TODO :: Change model
- 	# 			} for x in data ]
-		# 	})
+
 
 	@query_except_handler
 	def get_accounts_list(self):
@@ -180,14 +172,15 @@ class AdminMainHandler(JsonResponseMixin):
 		pass
 
 	@query_except_handler
-	def get_fields(self, model):
+	def get_fields(self, model, exclude):
+		print(exclude)
 		session = Session()
 		models = {
 			'static_page': StaticPageModel
 		}
 		return self.json_response({
 			'status': 'success',
-			'fields_list': session.query(models[model]).first().fields
+			'fields_list': [x for x in session.query(models[model]).first().fields if x not in exclude]
 			})
 
 class ImageLoadHandler(JsonResponseMixin):
