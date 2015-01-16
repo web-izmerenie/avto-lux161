@@ -1,0 +1,5 @@
+{
+  "root_url": "/adm/",
+  "logout_url": "/adm/logout",
+  "ajax_data_url": "/adm/data.json"
+}

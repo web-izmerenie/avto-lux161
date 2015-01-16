@@ -17,7 +17,23 @@
         "name": "Название",
         "url": "URL",
         "add": "Добавить страницу",
-        "refresh": "Обновить"
+        "refresh": "Обновить",
+        "form": {
+          "id": "ID",
+          "title": "Заголовок",
+          "content_text": "Содержимое страницы",
+          "alias": "Путь",
+          "is_active": "Активен",
+          "is_main_page": "Главная страница",
+          "has_footer_slogan": "Показывать афоризм внизу страницы",
+          "footer_slogan": "Афоризм внизу страницы",
+          "is_h1_show": "Показывать H1 заголовок",
+          "seo_title": "SEO: Заголовок H1",
+          "seo_meta_title": "SEO: Заголовок страницы",
+          "seo_meta_description": "SEO: Описание",
+          "seo_meta_keywords": "SEO: Ключевые слова",
+          "submit": "Сохранить"
+        }
       },
       "catalog": {
         "sections_list": "Список разделов",

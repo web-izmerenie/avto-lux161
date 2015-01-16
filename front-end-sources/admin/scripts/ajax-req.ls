@@ -8,11 +8,12 @@
 require! {
 	\jquery : $
 	\backbone.wreqr : W
+	'./config.json' : config
 }
 
 module.exports = (options)->
 	options = {
-		url: 'data.json'
+		url: config.ajax_data_url
 		data-type: \json
 		method: \POST
 		cache: false

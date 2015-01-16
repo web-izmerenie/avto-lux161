@@ -8,6 +8,7 @@
 require! {
 	\backbone : B
 	\marionette : M
+	'./config.json' : config
 }
 
 class App extends M.Application
@@ -20,7 +21,7 @@ class App extends M.Application
 		@add-regions container: @get-option \container
 
 	start: (options)!->
-		B.history .start root: '/adm/'
+		B.history .start root: config.root_url
 
 	on-destroy: !->
 		B.history .stop!

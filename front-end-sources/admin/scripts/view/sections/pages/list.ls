@@ -1,5 +1,5 @@
 /**
- * Pages Elements List View
+ * Pages List View
  *
  * @author Viacheslav Lotsmanov
  * @author Andrew Fatkulin
@@ -18,18 +18,18 @@ require! {
 	'../../loader' : LoaderView
 }
 
-class PagesItemView extends M.ItemView
+class ItemView extends M.ItemView
 	tag-name: \tr
-	template: 'pages/elements-list-item'
+	template: 'pages/list-item'
 
 class TableListView extends M.CompositeView
 	class-name: 'panel panel-default'
-	template: 'pages/elements-list'
+	template: 'pages/list'
 	model: new BasicModel!
 	child-view-container: \tbody
-	child-view: PagesItemView
+	child-view: ItemView
 
-class PagesElementsListView extends SmoothView
+class PagesListView extends SmoothView
 	initialize: !->
 		SmoothView.prototype.initialize ...
 
@@ -65,11 +65,11 @@ class PagesElementsListView extends SmoothView
 	regions:
 		\main : '.main'
 
-	class-name: 'pages-elements-list v-stretchy'
+	class-name: 'pages-list v-stretchy'
 	template: 'main'
 	model: new BasicModel!
 
 	on-destroy: !->
 		@ajax.abort! if @ajax?
 
-module.exports = PagesElementsListView
+module.exports = PagesListView

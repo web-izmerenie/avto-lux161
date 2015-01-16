@@ -10,12 +10,14 @@ require! {
 	\marionette : M
 	\backbone.wreqr : W
 
+	'../config.json' : config
 	'../ajax-req'
 
 	'../collection/panel-menu' : panel-menu-list
 	'../view/login-form' : LoginFormView
 	'../view/panel' : PanelView
-	'../view/sections/pages/elements-list' : PagesElementsListView
+	'../view/sections/pages/list' : PagesListView
+	'../view/sections/pages/add' : AddPageView
 	'../view/sections/catalog/sections-list' : CatalogSectionsListView
 	'../view/sections/catalog/elements-list' : CatalogElementsListView
 	'../view/sections/redirect/list' : RedirectListView
@@ -56,14 +58,23 @@ class AppRouterController extends M.Controller
 			B.history .navigate first-ref, { trigger: true, replace: true }
 			return
 
-	\pages-elements-list : !->
+	\pages-list : !->
 		return unless auth-handler @
 
 		panel-view = (new PanelView!).render!
-		pages-view = (new PagesElementsListView!).render!
+		pages-view = (new PagesListView!).render!
 
 		@get-option \app .get-region \container .show panel-view
 		panel-view.get-option \work-area .show pages-view
+
+	\add-page : !->
+		return unless auth-handler @
+
+		panel-view = (new PanelView!).render!
+		view = (new AddPageView!).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show view
 
 	\catalog-sections-list : !->
 		return unless auth-handler @
@@ -106,7 +117,7 @@ class AppRouterController extends M.Controller
 		return unless auth-handler @, false
 
 		ajax-req {
-			url: '/adm/logout'
+			url: config.logout_url
 			success: (json)!~>
 				unless json.status is \logout
 					W.radio.commands .execute \police, \panic,
