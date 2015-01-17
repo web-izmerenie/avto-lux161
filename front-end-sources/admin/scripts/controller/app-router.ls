@@ -18,6 +18,7 @@ require! {
 	'../view/panel' : PanelView
 	'../view/sections/pages/list' : PagesListView
 	'../view/sections/pages/add' : AddPageView
+	'../view/sections/pages/edit' : EditPageView
 	'../view/sections/catalog/sections-list' : CatalogSectionsListView
 	'../view/sections/catalog/elements-list' : CatalogElementsListView
 	'../view/sections/redirect/list' : RedirectListView
@@ -72,6 +73,15 @@ class AppRouterController extends M.Controller
 
 		panel-view = (new PanelView!).render!
 		view = (new AddPageView!).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show view
+
+	\edit-page : (id)!->
+		return unless auth-handler @
+
+		panel-view = (new PanelView!).render!
+		view = (new EditPageView id: id).render!
 
 		@get-option \app .get-region \container .show panel-view
 		panel-view.get-option \work-area .show view

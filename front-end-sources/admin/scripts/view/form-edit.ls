@@ -29,13 +29,19 @@ class FormEditView extends SmoothView
 	on-show: !->
 		@get-region \main .show @loader-view
 
+		args = {
+			model: @get-option \section
+		}
+
+		if (@get-option \type) is \edit
+			args.id = @get-option \id
+			args.edit = true
+
 		@ajax.abort! if @ajax?
 		@ajax = ajax-req {
 			data:
 				action: \get_fields
-				args: JSON.stringify {
-					model: \static_page
-				}
+				args: JSON.stringify args
 			success: (json)!~>
 				if json.status is not \success or not json.fields_list?
 					W.radio.commands .execute \police, \panic,
@@ -61,6 +67,9 @@ class FormEditView extends SmoothView
 					@ajax.abort! if @ajax
 					B.history.navigate (@get-option \list-page), trigger: true
 
+				if (@get-option \type) is \edit and json.values_list?
+					view.model.set \values, json.values_list
+
 				parent-view = @
 				view.on \render !->
 					$form = @$el
@@ -80,10 +89,11 @@ class FormEditView extends SmoothView
 
 	send-to-server: (vals, form-view)!->
 		vals.section = \pages
+		vals.id = @get-option \id if (@get-option \type) is \edit
 		@ajax.abort! if @ajax
 		@ajax = ajax-req {
 			data:
-				action: @get-option \type
+				action: ((@get-option \type) is \edit) and \update or \add
 				args: JSON.stringify vals
 			success: (json)!~>
 				if json.status is \error

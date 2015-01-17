@@ -16,6 +16,7 @@ class AppRouter extends M.AppRouter
 		'panel' : \panel
 		'panel/pages' : \pages-list
 		'panel/pages/add.html' : \add-page
+		'panel/pages/edit_:id.html' : \edit-page
 		'panel/catalog' : \catalog-sections-list
 		'panel/catalog/section_:id/' : \catalog-elements-list
 		#'panel/catalog/section_:sid/:eid.html' : \catalog-elements-edit
