@@ -10,6 +10,7 @@ require! {
 	\marionette : M
 	\backbone.wreqr : W
 	'../../../ajax-req'
+	'../../../config.json'
 
 	'../../../model/basic' : BasicModel
 
@@ -48,6 +49,12 @@ class AddPageView extends SmoothView
 					new-arr.push name: item
 
 				list = new B.Collection new-arr
+				list.comparator = (item)->
+					return config.sections[\pages]
+						.fields_sort
+						.index-of (item.get \name)
+				list.sort!
+
 				view = new FormView {
 					collection: list
 					page: \pages

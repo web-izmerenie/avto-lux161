@@ -1,5 +1,24 @@
 {
   "root_url": "/adm/",
   "logout_url": "/adm/logout",
-  "ajax_data_url": "/adm/data.json"
+  "ajax_data_url": "/adm/data.json",
+  "sections": {
+    "pages": {
+      "fields_sort": [
+        "is_active",
+        "is_main_page",
+        "title",
+        "alias",
+        "content_text",
+        "files",
+        "is_h1_show",
+        "seo_title",
+        "seo_meta_title",
+        "seo_meta_descrtption",
+        "seo_meta_keywords",
+        "has_footer_slogan",
+        "footer_slogan"
+      ]
+    }
+  }
 }
