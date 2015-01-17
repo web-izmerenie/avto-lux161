@@ -29,15 +29,31 @@ class TableListView extends M.CompositeView
 	child-view-container: \tbody
 	child-view: ItemView
 
+	ui:
+		\refresh : \.refresh
+	events:
+		'click @ui.refresh': \refresh-list
+	\refresh-list : ->
+		@trigger \refresh:list
+		false
+
 class PagesListView extends SmoothView
 	initialize: !->
 		SmoothView.prototype.initialize ...
 
 		@loader-view = (new LoaderView!).render!
 
+		@table-list = new B.Collection []
+		@table-view = new TableListView collection: @table-list
+		@table-view.render!
+
+		@table-view.on \refresh:list, !~> @get-list!
+
 	on-show: !->
 		@get-region \main .show @loader-view
+		@get-list !~> @get-region \main .show @table-view
 
+	get-list : (cb)!->
 		@ajax = ajax-req {
 			data:
 				action: \get_pages_list
@@ -55,11 +71,8 @@ class PagesListView extends SmoothView
 						url: item.alias
 					}
 
-				list = new B.Collection new-data-list
-				table-view = new TableListView collection: list
-				table-view.render!
-
-				@get-region \main .show table-view
+				@table-list.reset new-data-list
+				cb! if cb?
 		}
 
 	regions:
