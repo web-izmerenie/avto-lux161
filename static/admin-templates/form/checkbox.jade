@@ -1,3 +1,6 @@
-input(type="checkbox", name=name)
+if values[name]
+	input(type="checkbox", name=name, checked="checked")
+else
+	input(type="checkbox", name=name)
 =' '
 span= local.get('sections')[page].form[name]

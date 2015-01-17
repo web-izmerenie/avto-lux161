@@ -13,18 +13,12 @@ require! {
 	'../model/localization' : LocalizationModel
 	'./smooth' : SmoothView
 	'./loader' : LoaderView
+	'./error-msg' : ErrorMessageView
 	'../ajax-req'
 }
 
+# TODO remove this
 localization-model = new LocalizationModel!
-
-class LoginFormErrorView extends SmoothView
-	initialize: (options)!->
-		SmoothView.prototype.initialize ...
-		@.model = new BasicModel {
-			message: options.message or ''
-		}
-	template: \err-msg
 
 class LoginFormView extends SmoothView
 	\auth-url : '/adm/auth' # TODO try get with prefix from B
@@ -61,7 +55,7 @@ class LoginFormView extends SmoothView
 			W.radio.commands .execute \police, \panic,
 				new Error 'Unknown "error_code"'
 
-		err-view = new LoginFormErrorView {
+		err-view = new ErrorMessageView {
 			message: localization-model .get \forms .err[json.error_code]
 		}
 		@ .get-region \message .show err-view

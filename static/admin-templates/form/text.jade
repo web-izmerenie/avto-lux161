@@ -1,3 +1,6 @@
 span= local.get('sections')[page].form[name]
 =' '
-input.form-control(type="text", name=name)
+- var value = ''
+if values[name]
+	- var value = values[name]
+input.form-control(type="text", name=name, value=value)

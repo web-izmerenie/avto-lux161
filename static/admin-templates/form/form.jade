@@ -1,5 +1,9 @@
-if form_title_key
-	h1= local.get('sections')[page][form_title_key]
+h1= local.get('sections')[page].title[type]
+if err_key
+	.alert.alert-danger(role="alert")
+		span.glyphicon.glyphicon-exclamation-sign(aria-hidden="true")
+		span.sr-only= local.get('error') + ': '
+		=' ' + local.get('sections')[page].form.err[err_key]
 .fields
 .actions
 	input.btn.btn-default.btn-success(

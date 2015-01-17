@@ -1,3 +1,6 @@
 span= local.get('sections')[page].form[name]
 =' '
-textarea.form-control(name=name)
+- var value = ''
+if values[name]
+	- var value = values[name]
+textarea.form-control(name=name)= value
