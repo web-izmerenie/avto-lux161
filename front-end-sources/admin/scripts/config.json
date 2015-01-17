@@ -20,5 +20,8 @@
         "footer_slogan"
       ]
     }
+  },
+  "tinymce_options": {
+    "script_url": null
   }
 }

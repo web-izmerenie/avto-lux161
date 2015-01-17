@@ -34,21 +34,13 @@ class AddPageView extends SmoothView
 				action: \get_fields
 				args: JSON.stringify {
 					model: \static_page
-					exclude :
-						\id
-						\create_date
-						\last_change
 				}
 			success: (json)!~>
 				if json.status is not \success or not json.fields_list?
 					W.radio.commands .execute \police, \panic,
 						new Error 'Incorrect server data'
 
-				new-arr = []
-				for item in json.fields_list
-					new-arr.push name: item
-
-				list = new B.Collection new-arr
+				list = new B.Collection json.fields_list
 
 				list.comparator = (item)->
 					return config.sections[\pages]

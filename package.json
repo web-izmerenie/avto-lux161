@@ -87,11 +87,11 @@
         "jshintDisabled": true,
         "shim": {
           "jquery": {
-            "path": "./bower_components/jquery/dist/jquery.js",
+            "path": "./bower_components/jquery/dist/jquery.min.js",
             "exports": ""
           },
           "marionette": {
-            "path": "./bower_components/marionette/lib/backbone.marionette.js",
+            "path": "./bower_components/marionette/lib/backbone.marionette.min.js",
             "exports": ""
           },
           "backbone": {
@@ -103,16 +103,21 @@
             "exports": ""
           },
           "backbone.babysitter": {
-            "path": "./bower_components/backbone.babysitter/lib/backbone.babysitter.js",
+            "path": "./bower_components/backbone.babysitter/lib/backbone.babysitter.min.js",
             "exports": ""
           },
           "backbone.wreqr": {
-            "path": "./bower_components/backbone.wreqr/lib/backbone.wreqr.js",
+            "path": "./bower_components/backbone.wreqr/lib/backbone.wreqr.min.js",
             "exports": ""
           },
           "jade": {
             "path": "./node_modules/jade",
             "exports": ""
+          },
+          "jquery.tinymce": {
+            "path": "./bower_components/tinymce/jquery.tinymce.min.js",
+            "exports": "",
+            "depends": { "jquery": "jQuery" }
           }
         }
       }

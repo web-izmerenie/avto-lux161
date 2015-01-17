@@ -6,14 +6,15 @@
  */
 
 require! {
+	\jquery : $
+	\jquery.tinymce : jquery-tinymce
 	\marionette : M
+	'../config.json'
 
 	'../model/basic' : BasicModel
 }
 
-class HTMLInputItemView extends M.ItemView
-	tag-name: \label
-	class-name: 'html'
+tinymce = window.tinymce
 
 class TextItemView extends M.ItemView
 	tag-name: \label
@@ -24,6 +25,15 @@ class CheckboxItemView extends M.ItemView
 	tag-name: \label
 	class-name: 'checkbox'
 	template: 'form/checkbox'
+
+class HTMLInputItemView extends M.ItemView
+	tag-name: \label
+	class-name: 'html'
+	template: 'form/html'
+	ui:
+		textarea: 'textarea'
+	on-render: !->
+		@ui.textarea.tinymce config.tinymce_options
 
 class FormView extends M.CompositeView
 	tag-name: \form
@@ -41,10 +51,9 @@ class FormView extends M.CompositeView
 		model.set \page @get-option \page
 
 	get-child-view: (item)~>
-		name = item.get \name
-
-		if (name.index-of \is_) is 0 or (name.index-of \has_) is 0
-			return CheckboxItemView
+		switch item.get \type
+		| \checkbox => return CheckboxItemView
+		| \html => return HTMLInputItemView
 
 		TextItemView
 

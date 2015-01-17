@@ -8,12 +8,16 @@
 require! {
 	\jquery : $
 	\backbone : B
+
+	'./config.json'
 }
 B.$ = $
 
 <-! $ # dom ready
 
 $html = $ \html
+
+config.tinymce_options.script_url = $html .attr \data-tinymce-path
 
 require! {
 	\marionette : M
