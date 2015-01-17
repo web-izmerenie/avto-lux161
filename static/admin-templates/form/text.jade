@@ -1,1 +1,3 @@
-input.form-control(type="text", name=name, placeholder=local.get('sections')[page].form[name])
+span= local.get('sections')[page].form[name]
+=' '
+input.form-control(type="text", name=name)

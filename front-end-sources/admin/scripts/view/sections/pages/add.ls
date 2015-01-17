@@ -49,6 +49,7 @@ class AddPageView extends SmoothView
 					new-arr.push name: item
 
 				list = new B.Collection new-arr
+
 				list.comparator = (item)->
 					return config.sections[\pages]
 						.fields_sort
