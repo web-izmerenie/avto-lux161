@@ -46,6 +46,14 @@ class FormView extends M.CompositeView
 	class-name: 'form edit-form'
 	child-view-container: \.fields
 	template: 'form/form'
+	ui:
+		\cancel : \.cancel
+	events:
+		'click @ui.cancel': \cancel
+
+	cancel: ->
+		@trigger \cancel:form
+		false
 
 	initialize: !->
 		@model = new BasicModel {
