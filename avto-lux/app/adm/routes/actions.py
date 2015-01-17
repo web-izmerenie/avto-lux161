@@ -81,7 +81,9 @@ class AdminMainHandler(JsonResponseMixin):
 		}
 
 		if action not in actions.keys():
-			return self.json_response({'status': 'error'})
+			return self.json_response({
+				'status': 'error',
+				'error_code': 'non_existent_action'})
 		func = actions[action]
 		return func(**kwrgs)
 
@@ -167,8 +169,7 @@ class AdminMainHandler(JsonResponseMixin):
 	@query_except_handler
 	def get_static_page(self, id=None):
 		session = Session()
-		data = session.query(
-			StaticPageModel).filter_by(id=id).one()
+		data = session.query(StaticPageModel).filter_by(id=id).one()
 		return self.json_response({
 			'status': 'success',
 			'data': data.item
@@ -198,29 +199,54 @@ class AdminMainHandler(JsonResponseMixin):
 
 		return self.json_response({'status': 'success'})
 
-
+	##TODO :: Clear shitcode
 	@query_except_handler
 	def update_page(self, **kwargs):
 		section = kwargs['section']
 		del kwargs['section']
+		id = kwargs['id']
+		print(id)
+		del kwargs['id']
+
 		section_map = {
 			'pages': StaticPageModel,
 			'catalog' : CatalogSectionModel,
 			'catalog_page' : CatalogItemModel
 		}
+
+		fields = db_inspector.get_columns(
+			section_map[section].__tablename__
+			)
+		print(fields)
+		for item in (x for x
+			in fields
+				if x['name'].startswith('is_')
+					or x['name'].startswith('has_')):
+			if item['name'] not in kwargs.keys():
+				kwargs.update({ item['name']: False })
+			else:
+				kwargs[item['name']] = True
+
+		print(kwargs)
+
 		session = Session()
-		page = session.query(section_map[section])
-		for key in kwargs:
-			page[key] = kwargs[key]
-		session.add(page)
+		session.query(
+			section_map[section]
+				).filter_by(id=id).update(kwargs)
+
 		session.commit()
+
+		return self.json_response({'status': 'success'})
 
 
 	@query_except_handler
 	def get_fields(self, model=None, edit=False, id=None):
+		print("Edit: %s" % edit)
+		print("Model: %s" % model)
+		print("Id: %s" % id)
 		session = Session()
 		models = {
-			'static_page': StaticPageModel
+			'pages': StaticPageModel
 		}
 
 		fields = db_inspector.get_columns(
@@ -248,12 +274,13 @@ class AdminMainHandler(JsonResponseMixin):
 				continue
 
 		values = None
-		if edit:
-			data = session.query(
-				models[model]
-				).filter_by(id=id).one()
-			print(data.item)
+		if edit and id is not None:
+			data = session.query(models[model]).filter_by(id=id).one()
 			values = data.item
+			del values['_sa_instance_state']
+			del values['create_date']
+			del values['last_change']
+			print(values)
 
 		return self.json_response({
 			'status': 'success',
