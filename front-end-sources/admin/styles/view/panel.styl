@@ -8,7 +8,11 @@
 	margin-bottom 0
 
 & > .col
+	box-sizing border-box
 	padding-top 20px
+
+& > .col:first-child
+	padding-bottom 0
 
 	@media (min-width $screen-md-min)
 		padding-bottom 20px
@@ -18,3 +22,7 @@
 
 	@media (min-width $screen-md-min)
 		height 100%
+
+& > .col > .work-area
+	.form
+		padding-bottom 20px
