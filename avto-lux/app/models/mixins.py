@@ -17,7 +17,7 @@ class PageMixin:
 
 	@declared_attr
 	def is_active(cls):
-		return Column(Boolean)
+		return Column(Boolean, default=True)
 
 	# Should be tested!!
 	@declared_attr
@@ -26,7 +26,7 @@ class PageMixin:
 
 	@declared_attr
 	def has_footer_slogan(cls):
-		return Column(Boolean)
+		return Column(Boolean, default=False)
 
 	@declared_attr
 	def footer_slogan(cls):
@@ -41,7 +41,7 @@ class PageMixin:
 		return Column(String(4096))
 
 	@declared_attr
-	def seo_meta_descrtption(cls):
+	def seo_meta_description(cls):
 		return Column(String(8192))
 
 	@declared_attr

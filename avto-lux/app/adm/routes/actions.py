@@ -1,4 +1,4 @@
-import os, json
+import os, json, sys
 from app.configparser import config
 from app.utils import get_json_localization
 import tornado.template
@@ -11,7 +11,7 @@ from app.mixins.routes_mixin import (
 
 from pyjade.ext.tornado import patch_tornado
 
-from app.models.dbconnect import Session
+from app.models.dbconnect import Session, db_inspector
 from app.models.usermodels import User
 from app.models.pagemodels import (
 	StaticPageModel,
@@ -24,6 +24,7 @@ from app.models.catalogmodels import(
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func
 import datetime
+import time
 patch_tornado()
 
 
@@ -37,7 +38,7 @@ def query_except_handler(fn):
 			self.set_status(404)
 			return self.json_response({'status': 'data_not_found'})
 		except Exception as e:
-			print(e)
+			print(e, file=sys.stderr)
 			self.set_status(500)
 			return self.json_response({
 				'status': 'error',
@@ -58,7 +59,6 @@ class AdminMainHandler(JsonResponseMixin):
 			kwrgs = json.loads(self.get_argument('args'))
 		except:
 			kwrgs = {}
-		print(kwrgs)
 
 		actions = {
 			'get_pages_list': self.get_pages_list,
@@ -88,7 +88,7 @@ class AdminMainHandler(JsonResponseMixin):
 			'data_list': [ x.static_list for x in data ]
 			})
 
-	## TODO : Optimize and using join
+	## TODO : Optimize and using join ¯\(°_o)/¯
 	@query_except_handler
 	def get_catalog_sections(self):
 		session = Session()
@@ -168,24 +168,44 @@ class AdminMainHandler(JsonResponseMixin):
 		pass
 
 	@query_except_handler
-	def create_static_page(self):
-		pass
+	def create_static_page(self, **kwargs):
+		ession = Session()
+
 
 	@query_except_handler
-	def get_fields(self, model, exclude):
-		print(exclude)
+	def get_fields(self, model):
 		session = Session()
 		models = {
 			'static_page': StaticPageModel
 		}
+		fields = db_inspector.get_columns(models[model].__tablename__)
+
+		types_map = {
+			'BOOLEAN': 'checkbox',
+			'TEXT': 'html',
+			'VARCHAR(4096)': 'text',
+			'VARCHAR(8192)': 'text',
+			'JSON': 'json'
+		}
+		vidgets = []
+		for field in fields:
+			try:
+				vidget = {
+					'name': field['name'],
+					'type': types_map[str(field['type'])],
+					'default': field['default']
+				}
+				vidgets.append(vidget)
+			except KeyError:
+				# print(e, file=sys.stderr)
+				continue
+
+
 		return self.json_response({
 			'status': 'success',
-			'fields_list': [x for x in
-				(x for x in
-					models[model].__dict__.keys()
-						if x != '_sa_instance_state')
-							if x not in exclude]
+			'fields_list': vidgets
 			})
+
 
 class ImageLoadHandler(JsonResponseMixin):
 	def post(self):

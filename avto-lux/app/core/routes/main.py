@@ -31,15 +31,15 @@ from app.utils import (
 	send_mail
 )
 from app.configparser import config
-
+session = Session()
 patch_tornado()
 
 
 class MainRoute(BaseHandler, Custom404Mixin):
 	def get(self):
 		# return self.render('sdfs.jade')
-		q = session.query(User).all()
-		self.write(json.dumps(str(q)))
+
+		self.write("Hello, cars!")
 
 
 class UrlToRedirect(BaseHandler):
@@ -166,7 +166,9 @@ class FormsHandler(JsonResponseMixin):
 		order = OrderModel(
 			name=d['name'],
 			callback=d['callback'],
-			date = datetime.combine(date(int(dt[2]), int(dt[1]), int(dt[0])), time(int(d['hours']), int(d['minutes']))),
+			date = datetime.combine(
+				date(int(dt[2]), int(dt[1]), int(dt[0])),
+				time(int(d['hours']), int(d['minutes']))),
 			item_id=item.id
 			)
 

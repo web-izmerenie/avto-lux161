@@ -13,16 +13,21 @@ class Custom404Mixin(RequestHandler):
 	def write_error(self, status_code, **kwargs):
 		lang = config('LOCALIZATION')['LANG']
 		localization = get_json_localization('CLIENT')[lang]['titles']
-		print(kwargs["exc_info"])
-		self.set_status(404)
+		error_class_name = kwargs["exc_info"][1].__class__.__name__
+		print(error_class_name)
+		errors = {
+			'FileNotFoundError': 404
+		}
+		status = errors[error_class_name]
+		self.set_status(status)
 		kwrgs = {
-			'page_title':localization['error_404'],
+			'page_title':localization['error_' + str(status)],
 			'show_h1': 1,
 			'page_content': '',
 			'error_msg_list': '',
 			'success_msg_list': ''
 		}
-		return self.render('client/error-404.jade', **kwrgs)
+		return self.render('client/error-404.jade', **kwrgs) ## TODO: rename to error_page.jade
 
 
 
