@@ -16,17 +16,15 @@ require! {
 	# views
 	'../../smooth' : SmoothView
 	'../../loader' : LoaderView
+	'../../table-list' : TableListView
 }
 
 class ItemView extends M.ItemView
 	tag-name: \tr
 	template: 'catalog/sections-list-item'
 
-class TableListView extends M.CompositeView
-	class-name: 'panel panel-default'
+class CompositeListView extends TableListView
 	template: 'catalog/sections-list'
-	model: new BasicModel!
-	child-view-container: \tbody
 	child-view: ItemView
 
 class CatalogSectionsListView extends SmoothView
@@ -35,9 +33,17 @@ class CatalogSectionsListView extends SmoothView
 
 		@loader-view = (new LoaderView!).render!
 
+		@table-list = new B.Collection []
+		@table-view = new CompositeListView collection: @table-list
+		@table-view.render!
+
+		@table-view.on \refresh:list, !~> @get-list!
+
 	on-show: !->
 		@get-region \main .show @loader-view
+		@get-list !~> @get-region \main .show @table-view
 
+	get-list: (cb)!->
 		@ajax = ajax-req {
 			data:
 				action: \get_catalog_sections
@@ -55,11 +61,8 @@ class CatalogSectionsListView extends SmoothView
 						count: item.count
 					}
 
-				list = new B.Collection new-data-list
-				table-view = new TableListView collection: list
-				table-view.render!
-
-				@get-region \main .show table-view
+				@table-list.reset new-data-list
+				cb! if cb?
 		}
 
 	regions:

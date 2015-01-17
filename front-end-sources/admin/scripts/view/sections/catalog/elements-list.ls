@@ -16,17 +16,15 @@ require! {
 	# views
 	'../../smooth' : SmoothView
 	'../../loader' : LoaderView
+	'../../table-list' : TableListView
 }
 
 class ItemView extends M.ItemView
 	tag-name: \tr
 	template: 'catalog/elements-list-item'
 
-class TableListView extends M.CompositeView
-	class-name: 'panel panel-default'
+class CompositeListView extends TableListView
 	template: 'catalog/elements-list'
-	model: new BasicModel!
-	child-view-container: \tbody
 	child-view: ItemView
 
 class PageView extends M.LayoutView
@@ -46,9 +44,26 @@ class CatalogElementsListView extends SmoothView
 
 		@loader-view = (new LoaderView!).render!
 
+		@table-list = new B.Collection []
+		@table-view = new CompositeListView collection: @table-list
+		@table-view.render!
+
+		@table-view.on \refresh:list, !~> @get-list!
+
+		@page-view = (new PageView!).render!
+		@header-view = new HeaderView {
+			model: new BasicModel { section_name: null }
+		}
+		@header-view.render!
+
 	on-show: !->
 		@get-region \main .show @loader-view
+		@get-list !~>
+			@get-region \main .show @page-view
+			@page-view.get-region \header .show @header-view
+			@page-view.get-region \main .show @table-view
 
+	get-list: (cb)!->
 		@ajax = ajax-req {
 			data:
 				action: \get_catalog_elements
@@ -72,18 +87,10 @@ class CatalogElementsListView extends SmoothView
 						count: item.count
 					}
 
-				list = new B.Collection new-data-list
-				table-view = new TableListView collection: list
-				table-view.render!
-
-				page-view = (new PageView!).render!
-				header-view = new HeaderView {
-					model: new BasicModel { section_name: json.section_title }
-				}
-
-				@get-region \main .show page-view
-				page-view.get-region \header .show header-view
-				page-view.get-region \main .show table-view
+				@table-list.reset new-data-list
+				@header-view.model.set \section_name, json.section_title
+				@header-view.render!
+				cb! if cb?
 		}
 
 	regions:

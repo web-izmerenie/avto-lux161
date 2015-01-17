@@ -16,26 +16,16 @@ require! {
 	# views
 	'../../smooth' : SmoothView
 	'../../loader' : LoaderView
+	'../../table-list' : TableListView
 }
 
 class ItemView extends M.ItemView
 	tag-name: \tr
 	template: 'pages/list-item'
 
-class TableListView extends M.CompositeView
-	class-name: 'panel panel-default'
+class CompositeListView extends TableListView
 	template: 'pages/list'
-	model: new BasicModel!
-	child-view-container: \tbody
 	child-view: ItemView
-
-	ui:
-		\refresh : \.refresh
-	events:
-		'click @ui.refresh': \refresh-list
-	\refresh-list : ->
-		@trigger \refresh:list
-		false
 
 class PagesListView extends SmoothView
 	initialize: !->
@@ -44,7 +34,7 @@ class PagesListView extends SmoothView
 		@loader-view = (new LoaderView!).render!
 
 		@table-list = new B.Collection []
-		@table-view = new TableListView collection: @table-list
+		@table-view = new CompositeListView collection: @table-list
 		@table-view.render!
 
 		@table-view.on \refresh:list, !~> @get-list!
@@ -53,7 +43,7 @@ class PagesListView extends SmoothView
 		@get-region \main .show @loader-view
 		@get-list !~> @get-region \main .show @table-view
 
-	get-list : (cb)!->
+	get-list: (cb)!->
 		@ajax = ajax-req {
 			data:
 				action: \get_pages_list
