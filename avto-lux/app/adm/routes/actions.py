@@ -66,7 +66,8 @@ class AdminMainHandler(JsonResponseMixin):
 			'get_catalog_elements': self.get_catalog_elements,
 			'get_redirect_list': self.get_redirect_list,
 			'get_accounts_list': self.get_accounts_list,
-			'get_fields': self.get_fields
+			'get_fields': self.get_fields,
+			'create_static_page': self.create_static_page
 		}
 
 		if action not in actions.keys():
@@ -169,7 +170,10 @@ class AdminMainHandler(JsonResponseMixin):
 
 	@query_except_handler
 	def create_static_page(self, **kwargs):
-		ession = Session()
+		session = Session()
+		page = Page(**kwargs)
+		session.add(page)
+		session.commit()
 
 
 	@query_except_handler
@@ -188,12 +192,13 @@ class AdminMainHandler(JsonResponseMixin):
 			'JSON': 'json'
 		}
 		vidgets = []
+
 		for field in fields:
 			try:
 				vidget = {
 					'name': field['name'],
 					'type': types_map[str(field['type'])],
-					'default': field['default']
+					'default_val': field['default']
 				}
 				vidgets.append(vidget)
 			except KeyError:

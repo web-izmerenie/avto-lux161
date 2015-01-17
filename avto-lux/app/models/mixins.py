@@ -5,8 +5,10 @@ from sqlalchemy import (
 	String,
 	Integer,
 	Boolean,
-	DateTime
+	DateTime,
+
 )
+from sqlalchemy.schema import ColumnDefault
 from sqlalchemy.dialects.postgresql import JSON
 
 class PageMixin:
@@ -19,7 +21,6 @@ class PageMixin:
 	def is_active(cls):
 		return Column(Boolean, default=True)
 
-	# Should be tested!!
 	@declared_attr
 	def alias(cls):
 		return Column(String(8192), unique=True)

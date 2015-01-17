@@ -1,5 +1,6 @@
 from sqlalchemy import (
 	Column,
+	Table,
 	String,
 	Integer,
 	Boolean,
