@@ -58,6 +58,7 @@ class AddPageView extends SmoothView
 				view = new FormView {
 					collection: list
 					page: \pages
+					\form-title-key : 'add_title'
 				}
 				view.render!
 

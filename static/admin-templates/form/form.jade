@@ -1,0 +1,9 @@
+if form_title_key
+	h1= local.get('sections')[page][form_title_key]
+.fields
+.actions
+	input.btn.btn-default.btn-success(
+		type="submit",
+		value=local.get('sections')[page].save)
+	=' '
+	button.cancel.btn.btn-default= local.get('sections')[page].cancel

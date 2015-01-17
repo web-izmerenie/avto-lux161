@@ -25,14 +25,21 @@ class CheckboxItemView extends M.ItemView
 	class-name: 'checkbox'
 	template: 'form/checkbox'
 
-class FormView extends M.CollectionView
+class FormView extends M.CompositeView
 	tag-name: \form
 	class-name: 'form edit-form'
-	model: new BasicModel!
+	child-view-container: \.fields
+	template: 'form/form'
+	initialize: !->
+		@model = new BasicModel {
+			page: @get-option \page
+			\form_title_key : (@get-option \form-title-key) or ''
+		}
+
 	child-view-options: (model, index)~>
 		model.set \local, @model.get \local
-		if (@get-option \page)?
-			model.set \page @get-option \page
+		model.set \page @get-option \page
+
 	get-child-view: (item)~>
 		name = item.get \name
 
