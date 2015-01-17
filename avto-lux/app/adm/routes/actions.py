@@ -180,7 +180,11 @@ class AdminMainHandler(JsonResponseMixin):
 		}
 		return self.json_response({
 			'status': 'success',
-			'fields_list': [x for x in session.query(models[model]).first().fields if x not in exclude]
+			'fields_list': [x for x in
+				(x for x in
+					models[model].__dict__.keys()
+						if x != '_sa_instance_state')
+							if x not in exclude]
 			})
 
 class ImageLoadHandler(JsonResponseMixin):
