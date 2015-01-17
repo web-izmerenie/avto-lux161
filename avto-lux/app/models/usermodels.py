@@ -25,6 +25,10 @@ class User(Base, IdMixin):
 	def __repr__(self):
 		return self.login
 
+	@property
+	def item(self):
+		return vars(self)
+
 
 def create_init_user():
 	try:

@@ -25,6 +25,10 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 
 	items = relationship('CatalogItemModel')
 
+	@property
+	def item(self):
+		return vars(self)
+
 
 class CatalogItemModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'catalog_items'
@@ -36,12 +40,11 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 	section_id = Column(Integer, ForeignKey(dbprefix + 'catalog.id'))
 	orders = relationship('OrderModel')
 
-
-
-
-	# Inheritance from catalog
-
 	inherit_seo_meta_title = Column(Boolean)
 	inherit_seo_meta_keywords = Column(Boolean)
 	inherit_seo_meta_descrtption = Column(Boolean)
 	inherit_seo_title = Column(Boolean)
+
+	@property
+	def item(self):
+		return vars(self)

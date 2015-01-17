@@ -18,7 +18,7 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'pages'
 
 	content_text = Column(Text)
-	is_h1_show = Column(Boolean, default=True)
+	is_h1_show = Column(Boolean, default=False)
 	is_main_page = Column(Boolean, default=False)
 
 	@property
@@ -40,9 +40,8 @@ class UrlMapping(Base, IdMixin):
 
 	old_url = Column(String(8192))
 	new_url = Column(String(8192))
-	status = Column(Integer, default=301)
+	status = Column(Integer)
 
 	@property
 	def item(self):
-		print(vars(self))
 		return vars(self)

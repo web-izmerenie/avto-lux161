@@ -19,7 +19,7 @@ class PageMixin:
 
 	@declared_attr
 	def is_active(cls):
-		return Column(Boolean, default=True)
+		return Column(Boolean, default=False)
 
 	@declared_attr
 	def alias(cls):

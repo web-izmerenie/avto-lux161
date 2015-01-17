@@ -34,15 +34,22 @@ def query_except_handler(fn):
 		try:
 			return fn(*args, **kwargs)
 		except NoResultFound as n:
-			print(n)
 			self.set_status(404)
-			return self.json_response({'status': 'data_not_found'})
+			return self.json_response({
+				'status': 'data_not_found'
+				})
 		except Exception as e:
+			if e.__class__.__name__ == 'IntegrityError':
+				return self.json_response({
+					'status': 'error',
+					'error_code': 'unique_key_exist',
+					})
 			print(e, file=sys.stderr)
 			self.set_status(500)
 			return self.json_response({
 				'status': 'error',
-				'error_code': 'system_fail'})
+				'error_code': 'system_fail'
+				})
 	wrap.__name__ = fn.__name__
 	return wrap
 
@@ -51,7 +58,9 @@ class AdminMainHandler(JsonResponseMixin):
 	def post(self):
 		if not self.get_current_user():
 			self.set_status(403)
-			return self.json_response({'status': 'unauthorized'})
+			return self.json_response({
+				'status': 'unauthorized'
+				})
 
 		action = self.get_argument('action')
 		kwrgs = {}
@@ -67,7 +76,8 @@ class AdminMainHandler(JsonResponseMixin):
 			'get_redirect_list': self.get_redirect_list,
 			'get_accounts_list': self.get_accounts_list,
 			'get_fields': self.get_fields,
-			'create_static_page': self.create_static_page
+			'add': self.create_page,
+			'update': self.update_page
 		}
 
 		if action not in actions.keys():
@@ -111,7 +121,7 @@ class AdminMainHandler(JsonResponseMixin):
 
 
 	@query_except_handler
-	def get_catalog_elements(self, id=id):
+	def get_catalog_elements(self, id=None):
 		session=Session()
 		data = session.query(
 			CatalogItemModel.id,
@@ -155,41 +165,74 @@ class AdminMainHandler(JsonResponseMixin):
 
 
 	@query_except_handler
-	def get_static_page(self, id):
+	def get_static_page(self, id=None):
 		session = Session()
-		data = session.query(StaticPageModel).filter_by(id=id).one()
-		print(data.one_record)
+		data = session.query(
+			StaticPageModel).filter_by(id=id).one()
 		return self.json_response({
 			'status': 'success',
 			'data': data.item
 			})
 
-	@query_except_handler
-	def update_static_page(self):
-		pass
 
 	@query_except_handler
-	def create_static_page(self, **kwargs):
+	def create_page(self, **kwargs):
+		section = kwargs['section']
+		del kwargs['section']
+
+		for item in (x for x
+			in kwargs.keys()
+				if x.startswith('is_')
+					or x.startswith('has_')):
+			kwargs[item] = True
+
+		section_map = {
+			'pages': StaticPageModel,
+			'catalog' : CatalogSectionModel,
+			'catalog_page' : CatalogItemModel
+		}
 		session = Session()
-		page = Page(**kwargs)
+		page = section_map[section](**kwargs)
+		session.add(page)
+		session.commit()
+
+		return self.json_response({'status': 'success'})
+
+
+	@query_except_handler
+	def update_page(self, **kwargs):
+		section = kwargs['section']
+		del kwargs['section']
+		section_map = {
+			'pages': StaticPageModel,
+			'catalog' : CatalogSectionModel,
+			'catalog_page' : CatalogItemModel
+		}
+		session = Session()
+		page = session.query(section_map[section])
+		for key in kwargs:
+			page[key] = kwargs[key]
 		session.add(page)
 		session.commit()
 
 
 	@query_except_handler
-	def get_fields(self, model):
+	def get_fields(self, model=None, edit=False, id=None):
 		session = Session()
 		models = {
 			'static_page': StaticPageModel
 		}
-		fields = db_inspector.get_columns(models[model].__tablename__)
+
+		fields = db_inspector.get_columns(
+			models[model].__tablename__
+			)
 
 		types_map = {
 			'BOOLEAN': 'checkbox',
 			'TEXT': 'html',
 			'VARCHAR(4096)': 'text',
 			'VARCHAR(8192)': 'text',
-			'JSON': 'json'
+			'JSON': 'file'
 		}
 		vidgets = []
 
@@ -202,14 +245,23 @@ class AdminMainHandler(JsonResponseMixin):
 				}
 				vidgets.append(vidget)
 			except KeyError:
-				# print(e, file=sys.stderr)
 				continue
 
+		values = None
+		if edit:
+			data = session.query(
+				models[model]
+				).filter_by(id=id).one()
+			print(data.item)
+			values = data.item
 
 		return self.json_response({
 			'status': 'success',
-			'fields_list': vidgets
+			'fields_list': vidgets,
+			'values_list': values
 			})
+
+
 
 
 class ImageLoadHandler(JsonResponseMixin):

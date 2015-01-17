@@ -20,6 +20,10 @@ class CallModel(Base, IdMixin):
 	phone = Column(String(4096))
 	date  = Column(DateTime)
 
+	@property
+	def item(self):
+		return vars(self)
+
 
 class OrderModel(Base, IdMixin):
 	__tablename__ = dbprefix + 'orders'
@@ -28,6 +32,10 @@ class OrderModel(Base, IdMixin):
 	callback = Column(String(8192))
 	date = Column(DateTime)
 	item_id = Column(Integer, ForeignKey(dbprefix + 'catalog_items.id'))
+
+	@property
+	def item(self):
+		return vars(self)
 
 
 class PhoneModel(Base, IdMixin):
@@ -39,3 +47,7 @@ class PhoneModel(Base, IdMixin):
 
 	def __repr__(self):
 		return self.phone
+
+	@property
+	def item(self):
+		return vars(self)
