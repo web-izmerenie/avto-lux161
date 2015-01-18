@@ -41,6 +41,14 @@ auth-handler = (obj, store-ref=true)->
 
 	true
 
+panel-page-handler = (controller, view)->
+	return unless auth-handler controller
+
+	panel-view = (new PanelView!).render!
+
+	controller.get-option \app .get-region \container .show panel-view
+	panel-view.get-option \work-area .show view
+
 class AppRouterController extends M.Controller
 	get-option: M.proxy-get-option
 
@@ -64,104 +72,40 @@ class AppRouterController extends M.Controller
 			return
 
 	\pages-list : !->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
-		pages-view = (new PagesListView!).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show pages-view
+		panel-page-handler @, (new PagesListView!).render!
 
 	\add-page : !->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
-		view = (new AddPageView!).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show view
+		panel-page-handler @, (new AddPageView!).render!
 
 	\edit-page : (id)!->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
-		view = (new EditPageView id: id).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show view
+		panel-page-handler @, (new EditPageView id: id).render!
 
 	\catalog-sections-list : !->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
-		catalog-view = (new CatalogSectionsListView!).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show catalog-view
+		panel-page-handler @, (new CatalogSectionsListView!).render!
 
 	\catalog-elements-list : (section-id)!->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
-		catalog-view = new CatalogElementsListView \section-id : section-id
-		catalog-view.render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show catalog-view
+		view = (new CatalogElementsListView \section-id : section-id).render!
+		panel-page-handler @, view
 
 	\catalog-element-add : (sid)!->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
 		view = (new CatalogElementAddView {\section-id : sid}).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show view
+		panel-page-handler @, view
 
 	\catalog-element-edit : (sid, eid)!->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
 		view = (new CatalogElementEditView {\section-id : sid, id: eid}).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show view
+		panel-page-handler @, view
 
 	\redirect-list : !->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
-		redirect-view = (new RedirectListView!).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show redirect-view
+		panel-page-handler @, (new RedirectListView!).render!
 
 	\add-redirect : !->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
-		view = (new AddRedirectView!).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show view
+		panel-page-handler @, (new AddRedirectView!).render!
 
 	\edit-redirect : (id)!->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
-		view = (new EditRedirectView id: id).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show view
+		panel-page-handler @, (new EditRedirectView id: id).render!
 
 	\accounts : !->
-		return unless auth-handler @
-
-		panel-view = (new PanelView!).render!
-		accounts-view = (new AccountsListView!).render!
-
-		@get-option \app .get-region \container .show panel-view
-		panel-view.get-option \work-area .show accounts-view
+		panel-page-handler @, (new AccountsListView!).render!
 
 	\logout : !->
 		return unless auth-handler @, false
