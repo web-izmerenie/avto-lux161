@@ -38,11 +38,17 @@ class CatalogElementsListView extends ListView
 	initialize: !->
 		ListView.prototype.initialize ...
 
+		section-id = @get-option \section-id
 		@init-table-list CompositeListView
+
+		@table-view.model.set \section_id, section-id
 
 		@page-view = (new PageView!).render!
 		@header-view = new HeaderView {
-			model: new BasicModel { section_name: null }
+			model: new BasicModel {
+				section_name: null
+				section_id: section-id
+			}
 		}
 		@header-view.render!
 

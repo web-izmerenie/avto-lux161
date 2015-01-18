@@ -1,13 +1,20 @@
 .panel-heading
 	.row
-		.col.col-md-6
+		.col.col-md-3
 			h1.h5= local.get('sections').catalog.elements_list
-		.col.col-md-6.align-right
+		.col.col-md-9.align-right
 			.btn-group
 				button.refresh.btn.btn-default
 					span.glyphicon.glyphicon-transfer
 					= ' ' + local.get('sections').catalog.refresh
-				a.add.btn.btn-default.btn-success(href="#")
+				a.add.btn.btn-default.btn-info(
+					href= '#panel/catalog/section_' + section_id + '/edit.html'
+				)
+					span.glyphicon.glyphicon-pencil
+					= ' ' + local.get('sections').catalog.edit_section
+				a.add.btn.btn-default.btn-success(
+					href= '#panel/catalog/section_' + section_id + '/add.html'
+				)
 					span.glyphicon.glyphicon-plus
 					= ' ' + local.get('sections').catalog.add_element
 table.table
