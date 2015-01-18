@@ -17,10 +17,10 @@ require! {
 	'../../smooth' : SmoothView
 	'../../loader' : LoaderView
 	'../../table-list' : TableListView
+	'../../table-item' : TableItemView
 }
 
-class ItemView extends M.ItemView
-	tag-name: \tr
+class ItemView extends TableItemView
 	template: 'catalog/elements-list-item'
 
 class CompositeListView extends TableListView
