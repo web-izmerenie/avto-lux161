@@ -4,7 +4,7 @@ html(lang=lang,
 	data-local-file=static_url('admin-local.json'),
 	data-is-auth=is_auth,
 	data-is-debug=is_debug,
-	data-tinymce-path=static_url('tinymce/tinymce.min.js'))
+	data-tinymce-path=static_url('tinymce/tinymce.js'))
 	head
 		meta(charset="utf-8")
 
@@ -17,7 +17,9 @@ html(lang=lang,
 		link(href=static_url('admin-build.css'), type="text/css", rel="stylesheet")
 		script(src=static_url('admin-build.js'), type="text/javascript")
 	body
-		.loading.container
-			.wrap
-				.spinner.glyphicon.glyphicon-refresh
-				.text= local['page_loading']
+		.main-page-container.v-stretchy
+			.loading.container
+				.wrap
+					.spinner.glyphicon.glyphicon-refresh
+					.text= local['page_loading']
+		.hacks

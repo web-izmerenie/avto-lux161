@@ -33,7 +33,10 @@ M.TemplateCache.prototype.load-template = template-handlers.load
 M.TemplateCache.prototype.compile-template = template-handlers.compile
 M.Renderer.render = template-handlers.render
 
-app = new App is-auth: ($ \html .attr \data-is-auth .to-string! is \1)
+app = new App {
+	is-auth: ($ \html .attr \data-is-auth .to-string! is \1)
+	container: \.main-page-container
+}
 
 router-controller = new AppRouterController app: app
 router = new AppRouter controller: router-controller

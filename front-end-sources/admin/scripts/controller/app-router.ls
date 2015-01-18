@@ -29,6 +29,38 @@ require! {
 	'../view/sections/accounts/list' : AccountsListView
 }
 
+police = W.radio .channel \police
+
+# for tinymce {{{
+
+stop-counter = 0
+stop-last-page = null
+
+police.commands .set-handler \request-stop, !->
+	console.log \requested_stop, stop-counter
+	stop-counter++
+	if stop-counter is 1
+		stop-last-page := B.history.fragment
+
+police.commands .set-handler \request-free, !->
+	console.log \requested_free, stop-counter
+	stop-counter--
+	if stop-counter is 0
+		stop-last-page := null
+	if stop-counter < 0
+		throw new Error 'stop-counter cannot be less than zero'
+
+restore-last-page = ->
+	console.log \restore
+	return true if stop-counter <= 0
+	unless stop-last-page?
+		throw new Error 'stop-last-page must be a string'
+	B.history.navigate \# + stop-last-page, replace: true
+	console.log \blocked
+	false
+
+# }}}
+
 auth-handler = (obj, store-ref=true)->
 	unless obj.get-option \app .is-auth
 		obj.store-ref = B.history.fragment if store-ref
@@ -42,6 +74,7 @@ auth-handler = (obj, store-ref=true)->
 	true
 
 panel-page-handler = (controller, view)->
+	return unless restore-last-page!
 	return unless auth-handler controller
 
 	panel-view = (new PanelView!).render!
@@ -53,6 +86,8 @@ class AppRouterController extends M.Controller
 	get-option: M.proxy-get-option
 
 	\main : !->
+		return unless restore-last-page!
+
 		if @get-option \app .is-auth
 			B.history .navigate '#panel', { trigger: true, replace: true }
 			return
@@ -63,6 +98,7 @@ class AppRouterController extends M.Controller
 		@get-option \app .get-region \container .show login-form-view
 
 	\panel : !->
+		return unless restore-last-page!
 		return unless auth-handler @
 
 		if B.history.fragment is \panel
@@ -108,6 +144,7 @@ class AppRouterController extends M.Controller
 		panel-page-handler @, (new AccountsListView!).render!
 
 	\logout : !->
+		return unless restore-last-page!
 		return unless auth-handler @, false
 
 		ajax-req {
@@ -122,6 +159,8 @@ class AppRouterController extends M.Controller
 		}
 
 	\unknown : !->
+		return unless restore-last-page!
+
 		W.radio.commands .execute \police, \panic,
 			new Error 'Route not found'
 

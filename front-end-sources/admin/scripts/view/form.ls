@@ -9,6 +9,7 @@ require! {
 	\jquery : $
 	\jquery.tinymce : jquery-tinymce
 	\marionette : M
+	\backbone.wreqr : W
 	'../config.json'
 
 	'../view/error-msg' : ErrorMessageView
@@ -32,17 +33,32 @@ class HTMLInputItemView extends InputItemView
 	class-name: 'html'
 	template: 'form/html'
 	ui:
-		textarea: 'textarea'
+		textarea: \textarea
+		wysiwyg: \.wysiwyg
+	check-for-alive: ->
+		unless @? and @ui? and @ui.textarea? and @ui.textarea.tinymce?
+			false
+		else
+			true
 	on-render: !->
 		return if @has-tinymce?
 		@has-tinymce = true
-		set-timeout (!~> # async hack
-			return unless @? and @ui? and @ui.textarea? and @ui.textarea.tinymce?
-			try
-				@ui.textarea.tinymce config.tinymce_options
-			catch e
-				console.error \sheeeeeiiiiiiiiiit, e
-		), 1
+
+		$fucking-clone = @ui.textarea.clone!
+		$wrap = $ '<div/>'
+		$wrap.html $fucking-clone
+		$wrap.append-to $ 'body > .hacks'
+
+		$fucking-clone.tinymce ({
+			setup: (editor)!~>
+				editor.on \init, !~>
+					unless @check-for-alive!
+						set-timeout (!-> editor.destroy! ; $fucking-clone.remove!), 1
+						return
+
+					@ui.textarea.remove!
+					$wrap.append-to @ui.wysiwyg
+		} <<<< config.tinymce_options)
 
 class SelectItemView extends InputItemView
 	class-name: \select
