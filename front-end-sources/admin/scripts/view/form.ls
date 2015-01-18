@@ -38,7 +38,10 @@ class HTMLInputItemView extends InputItemView
 		@has-tinymce = true
 		set-timeout (!~> # async hack
 			return unless @? and @ui? and @ui.textarea? and @ui.textarea.tinymce?
-			@ui.textarea.tinymce config.tinymce_options
+			try
+				@ui.textarea.tinymce config.tinymce_options
+			catch e
+				console.error \sheeeeeiiiiiiiiiit, e
 		), 1
 
 class SelectItemView extends InputItemView

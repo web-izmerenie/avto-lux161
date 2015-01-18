@@ -6,18 +6,10 @@
  */
 
 require! {
-	\backbone : B
-	\marionette : M
-	\backbone.wreqr : W
-	'../../../ajax-req'
-
-	'../../../model/basic' : BasicModel
-
 	# views
-	'../../smooth' : SmoothView
-	'../../loader' : LoaderView
 	'../../table-list' : TableListView
 	'../../table-item' : TableItemView
+	'../../list' : ListView
 }
 
 class ItemView extends TableItemView
@@ -27,52 +19,28 @@ class CompositeListView extends TableListView
 	template: 'pages/list'
 	child-view: ItemView
 
-class PagesListView extends SmoothView
+class PagesListView extends ListView
 	initialize: !->
-		SmoothView.prototype.initialize ...
-
-		@loader-view = (new LoaderView!).render!
-
-		@table-list = new B.Collection []
-		@table-view = new CompositeListView collection: @table-list
-		@table-view.render!
-
-		@table-view.on \refresh:list, !~> @get-list!
+		ListView.prototype.initialize ...
+		@init-table-list CompositeListView
 
 	on-show: !->
-		@get-region \main .show @loader-view
-		@get-list !~> @get-region \main .show @table-view
+		ListView.prototype.on-show ...
+		@update-list !~> @get-region \main .show @table-view
 
-	get-list: (cb)!->
-		@ajax = ajax-req {
-			data:
-				action: \get_pages_list
-			success: (json)!~>
-				if json.status is not \success or not json.data_list?
-					W.radio.commands .execute \police, \panic,
-						new Error 'Incorrect server data'
+	update-list: (cb)!->
+		(data-arr)<~! @get-list { action: \get_pages_list }
 
-				new-data-list = []
-				for item in json.data_list
-					new-data-list.push {
-						id: item.id
-						ref: '#panel/pages/edit_' + item.id + '.html'
-						name: item.title
-						url: item.alias
-					}
+		new-data-list = []
+		for item in data-arr
+			new-data-list.push {
+				id: item.id
+				ref: '#panel/pages/edit_' + item.id + '.html'
+				name: item.title
+				url: item.alias
+			}
 
-				@table-list.reset new-data-list
-				cb! if cb?
-		}
-
-	regions:
-		\main : '.main'
-
-	class-name: 'pages-list v-stretchy'
-	template: 'main'
-	model: new BasicModel!
-
-	on-destroy: !->
-		@ajax.abort! if @ajax?
+		@table-list.reset new-data-list
+		cb! if cb?
 
 module.exports = PagesListView

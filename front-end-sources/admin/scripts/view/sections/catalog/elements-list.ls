@@ -6,18 +6,14 @@
  */
 
 require! {
-	\backbone : B
 	\marionette : M
-	\backbone.wreqr : W
-	'../../../ajax-req'
 
 	'../../../model/basic' : BasicModel
 
 	# views
-	'../../smooth' : SmoothView
-	'../../loader' : LoaderView
 	'../../table-list' : TableListView
 	'../../table-item' : TableItemView
+	'../../list' : ListView
 }
 
 class ItemView extends TableItemView
@@ -38,17 +34,11 @@ class HeaderView extends M.LayoutView
 	model: new BasicModel!
 	template: 'catalog/elements-list-header'
 
-class CatalogElementsListView extends SmoothView
+class CatalogElementsListView extends ListView
 	initialize: !->
-		SmoothView.prototype.initialize ...
+		ListView.prototype.initialize ...
 
-		@loader-view = (new LoaderView!).render!
-
-		@table-list = new B.Collection []
-		@table-view = new CompositeListView collection: @table-list
-		@table-view.render!
-
-		@table-view.on \refresh:list, !~> @get-list!
+		@init-table-list CompositeListView
 
 		@page-view = (new PageView!).render!
 		@header-view = new HeaderView {
@@ -57,49 +47,36 @@ class CatalogElementsListView extends SmoothView
 		@header-view.render!
 
 	on-show: !->
-		@get-region \main .show @loader-view
-		@get-list !~>
+		ListView.prototype.on-show ...
+
+		@update-list !~>
 			@get-region \main .show @page-view
 			@page-view.get-region \header .show @header-view
 			@page-view.get-region \main .show @table-view
 
-	get-list: (cb)!->
-		@ajax = ajax-req {
-			data:
-				action: \get_catalog_elements
-				args: JSON.stringify {
-					id: @get-option \section-id
-				}
-			success: (json)!~>
-				if json.status is not \success or not json.data_list?
-					W.radio.commands .execute \police, \panic,
-						new Error 'Incorrect server data'
-
-				new-data-list = []
-				for item in json.data_list
-					ref = '#panel/catalog/section_'
-					ref += @get-option \section-id
-					ref += '/edit_' + item.id + '.html'
-					new-data-list.push {
-						id: item.id
-						ref: ref
-						name: item.title
-						count: item.count
-					}
-
-				@table-list.reset new-data-list
-				@header-view.model.set \section_name, json.section_title
-				@header-view.render!
-				cb! if cb?
+	update-list: (cb)!->
+		(data-arr, json)<~! @get-list {
+			action: \get_catalog_elements
+			args: JSON.stringify {
+				id: @get-option \section-id
+			}
 		}
 
-	regions:
-		\main : '.main'
+		new-data-list = []
+		for item in data-arr
+			ref = '#panel/catalog/section_'
+			ref += @get-option \section-id
+			ref += '/edit_' + item.id + '.html'
+			new-data-list.push {
+				id: item.id
+				ref: ref
+				name: item.title
+				count: item.count
+			}
 
-	class-name: 'catalog-elements-list v-stretchy'
-	template: 'main'
-
-	on-destroy: !->
-		@ajax.abort! if @ajax?
+		@table-list.reset new-data-list
+		@header-view.model.set \section_name, json.section_title
+		@header-view.render!
+		cb! if cb?
 
 module.exports = CatalogElementsListView
