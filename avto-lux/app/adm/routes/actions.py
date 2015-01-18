@@ -44,6 +44,11 @@ def query_except_handler(fn):
 					'status': 'error',
 					'error_code': 'unique_key_exist',
 					})
+			elif e.__class__.__name__ == 'DataError':
+				return self.json_response({
+					'status': 'error',
+					'error_code': 'incorrect_data',
+					})
 			print(e, file=sys.stderr)
 			self.set_status(500)
 			return self.json_response({
@@ -189,8 +194,9 @@ class AdminMainHandler(JsonResponseMixin):
 
 		section_map = {
 			'pages': StaticPageModel,
-			'catalog' : CatalogSectionModel,
-			'catalog_page' : CatalogItemModel
+			'redirect': UrlMapping,
+			'catalog_section': CatalogSectionModel,
+			'catalog_element': CatalogItemModel,
 		}
 		session = Session()
 		page = section_map[section](**kwargs)
@@ -210,8 +216,9 @@ class AdminMainHandler(JsonResponseMixin):
 
 		section_map = {
 			'pages': StaticPageModel,
-			'catalog' : CatalogSectionModel,
-			'catalog_page' : CatalogItemModel
+			'redirect': UrlMapping,
+			'catalog_section': CatalogSectionModel,
+			'catalog_element': CatalogItemModel,
 		}
 
 		fields = db_inspector.get_columns(
@@ -233,9 +240,7 @@ class AdminMainHandler(JsonResponseMixin):
 		session.query(
 			section_map[section]
 				).filter_by(id=id).update(kwargs)
-
 		session.commit()
-
 		return self.json_response({'status': 'success'})
 
 
@@ -246,7 +251,11 @@ class AdminMainHandler(JsonResponseMixin):
 		print("Id: %s" % id)
 		session = Session()
 		models = {
-			'pages': StaticPageModel
+			'pages': StaticPageModel,
+			'redirect': UrlMapping,
+			'catalog_section': CatalogSectionModel,
+			'catalog_element': CatalogItemModel,
+			'accounts': User
 		}
 
 		fields = db_inspector.get_columns(
@@ -258,12 +267,15 @@ class AdminMainHandler(JsonResponseMixin):
 			'TEXT': 'html',
 			'VARCHAR(4096)': 'text',
 			'VARCHAR(8192)': 'text',
-			'JSON': 'file'
+			'JSON': 'file',
+			'INTEGER': 'text'
 		}
 		vidgets = []
 
 		for field in fields:
 			try:
+				if 'id' in field['name']:
+					continue
 				vidget = {
 					'name': field['name'],
 					'type': types_map[str(field['type'])],
@@ -277,11 +289,33 @@ class AdminMainHandler(JsonResponseMixin):
 		if edit and id is not None:
 			data = session.query(models[model]).filter_by(id=id).one()
 			values = data.item
-			del values['_sa_instance_state']
+
+			if model == 'catalog_element':
+				print("SID:: %s" % data.section_id)
+				values.update({'section_id': data.section_id})
+
+		print(vidgets)
+
+		if model == 'catalog_element':
+			sections = session.query(CatalogSectionModel).all()
+
+			vidgets.append({
+				'name': 'section_id',
+				'type': 'select',
+				'default_val': None,
+				'list_values': [{
+					'title': x.title,
+					'value': x.id} for x in sections]
+				})
+
+		try:
 			del values['create_date']
 			del values['last_change']
-			print(values)
+			del values['_sa_instance_state']
+		except Exception:
+			pass
 
+		print("Values {}".format(values))
 		return self.json_response({
 			'status': 'success',
 			'fields_list': vidgets,
