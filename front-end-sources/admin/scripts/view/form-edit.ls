@@ -49,8 +49,8 @@ class FormEditView extends SmoothView
 
 				list = new B.Collection json.fields_list
 
-				list.comparator = (item)->
-					return config.sections[\pages]
+				list.comparator = (item)~>
+					return config.sections[@get-option \section]
 						.fields_sort
 						.index-of (item.get \name)
 				list.sort!
@@ -59,7 +59,7 @@ class FormEditView extends SmoothView
 
 				view = new FormView {
 					collection: list
-					page: \pages
+					page: @get-option \section
 					type: @get-option \type
 				}
 
@@ -88,7 +88,7 @@ class FormEditView extends SmoothView
 		}
 
 	send-to-server: (vals, form-view)!->
-		vals.section = \pages
+		vals.section = @get-option \section
 		vals.id = @get-option \id if (@get-option \type) is \edit
 		@ajax.abort! if @ajax
 		@ajax = ajax-req {
@@ -97,10 +97,11 @@ class FormEditView extends SmoothView
 				args: JSON.stringify vals
 			success: (json)!~>
 				if json.status is \error
-					if json.error_code is \unique_key_exist
-						form-view.trigger \form-msg, \unique_key_exist
+					switch json.error_code
+					| \unique_key_exist \incorrect_data =>
+						form-view.trigger \form-msg, json.error_code
 						@ajax = null
-					else
+					| _ =>
 						W.radio.commands .execute \police, \panic,
 							new Error 'Incorrect server data'
 					return

@@ -21,7 +21,11 @@ require! {
 	'../view/sections/pages/edit' : EditPageView
 	'../view/sections/catalog/sections-list' : CatalogSectionsListView
 	'../view/sections/catalog/elements-list' : CatalogElementsListView
+	'../view/sections/catalog/element-add' : CatalogElementAddView
+	'../view/sections/catalog/element-edit' : CatalogElementEditView
 	'../view/sections/redirect/list' : RedirectListView
+	'../view/sections/redirect/add' : AddRedirectView
+	'../view/sections/redirect/edit' : EditRedirectView
 	'../view/sections/accounts/list' : AccountsListView
 }
 
@@ -105,6 +109,24 @@ class AppRouterController extends M.Controller
 		@get-option \app .get-region \container .show panel-view
 		panel-view.get-option \work-area .show catalog-view
 
+	\catalog-element-add : (sid)!->
+		return unless auth-handler @
+
+		panel-view = (new PanelView!).render!
+		view = (new CatalogElementAddView {\section-id : sid}).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show view
+
+	\catalog-element-edit : (sid, eid)!->
+		return unless auth-handler @
+
+		panel-view = (new PanelView!).render!
+		view = (new CatalogElementEditView {\section-id : sid, id: eid}).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show view
+
 	\redirect-list : !->
 		return unless auth-handler @
 
@@ -113,6 +135,24 @@ class AppRouterController extends M.Controller
 
 		@get-option \app .get-region \container .show panel-view
 		panel-view.get-option \work-area .show redirect-view
+
+	\add-redirect : !->
+		return unless auth-handler @
+
+		panel-view = (new PanelView!).render!
+		view = (new AddRedirectView!).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show view
+
+	\edit-redirect : (id)!->
+		return unless auth-handler @
+
+		panel-view = (new PanelView!).render!
+		view = (new EditRedirectView id: id).render!
+
+		@get-option \app .get-region \container .show panel-view
+		panel-view.get-option \work-area .show view
 
 	\accounts : !->
 		return unless auth-handler @

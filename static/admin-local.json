@@ -26,9 +26,9 @@
         "cancel": "Отмена",
         "form": {
           "err": {
-            "unique_key_exist": "Элемент уже существует!"
+            "unique_key_exist": "Элемент уже существует!",
+            "incorrect_data": "Некорректные данные!"
           },
-          "id": "ID",
           "title": "Заголовок",
           "content_text": "Содержимое страницы",
           "alias": "Путь",
@@ -55,14 +55,61 @@
         "add_element": "Добавить элемент",
         "refresh": "Обновить"
       },
+      "catalog_element": {
+        "title": {
+          "add": "Добавление элемента",
+          "edit": "Редактирование элемента"
+        },
+        "save": "Сохранить",
+        "cancel": "Отмена",
+        "form": {
+          "err": {
+            "unique_key_exist": "Элемент уже существует!",
+            "incorrect_data": "Некорректные данные!"
+          },
+          "is_active": "Активен",
+          "title": "Заголовок",
+          "desctiption_text": "Описание",
+          "files": "Файлы",
+          "main_image": "Главная фотография",
+          "images": "Фотографии",
+          "inherit_seo_title": "SEO: Наследовать заголовок H1 от раздела",
+          "seo_title": "SEO: Заголовок H1",
+          "inherit_seo_meta_title": "SEO: Наследовать заголовок страницы от раздела",
+          "seo_meta_title": "SEO: Заголовок страницы",
+          "inherit_seo_meta_descrtption": "SEO: Наследовать ключевые слова от раздела",
+          "seo_meta_description": "SEO: Описание",
+          "inherit_seo_meta_keywords": "SEO: Наследовать описание от раздела",
+          "seo_meta_keywords": "SEO: Ключевые слова",
+          "has_footer_slogan": "Собственный слоган внизу страницы",
+          "footer_slogan": "Афоризм внизу страницы",
+          "submit": "Сохранить"
+        }
+      },
       "redirect": {
         "redirect_list": "Список редиректов",
+        "title": {
+          "add": "Добавление редиректа",
+          "edit": "Редактирование редиректа"
+        },
         "id": "ID",
         "status": "Код статуса",
         "old_url": "Старый путь",
         "new_url": "Новый путь",
         "add": "Добавить редирект",
-        "refresh": "Обновить"
+        "refresh": "Обновить",
+        "save": "Сохранить",
+        "cancel": "Отмена",
+        "form": {
+          "err": {
+            "unique_key_exist": "Элемент уже существует!",
+            "incorrect_data": "Некорректные данные!"
+          },
+          "status": "HTTP-статус",
+          "old_url": "Старый путь",
+          "new_url": "Новый путь",
+          "submit": "Сохранить"
+        }
       },
       "accounts": {
         "accounts_list": "Список аккаунтов",

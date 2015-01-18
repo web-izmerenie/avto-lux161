@@ -79,7 +79,7 @@ class CatalogElementsListView extends SmoothView
 				for item in json.data_list
 					ref = '#panel/catalog/section_'
 					ref += @get-option \section-id
-					ref += '/' + item.id + '.html'
+					ref += '/edit_' + item.id + '.html'
 					new-data-list.push {
 						id: item.id
 						ref: ref

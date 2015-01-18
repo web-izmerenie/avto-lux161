@@ -19,6 +19,34 @@
         "has_footer_slogan",
         "footer_slogan"
       ]
+    },
+    "redirect": {
+      "fields_sort": [
+        "status",
+        "old_url",
+        "new_url"
+      ]
+    },
+    "catalog_element": {
+      "fields_sort": [
+        "is_active",
+        "title",
+        "desctiption_text",
+        "files",
+        "main_image",
+        "images",
+        "inherit_seo_title",
+        "seo_title",
+        "inherit_seo_meta_title",
+        "seo_meta_title",
+        "inherit_seo_meta_descrtption",
+        "seo_meta_description",
+        "inherit_seo_meta_keywords",
+        "seo_meta_keywords",
+        "has_footer_slogan",
+        "footer_slogan",
+        "submit"
+      ]
     }
   },
   "tinymce_options": {
