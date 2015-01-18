@@ -31,6 +31,8 @@
       "fields_sort": [
         "is_active",
         "title",
+        "alias",
+        "section_id",
         "desctiption_text",
         "files",
         "main_image",

@@ -69,6 +69,8 @@
           },
           "is_active": "Активен",
           "title": "Заголовок",
+          "alias": "Символьный код",
+          "section_id": "Раздел",
           "desctiption_text": "Описание",
           "files": "Файлы",
           "main_image": "Главная фотография",

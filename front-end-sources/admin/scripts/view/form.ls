@@ -17,18 +17,18 @@ require! {
 
 tinymce = window.tinymce
 
-class TextItemView extends M.ItemView
+class InputItemView extends M.ItemView
 	tag-name: \label
+
+class TextItemView extends InputItemView
 	class-name: 'text'
 	template: 'form/text'
 
-class CheckboxItemView extends M.ItemView
-	tag-name: \label
+class CheckboxItemView extends InputItemView
 	class-name: 'checkbox'
 	template: 'form/checkbox'
 
-class HTMLInputItemView extends M.ItemView
-	tag-name: \label
+class HTMLInputItemView extends InputItemView
 	class-name: 'html'
 	template: 'form/html'
 	ui:
@@ -37,9 +37,13 @@ class HTMLInputItemView extends M.ItemView
 		return if @has-tinymce?
 		@has-tinymce = true
 		set-timeout (!~> # async hack
-			return unless @? and @ui? and @ui.textarea and @ui.textarea.tinymce
+			return unless @? and @ui? and @ui.textarea? and @ui.textarea.tinymce?
 			@ui.textarea.tinymce config.tinymce_options
 		), 1
+
+class SelectItemView extends InputItemView
+	class-name: \select
+	template: 'form/select'
 
 class FormView extends M.CompositeView
 	tag-name: \form
@@ -86,6 +90,7 @@ class FormView extends M.CompositeView
 		switch item.get \type
 		| \checkbox => return CheckboxItemView
 		| \html => return HTMLInputItemView
+		| \select => return SelectItemView
 
 		TextItemView
 

@@ -70,6 +70,9 @@ class FormEditView extends SmoothView
 				if (@get-option \type) is \edit and json.values_list?
 					view.model.set \values, json.values_list
 
+				if (@get-option \type) is \add and (@get-option \section_id)?
+					view.model.set \values section_id: @get-option \section_id
+
 				parent-view = @
 				view.on \render !->
 					$form = @$el
