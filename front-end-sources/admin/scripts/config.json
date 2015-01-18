@@ -50,8 +50,5 @@
         "submit"
       ]
     }
-  },
-  "tinymce_options": {
-    "script_url": null
   }
 }

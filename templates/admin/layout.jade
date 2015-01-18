@@ -3,8 +3,7 @@ html(lang=lang,
 	data-templates-path=static_url('admin-templates/'),
 	data-local-file=static_url('admin-local.json'),
 	data-is-auth=is_auth,
-	data-is-debug=is_debug,
-	data-tinymce-path=static_url('tinymce/tinymce.js'))
+	data-is-debug=is_debug)
 	head
 		meta(charset="utf-8")
 
@@ -16,10 +15,10 @@ html(lang=lang,
 		link(href=static_url('images/favicon.ico'), rel="shortcut icon")
 		link(href=static_url('admin-build.css'), type="text/css", rel="stylesheet")
 		script(src=static_url('admin-build.js'), type="text/javascript")
+		script(src=static_url('ckeditor/ckeditor.js'), type="text/javascript")
 	body
 		.main-page-container.v-stretchy
 			.loading.container
 				.wrap
 					.spinner.glyphicon.glyphicon-refresh
 					.text= local['page_loading']
-		.hacks

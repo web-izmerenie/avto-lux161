@@ -114,8 +114,8 @@
             "path": "./node_modules/jade",
             "exports": ""
           },
-          "jquery.tinymce": {
-            "path": "./bower_components/tinymce/jquery.tinymce.min.js",
+          "jquery.ckeditor": {
+            "path": "./bower_components/ckeditor/adapters/jquery.js",
             "exports": "",
             "depends": { "jquery": "jQuery" }
           }

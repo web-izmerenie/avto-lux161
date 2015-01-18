@@ -31,19 +31,17 @@ require! {
 
 police = W.radio .channel \police
 
-# for tinymce {{{
+# semaphore {{{
 
 stop-counter = 0
 stop-last-page = null
 
 police.commands .set-handler \request-stop, !->
-	console.log \requested_stop, stop-counter
 	stop-counter++
 	if stop-counter is 1
 		stop-last-page := B.history.fragment
 
 police.commands .set-handler \request-free, !->
-	console.log \requested_free, stop-counter
 	stop-counter--
 	if stop-counter is 0
 		stop-last-page := null
@@ -51,15 +49,13 @@ police.commands .set-handler \request-free, !->
 		throw new Error 'stop-counter cannot be less than zero'
 
 restore-last-page = ->
-	console.log \restore
 	return true if stop-counter <= 0
 	unless stop-last-page?
 		throw new Error 'stop-last-page must be a string'
 	B.history.navigate \# + stop-last-page, replace: true
-	console.log \blocked
 	false
 
-# }}}
+# semaphore }}}
 
 auth-handler = (obj, store-ref=true)->
 	unless obj.get-option \app .is-auth

@@ -17,8 +17,6 @@ B.$ = $
 
 $html = $ \html
 
-config.tinymce_options.script_url = $html .attr \data-tinymce-path
-
 require! {
 	\marionette : M
 	\backbone.wreqr : W
