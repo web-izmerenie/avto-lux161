@@ -10,6 +10,8 @@
 
 label
 	display block
+	& + label
+		margin-top 20px
 
 label.checkbox
 	margin-left 20px
@@ -22,6 +24,20 @@ label.html textarea
 
 label.select span
 	display block
+
+label.files
+	input
+		margin-top 15px
+	.upload-area
+		margin-top 15px
+		ul.upload-list
+			min-height 100px
+			margin-bottom 0
+			list-style none
+		.panel-body
+			transition background-color 0.5s linear
+		&.fileover .panel-body
+			background #eaeaea
 
 .actions
 	padding-top 15px

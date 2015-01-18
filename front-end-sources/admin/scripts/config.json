@@ -2,6 +2,7 @@
   "root_url": "/adm/",
   "logout_url": "/adm/logout",
   "ajax_data_url": "/adm/data.json",
+  "upload_file_url": "/adm/upload.json",
   "sections": {
     "pages": {
       "fields_sort": [

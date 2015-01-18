@@ -1,3 +1,6 @@
 [submodule "web-front-end-deploy"]
 	path = web-front-end-deploy
 	url = https://github.com/web-izmerenie/web-front-end-deploy
+[submodule "jquery.dragndrop-file-upload"]
+	path = jquery.dragndrop-file-upload
+	url = https://github.com/unclechu/jquery.dragndrop-file-upload

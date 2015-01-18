@@ -7,9 +7,11 @@
     "forms": {
       "err": {
         "user_not_found": "Пользователь не найден в базе",
-        "incorrect_password": "Неправильный пароль"
+        "incorrect_password": "Неправильный пароль",
+        "upload_error": "Ошибка загрузки"
       }
     },
+    "mib": "МиБ",
     "sections": {
       "pages": {
         "pages_list": "Список страниц",
@@ -41,7 +43,10 @@
           "seo_meta_title": "SEO: Заголовок страницы",
           "seo_meta_description": "SEO: Описание",
           "seo_meta_keywords": "SEO: Ключевые слова",
-          "files": "Файлы",
+          "files": {
+            "title": "Файлы",
+            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки"
+          },
           "submit": "Сохранить"
         }
       },
