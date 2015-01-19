@@ -2,10 +2,10 @@ __all__ = ['base', 'main']
 
 from .main import (
 	AdminMainRoute,
-	EmptyHandler,
 	AuthHandler,
 	LogoutHandler,
 	CreateUser,
+	FileUpload
 )
 from .actions import AdminMainHandler
 
@@ -15,5 +15,6 @@ routes = [
 	('/adm/auth', AuthHandler),
 	('/adm/logout', LogoutHandler),
 	('/adm/data.json', AdminMainHandler),
-	('/adm/create.user', CreateUser)
+	('/adm/create.user', CreateUser),
+	('/adm/upload.json', FileUpload)
 ]

@@ -11,6 +11,7 @@ from app.mixins.routes_mixin import (
 
 from pyjade.ext.tornado import patch_tornado
 
+from app.adm.imageprocessing.imageprepare import resize_images, calculate_sizes
 from app.models.dbconnect import Session, db_inspector
 from app.models.usermodels import User
 from app.models.pagemodels import (
@@ -40,11 +41,13 @@ def query_except_handler(fn):
 				})
 		except Exception as e:
 			if e.__class__.__name__ == 'IntegrityError':
+				print(e, file=sys.stderr)
 				return self.json_response({
 					'status': 'error',
 					'error_code': 'unique_key_exist',
 					})
 			elif e.__class__.__name__ == 'DataError':
+				print(e, file=sys.stderr)
 				return self.json_response({
 					'status': 'error',
 					'error_code': 'incorrect_data',
@@ -90,6 +93,7 @@ class AdminMainHandler(JsonResponseMixin):
 				'status': 'error',
 				'error_code': 'non_existent_action'})
 		func = actions[action]
+
 		return func(**kwrgs)
 
 
@@ -110,13 +114,19 @@ class AdminMainHandler(JsonResponseMixin):
 	@query_except_handler
 	def get_catalog_sections(self):
 		session = Session()
-		counts = session.query(
-			func.count(CatalogItemModel.section_id)
-			).group_by(CatalogItemModel.section_id).all()
+		cats = session.query(CatalogSectionModel.id).all()
+		counts = []
+		for i in cats:
+			count = session.query(
+				CatalogItemModel.id).filter_by(section_id=i[0]).all()
+			counts.append((len(count),))
+
 		data = session.query(
 			CatalogSectionModel.title,
 			CatalogSectionModel.id
 			).all()
+		print(counts)
+		print(list(zip(counts, data)))
 		return self.json_response({
 			'status': 'success',
 			'data_list': [{
@@ -183,6 +193,8 @@ class AdminMainHandler(JsonResponseMixin):
 
 	@query_except_handler
 	def create_page(self, **kwargs):
+		print(kwargs)
+		print("CREATE")
 		section = kwargs['section']
 		del kwargs['section']
 
@@ -199,6 +211,9 @@ class AdminMainHandler(JsonResponseMixin):
 			'catalog_element': CatalogItemModel,
 		}
 		session = Session()
+		print(section_map[section])
+
+
 		page = section_map[section](**kwargs)
 		session.add(page)
 		session.commit()
@@ -228,7 +243,8 @@ class AdminMainHandler(JsonResponseMixin):
 		for item in (x for x
 			in fields
 				if x['name'].startswith('is_')
-					or x['name'].startswith('has_')):
+					or x['name'].startswith('has_')
+						or x['name'].startswith('inherit_seo_')):
 			if item['name'] not in kwargs.keys():
 				kwargs.update({ item['name']: False })
 			else:
@@ -267,7 +283,7 @@ class AdminMainHandler(JsonResponseMixin):
 			'TEXT': 'html',
 			'VARCHAR(4096)': 'text',
 			'VARCHAR(8192)': 'text',
-			'JSON': 'file',
+			'JSON': 'files',
 			'INTEGER': 'text'
 		}
 		vidgets = []
@@ -294,8 +310,6 @@ class AdminMainHandler(JsonResponseMixin):
 				print("SID:: %s" % data.section_id)
 				values.update({'section_id': data.section_id})
 
-		print(vidgets)
-
 		if model == 'catalog_element':
 			sections = session.query(CatalogSectionModel).all()
 
@@ -315,18 +329,8 @@ class AdminMainHandler(JsonResponseMixin):
 		except Exception:
 			pass
 
-		print("Values {}".format(values))
 		return self.json_response({
 			'status': 'success',
 			'fields_list': vidgets,
 			'values_list': values
 			})
-
-
-
-
-class ImageLoadHandler(JsonResponseMixin):
-	def post(self):
-		files = (x for x in request.files)
-
-		return self.json_response()

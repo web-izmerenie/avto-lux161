@@ -1,4 +1,6 @@
 import os, json
+import hashlib
+import time
 from app.configparser import config
 from app.utils import get_json_localization
 import tornado.template
@@ -47,8 +49,6 @@ def request_except_handler(fn):
 
 
 
-
-
 class AdminMainRoute(JsonResponseMixin):
 	def get(self, *args):
 
@@ -70,15 +70,6 @@ class AdminMainRoute(JsonResponseMixin):
 
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
-
-
-
-class EmptyHandler():
-	def get(self):
-		self.write("Lolka")
-	def post(self):
-		return self.write("Hello!")
-
 
 
 class AuthHandler(AuthMixin, JsonResponseMixin):
@@ -126,10 +117,47 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 		passwd = self.get_argument('pass')
 		usr = User(
 			login=login,
-			password=passwrd,
+			password=self.create_password(passwd),
 			last_login=datetime.datetime.utcnow(),
 			is_active=True
 			)
 		session.add(usr)
 		session.commit()
 		return self.json_response({'status': 'created'})
+
+
+class FileUpload(JsonResponseMixin):
+	@request_except_handler
+	def post(self):
+		if not self.get_current_user():
+			self.set_status(403)
+			return self.json_response({
+				'status': 'unauthorized'
+				})
+
+		file_path = config('UPLOAD_FILES_PATH')
+		hashes = []
+		for f in self.request.files.items():
+			_file = f[1][0]
+			print(_file['content_type'])
+			_filename = hashlib.sha512(str(time.time()).encode('utf-8')).hexdigest()[0:35]
+
+			f = open(os.path.join(file_path, _filename), 'wb')
+			f.write(_file['body'])
+			f.close()
+			hashes.append({ 'name': _filename + '.' + _file['content_type'].split('/')[1]})
+
+
+			print("File: %s was uploaded" % _file['filename'])
+		return self.json_response({
+			'status': 'success',
+			'files': hashes
+			})
+
+	def get_current_user(self):
+		return self.get_secure_cookie('user')
+
+
+
+class FileSave(JsonResponseMixin):
+	pass
