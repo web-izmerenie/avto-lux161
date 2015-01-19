@@ -47,8 +47,25 @@
         "inherit_seo_meta_keywords",
         "seo_meta_keywords",
         "has_footer_slogan",
-        "footer_slogan",
-        "submit"
+        "footer_slogan"
+      ]
+    },
+    "catalog_section": {
+      "fields_sort": [
+        "is_active",
+        "title",
+        "alias",
+        "files",
+        "delegate_seo_title",
+        "seo_title",
+        "delegate_seo_meta_title",
+        "seo_meta_title",
+        "delegate_seo_meta_descrtption",
+        "seo_meta_description",
+        "delegate_seo_meta_keywords",
+        "seo_meta_keywords",
+        "has_footer_slogan",
+        "footer_slogan"
       ]
     }
   }

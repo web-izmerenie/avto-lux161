@@ -96,8 +96,38 @@
           "inherit_seo_meta_keywords": "SEO: Наследовать описание от раздела",
           "seo_meta_keywords": "SEO: Ключевые слова",
           "has_footer_slogan": "Собственный слоган внизу страницы",
-          "footer_slogan": "Афоризм внизу страницы",
-          "submit": "Сохранить"
+          "footer_slogan": "Афоризм внизу страницы"
+        }
+      },
+      "catalog_section": {
+        "title": {
+          "add": "Добавление раздела",
+          "edit": "Редактирование раздела"
+        },
+        "save": "Сохранить",
+        "cancel": "Отмена",
+        "form": {
+          "err": {
+            "unique_key_exist": "Раздел уже существует!",
+            "incorrect_data": "Некорректные данные!"
+          },
+          "is_active": "Активен",
+          "title": "Заголовок",
+          "alias": "Символьный код",
+          "files": {
+            "title": "Файлы",
+            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки"
+          },
+          "delegate_seo_title": "SEO: Делегировать заголовок H1 элементам",
+          "seo_title": "SEO: Заголовок H1",
+          "delegate_seo_meta_title": "SEO: Делегировать заголовок страницы",
+          "seo_meta_title": "SEO: Заголовок страницы",
+          "delegate_seo_meta_descrtption": "SEO: Делегировать описание",
+          "seo_meta_description": "SEO: Описание",
+          "delegate_seo_meta_keywords": "SEO: Делегировать ключевые слова",
+          "seo_meta_keywords": "SEO: Ключевые слова",
+          "has_footer_slogan": "Собственный слоган внизу страницы",
+          "footer_slogan": "Афоризм внизу страницы"
         }
       },
       "redirect": {

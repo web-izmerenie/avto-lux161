@@ -20,6 +20,8 @@ require! {
 	'../view/sections/pages/add' : AddPageView
 	'../view/sections/pages/edit' : EditPageView
 	'../view/sections/catalog/sections-list' : CatalogSectionsListView
+	'../view/sections/catalog/section-add' : CatalogSectionAddView
+	'../view/sections/catalog/section-edit' : CatalogSectionEditView
 	'../view/sections/catalog/elements-list' : CatalogElementsListView
 	'../view/sections/catalog/element-add' : CatalogElementAddView
 	'../view/sections/catalog/element-edit' : CatalogElementEditView
@@ -114,6 +116,14 @@ class AppRouterController extends M.Controller
 
 	\catalog-sections-list : !->
 		panel-page-handler @, (new CatalogSectionsListView!).render!
+
+	\catalog-section-add : (sid)!->
+		view = (new CatalogSectionAddView).render!
+		panel-page-handler @, view
+
+	\catalog-section-edit : (sid)!->
+		view = (new CatalogSectionEditView {\section-id : sid, id: sid}).render!
+		panel-page-handler @, view
 
 	\catalog-elements-list : (section-id)!->
 		view = (new CatalogElementsListView \section-id : section-id).render!
