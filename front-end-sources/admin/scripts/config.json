@@ -3,6 +3,7 @@
   "logout_url": "/adm/logout",
   "ajax_data_url": "/adm/data.json",
   "upload_file_url": "/adm/upload.json",
+  "uploaded_file_prefix": "/uploaded-files/",
   "sections": {
     "pages": {
       "fields_sort": [

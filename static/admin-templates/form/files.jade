@@ -1,7 +1,19 @@
-span= local.get('sections')[page].form[name].title
-=' '
-input(type="file", name=name)
-.upload-area.panel.panel-default
-	.panel-heading= local.get('sections')[page].form[name].dragndrop_here
-	.panel-body
-		ul.upload-list.list-group
+label
+	span= local.get('sections')[page].form[name].title
+	=' '
+	input(type="file", multiple)
+
+- var value = ''
+if values[name]
+	- var value = values[name]
+input(type="hidden", name=name, value=value)
+
+span= local.get('sections')[page].form[name].uploaded_earlier
+ul.uploaded-earlier-list.list-group
+	//li.list-group-item 123
+
+// TODO :: backend fix
+//.upload-area.panel.panel-default
+	//.panel-heading= local.get('sections')[page].form[name].dragndrop_here
+	//.panel-body
+		//ul.upload-list.list-group

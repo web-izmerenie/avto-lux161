@@ -9,7 +9,8 @@
         "user_not_found": "Пользователь не найден в базе",
         "incorrect_password": "Неправильный пароль",
         "upload_error": "Ошибка загрузки"
-      }
+      },
+      "delete": "Удалить"
     },
     "mib": "МиБ",
     "sections": {
@@ -45,7 +46,8 @@
           "seo_meta_keywords": "SEO: Ключевые слова",
           "files": {
             "title": "Файлы",
-            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки"
+            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",
+            "uploaded_earlier": "Загружено ранее"
           },
           "submit": "Сохранить"
         }
@@ -80,7 +82,8 @@
           "desctiption_text": "Описание",
           "files": {
             "title": "Файлы",
-            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки"
+            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",
+            "uploaded_earlier": "Загружено ранее"
           },
           "main_image": "Главная фотография",
           "images": {
@@ -116,7 +119,8 @@
           "alias": "Символьный код",
           "files": {
             "title": "Файлы",
-            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки"
+            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",
+            "uploaded_earlier": "Загружено ранее"
           },
           "delegate_seo_title": "SEO: Делегировать заголовок H1 элементам",
           "seo_title": "SEO: Заголовок H1",
