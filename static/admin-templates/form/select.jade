@@ -5,7 +5,7 @@ if values[name]
 	- var value = values[name]
 select.selectpicker(name=name)
 	each item in list_values
-		if value
+		if value == item.value
 			option(value=item.value, selected)= item.title
 		else
 			option(value=item.value)= item.title

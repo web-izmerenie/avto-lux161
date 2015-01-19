@@ -85,10 +85,14 @@
             "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",
             "uploaded_earlier": "Загружено ранее"
           },
-          "main_image": "Главная фотография",
+          "main_image": {
+            "title": "Главная фотография",
+            "uploaded_earlier": "Загружено ранее"
+          },
           "images": {
             "title": "Фотографии",
-            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки"
+            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",
+            "uploaded_earlier": "Загружено ранее"
           },
           "inherit_seo_title": "SEO: Наследовать заголовок H1 от раздела",
           "seo_title": "SEO: Заголовок H1",

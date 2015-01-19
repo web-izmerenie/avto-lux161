@@ -61,6 +61,10 @@ class FilesItemView extends InputItemView
 		list: 'ul.uploaded-earlier-list'
 
 	rebuild-files: !->
+		name = @model.get \name
+		if name is \images or name is \main_image
+			@ui.list.css \max-width \400px
+
 		json = JSON.parse @ui.json.val!
 		@ui.list.html ''
 		for item in json
@@ -71,6 +75,16 @@ class FilesItemView extends InputItemView
 				readonly: \readonly
 				class: 'form-control'
 			}
+			if name is \images or name is \main_image
+				$inp = $ '<img/>' {
+					alt: ''
+					src: config.uploaded_file_prefix + item.filename
+					class: 'form-control'
+				}
+				$inp.css {
+					width: \100%
+					height: \auto
+				}
 			$igrp = $ '<div/>' class: 'input-group'
 			$igrp.append $inp
 			$a = $ '<span/>' class: 'input-group-btn'
@@ -98,6 +112,8 @@ class FilesItemView extends InputItemView
 			@ui.json.val JSON.stringify []
 
 		@rebuild-files!
+
+		name = @model.get \name
 
 		@ui.file.on \change, !~>
 			W.radio.commands .execute \police, \request-stop
