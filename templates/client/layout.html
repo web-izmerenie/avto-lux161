@@ -1,0 +1,39 @@
+{% set html_classes = '' %}
+{% if has_footer_slogan == True %}
+	{% set html_classes = html_classes + ' aphorism ' %}
+{% end %}
+
+
+<!DOCTYPE html>
+<html lang="ru" class="{{html_classes}}" data-local-file="{{static_url('client-local.json')}}">
+	<head>
+		<meta charset="utf-8"/>
+		{% if seo_meta_title %}
+			<title>{{ seo_meta_title }}</title>
+		{% else %}
+			<title>{{ title }}</title>
+		{% end %}
+		{% if seo_meta_description %}
+			<meta name="description" content="{{seo_meta_description}}">
+		{% end %}
+		{% if seo_meta_keywords %}
+			<meta name="description" content="{{seo_meta_keywords}}">
+		{% end %}
+		<link href="{{static_url('images/favicon.ico')}}" rel="shortcut icon"/>
+		<link href="{{static_url('client-build.css')}}" type="text/css" rel="stylesheet"/>
+		<script src="{{static_url('client-build.js')}}" type="text/javascript"></script>
+	</head>
+<body>
+	<div class="top-block">
+		<header>
+			{% include 'header.html' %}
+		</header>
+		{% block 'page-specific' %}
+		{% end %}
+	</div>
+	<footer>
+		{% include 'footer.html' %}
+	</footer>
+	{% include 'forms.html' %}
+</body>
+</html>

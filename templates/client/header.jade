@@ -1,6 +1,6 @@
 .head-block
 	.right-part
-		unless main_page
+		unless is_main_page
 			a(href="/", title="На главную страницу")
 				img(alt="Авто Люкс логотип", src=static_url('images/logo.png'))
 		else

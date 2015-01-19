@@ -1,0 +1,17 @@
+{% if has_footer_slogan %}
+	<div class="aphorism-block">
+		<div class="aphorism-text">
+			{% autoescape None %}
+			<blockquote>{{ footer_slogan }}</blockquote>
+		</div>
+	</div>
+{% end %}
+<div class="contacts">
+	<a class="phone" href="tel:+79889993989">+7 988 999 39 89</a>
+	<a class="email" href="mailto:avto-lux161@yandex.ru">avto-lux161@yandex.ru</a>
+</div>
+<div class="developer">
+	<img alt="Логотип &laquo;Веб измерение&raquo;" src="{{static_url('images/web-izmerenie-logo.svg')}}">
+	Сделано в студии
+	<a href="http://web-izmerenie.ru" target="_blank">Web izmerenie</a>
+</div>

@@ -5,14 +5,16 @@ block page-specific
 		ul.cars.left
 			each i in ['1','2','3','4','5','6']
 				li
-					img(alt="", src=static_url('tmp/left/' + i + '.jpg'))
+					img(alt="", src=static_url('images/content/cars-rows/left/' + i + '.jpg'))
 		.content
-			if show_h1
-				if page_title
-					h1=page_title
+			if is_h1_show
+				if seo_title
+					h1= seo_title
+				else
+					h1= title
 			main
-				if page_content
-					=page_content
+				if content_text
+					= content_text
 				if error_msg_list
 					ul.error-messages
 						each msg in error_msg_list
@@ -25,4 +27,4 @@ block page-specific
 		ul.cars.right
 			each i in ['1','2','3','4','5','6']
 				li
-					img(alt="", src=static_url('tmp/right/' + i + '.jpg'))
+					img(alt="", src=static_url('images/content/cars-rows/right/' + i + '.jpg'))

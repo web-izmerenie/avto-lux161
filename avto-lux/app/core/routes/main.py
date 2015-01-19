@@ -31,32 +31,92 @@ from app.utils import (
 	send_mail
 )
 from app.configparser import config
+from sqlalchemy.orm.exc import NoResultFound
 session = Session()
-patch_tornado()
+# patch_tornado()
+
+def route_except_handler(fn):
+	def wrap(*args, **kwargs):
+		self = args[0]
+		try:
+			return fn(*args, **kwargs)
+		except NoResultFound as e:
+			print(e)
+			self.set_status(404)
+			page = session.query(StaticPageModel).filter_by(alias='/404.html').one()
+			page.to_frontend.update({'is_catalog': False})
+			return self.render('client/error_404.html', **page.to_frontend)
+		except Exception as e:
+			print(e)
+			self.set_status(500)
+			return self.write('500: Internal server error')
+	wrap.__name__ = fn.__name__
+	return wrap
 
 
 class MainRoute(BaseHandler, Custom404Mixin):
+	@route_except_handler
 	def get(self):
-		# return self.render('sdfs.jade')
-
-		self.write("Hello, cars!")
+		page = session.query(StaticPageModel).filter_by(alias='/').one()
+		print(page.to_frontend)
+		page.to_frontend.update({'is_catalog': False})
+		return self.render('client/content_page.html', **page.to_frontend)
 
 
 class UrlToRedirect(BaseHandler):
+	@route_except_handler
 	def get(self, first, second):
 		old_url = self.request.uri
-		new_url = session.query(UrlMapping.new_url).filter_by(old_url=str(old_url))
+		new_url = session.query(UrlMapping.new_url).filter_by(old_url=str(old_url)).one()
 		return self.redirect(str(new_url[0][0]), permanent=False, status=None)
 
 
-class PageRoute(BaseHandler, Custom404Mixin):
+class StaticPageRoute(BaseHandler, Custom404Mixin):
+	@route_except_handler
 	def get(self, alias):
-		self.render('xxx.jade') ## TODO Replace to page.jade
+		print(alias)
+		if not alias.endswith(".html"):
+			alias = '/' + alias + '.html'
+		page = session.query(StaticPageModel).filter_by(alias=alias).one()
+		print(page.to_frontend)
+		page.to_frontend.update({'is_catalog': False })
+		return self.render('client/content_page.html', **page.to_frontend)
+
+
+class CatalogPageRoute(BaseHandler, Custom404Mixin):
+	@route_except_handler
+	def get(self, alias):
+		print(alias)
+		if alias.endswith(".html"):
+			alias = alias.replace('.html', '').replace('/', '')
+			print(alias)
+		page = session.query(CatalogSectionModel).filter_by(alias=alias).one()
+		items = session.query(CatalogItemModel).filter_by(section_id=page.id).all()
+
+		page.to_frontend.update({'is_catalog': True, 'is_main_page': False})
+		page.to_frontend.update({'items': [x.to_frontend for x in items]})
+		print(page.to_frontend)
+		self.render('client/catalog_sections.html', **page.to_frontend)
 
 
 class ItemRoute(BaseHandler, Custom404Mixin):
+	@route_except_handler
 	def get(self, category, item):
-		return self.render('yyy.jade') #Replace to catalog.jade
+		print(item)
+		if item.endswith(".html"):
+			item = item.replace('.html', '').replace('/', '')
+		page = session.query(CatalogItemModel).filter_by(alias=item).one()
+		page.to_frontend['images'] = json.loads(page.to_frontend['images'])
+		for i in page.to_frontend['images']:
+			i['filename'] = '/uploaded-files/%s' % i['filename']
+			print(i)
+
+		main_image = json.loads(page.to_frontend['main_image'])[0]['filename']
+
+		page.to_frontend['main_image'] = '/uploaded-files/%s' % main_image
+
+		page.to_frontend.update({'is_catalog': True, 'is_main_page': False})
+		return self.render('client/catalog_detail.html', **page.to_frontend)
 
 
 
@@ -130,9 +190,6 @@ class FormsHandler(JsonResponseMixin):
 
 	def set_kwargs(self, success_msg_list=[], error_msg_list=[], title=''):
 		return {
-				'page_content':'',
-				'show_h1': 1,
-				'page_title': title,
 				'success_msg_list': success_msg_list,
 				'error_msg_list':error_msg_list
 			}

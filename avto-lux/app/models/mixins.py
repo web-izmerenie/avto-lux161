@@ -11,6 +11,7 @@ from sqlalchemy import (
 from sqlalchemy.schema import ColumnDefault
 from sqlalchemy.dialects.postgresql import JSON
 
+
 class PageMixin:
 
 	@declared_attr

@@ -1,3 +1,5 @@
+ # -*- coding: utf-8 -*-
+
 from sqlalchemy import (
 	Column,
 	Table,
@@ -12,6 +14,7 @@ from app.configparser import config
 from sqlalchemy.orm import relationship
 from .dbconnect import Base, dbprefix
 from .mixins import PageMixin, IdMixin
+import base64
 
 
 class StaticPageModel(Base, PageMixin, IdMixin):
@@ -32,6 +35,24 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	@property
 	def item(self):
 		return vars(self)
+
+	@property
+	def to_frontend(self):
+		vals = vars(self)
+		deprecated = ['_sa_instance_state', 'id', 'create_date', 'files', 'last_change', 'alias']
+		escaped = ['footer_slogan']
+		try:
+			for item in deprecated:
+				del vals[item]
+		except:
+			pass
+		# for item in escaped:
+		# 	print(vals[item])
+		# 	vals[item] = base64.b64encode(vals[item])
+
+		vals.update({'success_msg_list': '', 'error_msg_list': ''})
+		return vals
+
 
 
 

@@ -5,17 +5,18 @@ import os
 from app.configparser import config
 from .main import (
 	MainRoute,
-	PageRoute,
+	StaticPageRoute,
 	ItemRoute,
 	UrlToRedirect,
-	FormsHandler
+	FormsHandler,
+	CatalogPageRoute
 )
 
 from .testroute import TestRoute
 
 routes = [
 	('/', MainRoute),
-	 ('/uploaded-files/(.*)', StaticFileHandler, {"path": os.path.join(os.getcwd(), config('UPLOAD_FILES_PATH'))}),
+	('/uploaded-files/(.*)', StaticFileHandler, {"path": os.path.join(os.getcwd(), config('UPLOAD_FILES_PATH'))}),
 	('/api/forms/', FormsHandler),
 
 	('/test/(.*?).html', TestRoute), ## Only for testing slised pages
@@ -24,8 +25,10 @@ routes = [
 	('/([-0-9])+(.html)', UrlToRedirect),
 	('/(.*?)/item/(.*?).html', UrlToRedirect),
 
-	('/(.*?).html', PageRoute),
-	('/(.*?)', PageRoute),
-	('/(.*?)/(.*?).html', ItemRoute),
-	('/(.*?)/(.*?)', ItemRoute)
+	('/catalog/(.*?)/(.*?).html', ItemRoute),
+	('/catalog/(.*?)/(.*?)', ItemRoute),
+	('/catalog/(.*?)', CatalogPageRoute),
+	('/catalog/(.*?).html', CatalogPageRoute),
+	('/(.*?).html', StaticPageRoute),
+	('/(.*?)', StaticPageRoute)
 ]

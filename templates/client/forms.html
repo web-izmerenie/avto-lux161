@@ -1,0 +1,45 @@
+<form id="call-me-form" action="/api/forms/" method="post">
+	<h2>Заказать звонок</h2>
+	<input type="hidden" name="action" value="call">
+	<label class="text">
+		<input type="text" name="name" value="" placeholder="Имя">
+	</label>
+	<label class="text">
+		<input type="tel" name="phone" value="" placeholder="Телефон">
+	</label>
+	<!-- for bots -->
+	<input type="text" name="message" value="" style="display:none;" class="b">
+	<label class="submit">
+		<input type="submit" value="Отправить">
+	</label>
+</form>
+
+{% if is_catalog %}
+	<form id="order-form" action="/api/forms/" method="post">
+		<h2>Сделать заказ {{title}}</h2>
+		<input type="hidden" name="action" value="order">
+		<input type="hidden" name="id" value="1">
+		<label class="text">
+			<input type="text" name="name" value="" placeholder="Имя">
+		</label>
+		<label class="text">
+			<input type="tel" name="callback" value="" placeholder="Телефон или E-mail">
+		</label>
+		<label class="date">
+			<input type="date" name="date" value="" placeholder="Дата">
+		</label>
+		<div class="time">
+			<span>Время</span>
+			<label class="number">
+				<input type="number" name="hours" value="0" maxlength="2" min="0" max="23" placeholder="Часы">
+			</label>
+			<label class="number">
+				<input type="number" name="minutes" value="0" maxlength="2" min="0" max="59" placeholder="Минуты">
+			</label>
+		</div>
+		<input type="text" name="message" value="" style="display:none;" class="b">
+		<label class="submit">
+			<input type="submit" value="Отправить">
+		</label>
+	</form>
+{% end %}

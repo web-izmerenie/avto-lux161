@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block 'page-specific' %}
+<div class="catalog-page sections">
+	<div class="content">
+		{% if seo_title %}
+			<h1>{{ seo_title }}</h1>
+		{% else %}
+			<h1>{{ title }}</h1>
+		{% end %}
+		<main>
+			<ul class="catalog-sections">
+				{% for item in items %}
+					<li>
+						<a href="{{item['detail_link']}}">
+							<img alt="Фото {{item['title']}}" src="{{item['main_image']}}">
+							<span>{{item['title']}}</span>
+						</a>
+					</li>
+				{% end %}
+			</ul>
+		</main>
+	</div>
+</div>
+{% end %}

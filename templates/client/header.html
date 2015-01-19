@@ -1,0 +1,49 @@
+<div class="head-block">
+	<div class="right-part">
+		{% if not is_main_page %}
+			<a href="/" title="На главную страницу">
+				<img src="{{static_url('images/logo.png')}}" alt="Авто Люкс логотип">
+			</a>
+		{% else %}
+			<img src="{{static_url('images/logo.png')}}" alt="Авто Люкс логотип">
+		{% end %}
+		<div class="slogan">
+			Аренда и прокат автомобилей<br>
+			Заказ микроавтобусов
+		</div>
+		<ul class="phones">
+			<li><a href="tel:+78632706620">+7(863) 270 66 20</a></li>
+			<li><a href="tel:+79889993989">+7(988) 999 39 89</a></li>
+		</ul>
+		<a href="#call-me-form" class="call-me">Заказать звонок</a>
+		<nav class="main-menu">
+			<ul>
+				<li><a href="/about_company.html">О компании</a></li>
+				<li class="active"><span>Стоимость услуг</span></li>
+				<li class="active"><a href="/contacts.html">Контактная информация</a></li>
+				<li><a href="./wedding-advices.html">Свадебные советы молодоженам</a></li>
+			</ul>
+		</nav>
+	</div>
+</div><!--.head-block-->
+<div class="catalog-menu">
+	<nav>
+		<ul>
+			<li class="active">
+				<span>
+					<span>Аренда автомобиля</span>
+				</span>
+			</li>
+			<li class="active">
+				<a href="#bus">
+					<span>Аренда микроавтобуса</span>
+				</a>
+			</li>
+			<li>
+				<a href="#wedding">
+					<span>Свадебные укражения</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+</div><!--.catalog-menu-->

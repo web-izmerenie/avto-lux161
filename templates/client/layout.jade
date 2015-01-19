@@ -1,28 +1,24 @@
-- var main_page = 1
-- var aphorism_block = 1
-- var meta_title = 'Авто Люкс — аренда и прокат автомобилей с водителем. Заказ микроавтобусов.'
-- var meta_description = ''
-- var meta_keywords = ''
-
 - var html_classes = ''
 
-if aphorism_block
+if has_footer_slogan
 	- var html_classes = html_classes + 'aphorism'
+
+{% autoescape None %}
 
 !!! 5
 html(lang="ru", class=html_classes, data-local-file=static_url('client-local.json'))
 	head
 		meta(charset="utf-8")
 
-		if meta_title
-			title=meta_title
+		if seo_meta_title
+			title= seo_meta_title
 		else
-			title=page_title
+			title= title
 
-		if meta_description
-			meta(name="description", content=meta_description)
-		if meta_keywords
-			meta(name="keywords", content=meta_keywords)
+		if seo_meta_description
+			meta(name="description", content=seo_meta_description)
+		if seo_meta_keywords
+			meta(name="keywords", content=seo_meta_keywords)
 
 		meta(name="author", content="Viacheslav Lotsmanov")
 		meta(name="author", content="Andrew Fatkulin")

@@ -27,12 +27,6 @@ class LoginFormView extends SmoothView
 	initialize: !->
 		SmoothView.prototype.initialize ...
 
-	on-show: !->
-		# temporary for development
-		@ui.user.val \admin
-		@ui.pass.val \admin
-		@ui.form.submit!
-
 	process: false
 	set-processing: (b)!-> @.process = b
 	is-processing: -> @.process

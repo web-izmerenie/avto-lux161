@@ -11,7 +11,7 @@ form#call-me-form(action="/api/forms/", method="post")
 		input(type="submit", value="Отправить")
 
 form#order-form(action="/api/forms/", method="post")
-	h2='Сделать заказ ' + page_title
+	h2='Сделать заказ ' + title
 	input(type="hidden", name="action", value="order")
 	input(type="hidden", name="id", value="1")
 	label.text

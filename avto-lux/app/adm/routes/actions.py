@@ -11,7 +11,6 @@ from app.mixins.routes_mixin import (
 
 from pyjade.ext.tornado import patch_tornado
 
-from app.adm.imageprocessing.imageprepare import resize_images, calculate_sizes
 from app.models.dbconnect import Session, db_inspector
 from app.models.usermodels import User
 from app.models.pagemodels import (
