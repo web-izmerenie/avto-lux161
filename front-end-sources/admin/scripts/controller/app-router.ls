@@ -29,6 +29,8 @@ require! {
 	'../view/sections/redirect/add' : AddRedirectView
 	'../view/sections/redirect/edit' : EditRedirectView
 	'../view/sections/accounts/list' : AccountsListView
+	'../view/sections/accounts/add' : AddAccountView
+	'../view/sections/accounts/edit' : EditAccountView
 }
 
 police = W.radio .channel \police
@@ -148,6 +150,12 @@ class AppRouterController extends M.Controller
 
 	\accounts : !->
 		panel-page-handler @, (new AccountsListView!).render!
+
+	\account-add : !->
+		panel-page-handler @, (new AddAccountView!).render!
+
+	\account-edit : (id)!->
+		panel-page-handler @, (new EditAccountView id: id).render!
 
 	\logout : !->
 		return unless restore-last-page!

@@ -94,7 +94,8 @@ class FormEditView extends SmoothView
 		vals.section = @get-option \section
 		vals.id = @get-option \id if (@get-option \type) is \edit
 		@ajax.abort! if @ajax
-		@ajax = ajax-req {
+
+		ajax-opts = {
 			data:
 				action: ((@get-option \type) is \edit) and \update or \add
 				args: JSON.stringify vals
@@ -116,6 +117,18 @@ class FormEditView extends SmoothView
 				@ajax = null
 				B.history.navigate (@get-option \list-page), trigger: true
 		}
+
+		if (@get-option \section) is \accounts
+			ajax-opts.data =
+				is_active: vals.is_active
+				login: vals.login
+				password: vals.password
+			ajax-opts.data.id = vals.id if vals.id?
+			switch @get-option \type
+			| \add => ajax-opts.url = config.create_account_url
+			| \edit => ajax-opts.url = config.update_account_url
+
+		@ajax = ajax-req ajax-opts
 
 	regions:
 		\main : '.main'

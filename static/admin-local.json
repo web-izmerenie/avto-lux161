@@ -165,13 +165,29 @@
       },
       "accounts": {
         "accounts_list": "Список аккаунтов",
+        "title": {
+          "add": "Добавление аккаунта",
+          "edit": "Редактирование аккаунта"
+        },
         "id": "ID",
         "is_active": "Активен",
         "is_active_yes": "Да",
         "is_active_no": "Нет",
         "login": "Логин",
+        "password": "Пароль",
         "add": "Добавить аккаунт",
-        "refresh": "Обновить"
+        "refresh": "Обновить",
+        "form": {
+          "err": {
+            "unique_key_exist": "Аккаунт уже существует!",
+            "incorrect_data": "Некорректные данные!"
+          },
+          "is_active": "Активен",
+          "login": "Логин",
+          "password": "Пароль"
+        },
+        "save": "Сохранить",
+        "cancel": "Отмена"
       }
     }
   }

@@ -217,6 +217,10 @@ class FilesItemView extends InputItemView
 		#delete! @D
 		#delete! @files-dom-list
 
+class PasswordItemView extends TextItemView
+	class-name: 'password'
+	template: 'form/password'
+
 class FormView extends M.CompositeView
 	tag-name: \form
 	class-name: 'form edit-form'
@@ -264,6 +268,7 @@ class FormView extends M.CompositeView
 		| \html => return HTMLInputItemView
 		| \select => return SelectItemView
 		| \files => return FilesItemView
+		| \password => return PasswordItemView
 
 		TextItemView
 

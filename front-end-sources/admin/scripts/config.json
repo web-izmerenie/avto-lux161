@@ -4,6 +4,8 @@
   "ajax_data_url": "/adm/data.json",
   "upload_file_url": "/adm/upload.json",
   "uploaded_file_prefix": "/uploaded-files/",
+  "create_account_url": "/adm/create.account",
+  "update_account_url": "/adm/update.account",
   "sections": {
     "pages": {
       "fields_sort": [
@@ -67,6 +69,13 @@
         "seo_meta_keywords",
         "has_footer_slogan",
         "footer_slogan"
+      ]
+    },
+    "accounts": {
+      "fields_sort": [
+        "is_active",
+        "login",
+        "password"
       ]
     }
   }
