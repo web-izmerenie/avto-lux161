@@ -5,6 +5,7 @@ from .main import (
 	AuthHandler,
 	LogoutHandler,
 	CreateUser,
+	UpdateUser,
 	FileUpload
 )
 from .actions import AdminMainHandler
@@ -15,6 +16,7 @@ routes = [
 	('/adm/auth', AuthHandler),
 	('/adm/logout', LogoutHandler),
 	('/adm/data.json', AdminMainHandler),
-	('/adm/create.user', CreateUser),
-	('/adm/upload.json', FileUpload)
+	('/adm/create.account', CreateUser),
+	('/adm/update.account', UpdateUser),
+	('/adm/upload.json', FileUpload),
 ]

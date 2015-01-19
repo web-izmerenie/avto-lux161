@@ -17,8 +17,8 @@ from app.mixins import AuthMixin
 class User(Base, IdMixin):
 	__tablename__ = dbprefix + 'users'
 
-	login = Column(String(128))
-	password = Column(String(4096))
+	login = Column(String(4096))
+	password = Column(String(5000))
 	last_login = Column(DateTime(timezone=False))
 	is_active = Column(Boolean)
 

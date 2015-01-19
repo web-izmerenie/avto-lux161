@@ -123,7 +123,8 @@ class AdminMainHandler(JsonResponseMixin):
 
 		data = session.query(
 			CatalogSectionModel.title,
-			CatalogSectionModel.id
+			CatalogSectionModel.id,
+			CatalogSectionModel.is_active
 			).all()
 		print(counts)
 		print(list(zip(counts, data)))
@@ -143,7 +144,9 @@ class AdminMainHandler(JsonResponseMixin):
 		data = session.query(
 			CatalogItemModel.id,
 			CatalogItemModel.title,
+			CatalogItemModel.is_active
 			).filter_by(section_id=id).all()
+
 		title = session.query(
 			CatalogSectionModel.title
 			).filter_by(id=id).one()
@@ -239,7 +242,7 @@ class AdminMainHandler(JsonResponseMixin):
 		fields = db_inspector.get_columns(
 			section_map[section].__tablename__
 			)
-		print(fields)
+
 		for item in (x for x
 			in fields
 				if x['name'].startswith('is_')
@@ -283,6 +286,7 @@ class AdminMainHandler(JsonResponseMixin):
 			'TEXT': 'html',
 			'VARCHAR(4096)': 'text',
 			'VARCHAR(8192)': 'text',
+			'VARCHAR(5000)': 'password',
 			'JSON': 'files',
 			'INTEGER': 'text'
 		}
@@ -326,6 +330,7 @@ class AdminMainHandler(JsonResponseMixin):
 			del values['create_date']
 			del values['last_change']
 			del values['_sa_instance_state']
+			del values['password']
 		except Exception:
 			pass
 

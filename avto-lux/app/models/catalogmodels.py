@@ -34,7 +34,7 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'catalog_items'
 
 	desctiption_text = Column(Text)
-	main_image = Column(String(8192))
+	main_image = Column(JSON)
 	images = Column(JSON)
 
 	section_id = Column(Integer, ForeignKey(dbprefix + 'catalog.id'))
