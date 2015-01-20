@@ -89,10 +89,14 @@ class CatalogSectionRoute(BaseHandler, Custom404Mixin):
 		page = session.query(CatalogSectionModel).filter_by(alias=alias).one()
 		items = session.query(CatalogItemModel).filter_by(section_id=page.id).all()
 
-		page.to_frontend.update({'is_catalog': True, 'is_main_page': False})
-		page.to_frontend.update({'items': [x.to_frontend for x in items]})
+		data = page.to_frontend
+		data.update({
+			'is_catalog': True,
+			'is_main_page': False,
+			'items': [x.to_frontend for x in items]
+			})
 
-		self.render('client/catalog_sections.html', **page.to_frontend)
+		self.render('client/catalog_sections.html', **data)
 
 
 class CatalogItemRoute(BaseHandler, Custom404Mixin):

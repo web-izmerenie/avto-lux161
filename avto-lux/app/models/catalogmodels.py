@@ -42,7 +42,7 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 
 	@property
 	def to_frontend(self):
-		vals = vars(self)
+		vals = vars(self).copy()
 
 		deprecated = ['_sa_instance_state', 'id', 'create_date', 'files', 'last_change', 'alias']
 		for item in deprecated:
