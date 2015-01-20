@@ -17,6 +17,9 @@ require! {
 	'./smooth' : SmoothView
 }
 
+class TableListCollection extends B.Collection
+	comparator: (v) -> if v.id then v.id else 0
+
 class ListView extends SmoothView
 	initialize: !->
 		SmoothView.prototype.initialize ...
@@ -27,7 +30,7 @@ class ListView extends SmoothView
 		@get-region \main .show @loader-view
 
 	init-table-list: (View, options)!->
-		@table-list = new B.Collection []
+		@table-list = new TableListCollection []
 		options = collection: @table-list <<<< (options or {})
 		@table-view = new View options
 		@table-view.render!
