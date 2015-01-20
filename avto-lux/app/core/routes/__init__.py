@@ -19,6 +19,7 @@ routes = [
 	('/uploaded-files/(.*)', StaticFileHandler, {"path": os.path.join(os.getcwd(), config('UPLOAD_FILES_PATH'))}),
 	('/api/forms/', FormsHandler),
 
+	# TODO :: remove for production (only for development)
 	('/test/(.*?).html', TestRoute), ## Only for testing slised pages
 	('/test/(.*?)', TestRoute),
 
