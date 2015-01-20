@@ -91,6 +91,8 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 		if main_image and len(main_image) > 0 and 'filename' in main_image[0]:
 			main_image = main_image[0]
 			main_image['filename'] = '/uploaded-files/%s' % main_image['filename']
+		else:
+			main_image = None
 
 		vals['main_image'] = main_image
 
