@@ -16,14 +16,13 @@
 		a.call-me(href="#call-me-form") Заказать звонок
 		nav.main-menu
 			ul
-				li
-					a(href="#about-company") О компании
-				li.active
-					span Стоимость услуг
-				li.active
-					a(href="#contacts") Контактная информация
-				li
-					a(href="#wedding-advices") Свадебные советы молодоженам
+				each item in menu['main']
+					if item['active']
+						li.active
+							span= item['title']
+					else
+						li
+							a(href=item['link'])= item['title']
 .catalog-menu
 	nav
 		ul

@@ -19,6 +19,19 @@ class MenuProviderMixin():
 			'catalog': []
 		}
 
+		static_pages = session.query(StaticPageModel)\
+			.filter_by(is_main_menu_item=True).all()
+		for page in [x.item for x in static_pages]:
+			item = {
+				'active': False,
+				'link': page['alias'],
+				'title': page['title']
+			}
+			if page_alias is not None:
+				if page['alias'] == page_alias:
+					item['active'] = True
+			menu['main'].append(item)
+
 		sections = session.query(CatalogSectionModel).all()
 		for section in [x.item for x in sections]:
 			item = {
@@ -27,11 +40,12 @@ class MenuProviderMixin():
 				'link': '/catalog/' + section['alias'] + '.html',
 				'title': section['title']
 			}
-			if section['alias'] == catalog_section_alias:
-				item['active'] = True
-				item['current'] = True
-				if catalog_item_alias is not None:
-					item['current'] = False
+			if catalog_section_alias is not None:
+				if section['alias'] == catalog_section_alias:
+					item['active'] = True
+					item['current'] = True
+					if catalog_item_alias is not None:
+						item['current'] = False
 			menu['catalog'].append(item)
 
 		return menu

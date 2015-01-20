@@ -11,6 +11,7 @@
       "fields_sort": [
         "is_active",
         "is_main_page",
+        "is_main_menu_item",
         "title",
         "alias",
         "content_text",
@@ -37,7 +38,7 @@
         "title",
         "alias",
         "section_id",
-        "desctiption_text",
+        "description_text",
         "files",
         "main_image",
         "images",

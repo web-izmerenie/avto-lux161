@@ -2,16 +2,11 @@
 
 from sqlalchemy import (
 	Column,
-	Table,
 	String,
 	Integer,
 	Boolean,
-	DateTime,
-	Text,
-	ForeignKey
-	)
-from app.configparser import config
-from sqlalchemy.orm import relationship
+	Text
+)
 from .dbconnect import Base, dbprefix
 from .mixins import PageMixin, IdMixin
 
@@ -22,6 +17,7 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	content_text = Column(Text)
 	is_h1_show = Column(Boolean, default=False)
 	is_main_page = Column(Boolean, default=False)
+	is_main_menu_item = Column(Boolean, default=False)
 
 	@property
 	def static_list(self):

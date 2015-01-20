@@ -37,6 +37,7 @@
           "alias": "Путь",
           "is_active": "Активен",
           "is_main_page": "Главная страница",
+          "is_main_menu_item": "Добавить в главное меню",
           "has_footer_slogan": "Показывать афоризм внизу страницы",
           "footer_slogan": "Афоризм внизу страницы",
           "is_h1_show": "Показывать H1 заголовок",
@@ -79,7 +80,7 @@
           "title": "Заголовок",
           "alias": "Символьный код",
           "section_id": "Раздел",
-          "desctiption_text": "Описание",
+          "description_text": "Описание",
           "files": {
             "title": "Файлы",
             "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",

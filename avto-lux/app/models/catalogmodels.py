@@ -48,7 +48,7 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 class CatalogItemModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'catalog_items'
 
-	desctiption_text = Column(Text)
+	description_text = Column(Text)
 	main_image = Column(JSON)
 	images = Column(JSON)
 

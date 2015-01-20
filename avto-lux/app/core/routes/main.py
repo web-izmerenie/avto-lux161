@@ -65,7 +65,7 @@ class StaticPageRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 		data = page.to_frontend
 		data.update({ 'menu': menu })
 		data.update({'is_catalog': False})
-		return self.render('client/content-page.jade', **page.to_frontend)
+		return self.render('client/content-page.jade', **data)
 
 
 class FormsHandler(JsonResponseMixin):
@@ -116,7 +116,7 @@ class FormsHandler(JsonResponseMixin):
 				return self.json_response({'status': 'success'})
 
 			kwrgs = self.set_kwargs(
-				success_msg_list=['lol', 'you','are', 'nigga'],
+				success_msg_list=['lol', 'you', 'are', 'nigga'],
 				title=p_title)
 			return self.render('client/content-page.jade', **kwargs)
 
