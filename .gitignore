@@ -25,6 +25,10 @@ front-end-gulp
 
 static/**/*build.css
 static/**/*build.js
+static/client-build.css
+static/client-build.js
+static/admin-build.css
+static/admin-build.js
 static/tmp
 images_sizes.txt
 
