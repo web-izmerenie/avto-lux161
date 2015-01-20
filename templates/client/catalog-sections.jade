@@ -1,109 +1,17 @@
 extends layout
 
 block page-specific
-	- var show_h1 = 1
-	- var page_title = 'Аренда автомобиля с водителем'
-
 	.catalog-page.sections
 		.content
-			if show_h1
-				if page_title
-					h1=page_title
+			if seo_title
+				h1= seo_title
+			else
+				h1= title
 			main
 				ul.catalog-sections
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри Toyota Camry lololo asd as asd asd asda sdasd as
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
-					li
-						a(href="javascript:void(0);")
-							img(alt="Фото Тайота Камри" src=static_url('tmp/car.jpg'))
-							span Тойота Камри
+					each item in items
+						li
+							a(href=item['detail_link'])
+								img(alt='Фото '+title,
+									src=item['main_image']['filename'])
+								span= title

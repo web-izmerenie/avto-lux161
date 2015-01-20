@@ -9,8 +9,6 @@ from app.mixins.routes_mixin import (
 	JsonResponseMixin
 )
 
-from pyjade.ext.tornado import patch_tornado
-
 from app.models.dbconnect import Session, db_inspector
 from app.models.usermodels import User
 from app.models.pagemodels import (
@@ -25,7 +23,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func
 import datetime
 import time
-patch_tornado()
 
 
 def query_except_handler(fn):

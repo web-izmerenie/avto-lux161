@@ -1,4 +1,7 @@
-__all__ = ['base', 'main']
+__all__ = ['main']
+
+from pyjade.ext.tornado import patch_tornado
+patch_tornado()
 
 from .main import (
 	AdminMainRoute,

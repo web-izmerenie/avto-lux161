@@ -6,7 +6,6 @@ from .base import BaseHandler
 from .menu import MenuProvider
 
 from app.mixins.routes_mixin import Custom404Mixin, JsonResponseMixin
-from pyjade.ext.tornado import patch_tornado
 
 from app.models.dbconnect import Session
 from sqlalchemy import select, func
@@ -28,11 +27,8 @@ from app.utils import (
 	send_mail
 )
 from app.configparser import config
-from sqlalchemy.orm.exc import NoResultFound
 
 from .decorators import route_except_handler
-
-# patch_tornado()
 
 session = Session()
 
@@ -41,8 +37,9 @@ class MainRoute(BaseHandler, Custom404Mixin):
 	@route_except_handler
 	def get(self):
 		page = session.query(StaticPageModel).filter_by(alias='/').one()
-		page.to_frontend.update({'is_catalog': False})
-		return self.render('client/content_page.html', **page.to_frontend)
+		data = page.to_frontend
+		data.update({ 'is_catalog': False })
+		return self.render('client/content-page.jade', autoescape=False, **data)
 
 
 class UrlToRedirect(BaseHandler):
@@ -59,8 +56,9 @@ class StaticPageRoute(BaseHandler, Custom404Mixin):
 		if not alias.endswith(".html"):
 			alias = '/' + alias + '.html'
 		page = session.query(StaticPageModel).filter_by(alias=alias).one()
-		page.to_frontend.update({'is_catalog': False})
-		return self.render('client/content_page.html', **page.to_frontend)
+		data = page.to_frontend
+		data.update({'is_catalog': False})
+		return self.render('client/content-page.jade', **page.to_frontend)
 
 
 class FormsHandler(JsonResponseMixin):

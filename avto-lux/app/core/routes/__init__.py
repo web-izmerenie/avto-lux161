@@ -1,5 +1,8 @@
 __all__ = ['base', 'menu', 'main']
 
+from pyjade.ext.tornado import patch_tornado
+patch_tornado()
+
 from tornado.web import StaticFileHandler
 import os
 from app.configparser import config

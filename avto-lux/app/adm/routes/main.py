@@ -1,9 +1,8 @@
-import os, json
+import os
 import hashlib
 import time
 from app.configparser import config
 from app.utils import get_json_localization
-import tornado.template
 
 from app.mixins import AuthMixin
 
@@ -11,22 +10,9 @@ from app.mixins.routes_mixin import (
 	JsonResponseMixin
 )
 
-from pyjade.ext.tornado import patch_tornado
-
 from app.models.dbconnect import Session
 from app.models.usermodels import User
-from app.models.pagemodels import (
-	StaticPageModel,
-	UrlMapping
-)
-from app.models.catalogmodels import(
-	CatalogSectionModel,
-	CatalogItemModel
-)
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql import func
 import datetime
-patch_tornado()
 
 
 def request_except_handler(fn):
@@ -54,7 +40,7 @@ class AdminMainRoute(JsonResponseMixin):
 		lang = config('LOCALIZATION')['LANG']
 		localization = get_json_localization('ADMIN')[lang]
 		kwrgs = {
-			'page_title' : localization['page_title'],
+			'page_title': localization['page_title'],
 			'lang': lang,
 			'local': localization,
 			'is_auth': (
@@ -63,9 +49,8 @@ class AdminMainRoute(JsonResponseMixin):
 				lambda: 1 \
 					if self.application.settings.get('debug') \
 					else 0)()
-			}
+		}
 		return self.render('admin/layout.jade', **kwrgs)
-
 
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
@@ -75,11 +60,12 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 	def post(self):
 		session = Session()
 		if self.get_current_user():
-			return self.json_response({'status': 'success'}) ## TODO : Change status to already auth
+			# TODO : Change status to already auth
+			return self.json_response({'status': 'success'})
 		try:
 			usr = session.query(User).filter_by(
 				login=self.get_argument('user')
-				).one()
+			).one()
 		except Exception as e:
 			print(e)
 			return self.json_response({
@@ -97,22 +83,19 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'user_inactive'
-				})
+			})
 		return self.json_response({
 			'status': 'error',
 			'error_code': 'incorrect_password'})
 
-
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
-
 
 
 class LogoutHandler(JsonResponseMixin):
 	def post(self):
 		self.clear_all_cookies()
 		return self.json_response({'status': 'logout'})
-
 
 
 class CreateUser(AuthMixin, JsonResponseMixin):
@@ -127,12 +110,12 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'unique_key_exist'
-				})
+			})
 		elif login in olds:
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'incorrect_data'
-				})
+			})
 		try:
 			self.get_argument('is_active')
 		except:
@@ -144,7 +127,7 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 			password=self.create_password(passwd),
 			last_login=datetime.datetime.utcnow(),
 			is_active=is_active
-			)
+		)
 		session.add(usr)
 		session.commit()
 		return self.json_response({'status': 'success'})
@@ -169,12 +152,12 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'unique_key_exist'
-				})
+			})
 		elif usr.login != login and login in olds:
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'incorrect_data'
-				})
+			})
 
 		kwargs.update({'login': login, 'is_active': is_active})
 		if passwrd != '':
@@ -185,8 +168,6 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 		return self.json_response({'status': 'success'})
 
 
-
-
 class FileUpload(JsonResponseMixin):
 	@request_except_handler
 	def post(self):
@@ -194,7 +175,7 @@ class FileUpload(JsonResponseMixin):
 			self.set_status(403)
 			return self.json_response({
 				'status': 'unauthorized'
-				})
+			})
 
 		print(self.request.headers)
 		file_path = config('UPLOAD_FILES_PATH')
@@ -203,25 +184,24 @@ class FileUpload(JsonResponseMixin):
 			_file = f[1][0]
 			print(_file['content_type'])
 
-
-			_filename = hashlib.sha512(str(time.time()).encode('utf-8')).hexdigest()[0:35]
+			_filename = hashlib.sha512(
+				str(time.time()).encode('utf-8')).hexdigest()[0:35]
 			fname = _filename + '.' + _file['content_type'].split('/')[1]
 
 			f = open(os.path.join(file_path, fname), 'wb')
 			f.write(_file['body'])
 			f.close()
-			hashes.append({ 'name': fname })
-
+			hashes.append({'name': fname})
 
 			print("File: %s was uploaded" % _file['filename'])
+
 		return self.json_response({
 			'status': 'success',
 			'files': hashes
-			})
+		})
 
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
-
 
 
 class FileSave(JsonResponseMixin):

@@ -27,4 +27,4 @@ class CatalogSectionRoute(BaseHandler, MenuProvider, Custom404Mixin):
 			'items': [x.to_frontend for x in items]
 		})
 
-		self.render('client/catalog_sections.html', **data)
+		self.render('client/catalog-sections.jade', **data)

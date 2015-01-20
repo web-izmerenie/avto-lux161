@@ -1,3 +1,5 @@
+import sys
+from sqlalchemy.orm.exc import NoResultFound
 from app.models.dbconnect import Session
 
 from app.models.pagemodels import (
@@ -17,7 +19,7 @@ def route_except_handler(fn):
 			page = session.query(StaticPageModel).filter_by(alias='/404.html').one()
 			data = page.to_frontend
 			data.update({ 'is_catalog': False })
-			return self.render('client/error_404.html', **data)
+			return self.render('client/error-404.jade', **data)
 		except Exception as e:
 			print(e, file=sys.stderr)
 			self.set_status(500)

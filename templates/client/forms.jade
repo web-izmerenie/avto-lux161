@@ -10,23 +10,24 @@ form#call-me-form(action="/api/forms/", method="post")
 	label.submit
 		input(type="submit", value="Отправить")
 
-form#order-form(action="/api/forms/", method="post")
-	h2='Сделать заказ ' + title
-	input(type="hidden", name="action", value="order")
-	input(type="hidden", name="id", value="1")
-	label.text
-		input(type="text", name="name", value="", placeholder="Имя")
-	label.text
-		input(type="tel", name="callback", value="", placeholder="Телефон или E-mail")
-	label.date
-		input(type="date", name="date", value="", placeholder="Дата")
-	div.time
-		span Время
-		label.number
-			input(type="number", name="hours", value="0", maxlength="2", min="0", max="23", placeholder="Часы")
-		label.number
-			input(type="number", name="minutes", value="0", maxlength="2", min="0", max="59", placeholder="Минуты")
-	// for bots
-	input(type="text", name="message", value="", style="display:none;", class="b")
-	label.submit
-		input(type="submit", value="Отправить")
+if is_catalog
+	form#order-form(action="/api/forms/", method="post")
+		h2= 'Сделать заказ ' + title
+		input(type="hidden", name="action", value="order")
+		input(type="hidden", name="id", value="1")
+		label.text
+			input(type="text", name="name", value="", placeholder="Имя")
+		label.text
+			input(type="tel", name="callback", value="", placeholder="Телефон или E-mail")
+		label.date
+			input(type="date", name="date", value="", placeholder="Дата")
+		div.time
+			span Время
+			label.number
+				input(type="number", name="hours", value="0", maxlength="2", min="0", max="23", placeholder="Часы")
+			label.number
+				input(type="number", name="minutes", value="0", maxlength="2", min="0", max="59", placeholder="Минуты")
+		// for bots
+		input(type="text", name="message", value="", style="display:none;", class="b")
+		label.submit
+			input(type="submit", value="Отправить")

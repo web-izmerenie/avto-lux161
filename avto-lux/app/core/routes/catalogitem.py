@@ -17,4 +17,4 @@ class CatalogItemRoute(BaseHandler, MenuProvider, Custom404Mixin):
 		page = session.query(CatalogItemModel).filter_by(alias=item).one()
 		data = page.to_frontend
 		data.update({'is_catalog': True, 'is_main_page': False})
-		return self.render('client/catalog_detail.html', **data)
+		return self.render('client/catalog-detail.jade', **data)

@@ -13,8 +13,6 @@ block page-specific
 				else
 					h1= title
 			main
-				if content_text
-					= content_text
 				if error_msg_list
 					ul.error-messages
 						each msg in error_msg_list
@@ -24,6 +22,8 @@ block page-specific
 						each msg in success_msg_list
 							li=msg
 				block content
+					if content_text
+						!= content_text
 		ul.cars.right
 			each i in ['1','2','3','4','5','6']
 				li
