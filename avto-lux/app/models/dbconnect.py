@@ -11,7 +11,4 @@ dbc = config('DATABASE')
 engine = create_engine("postgresql://%s:%s@%s/%s" % (dbc['USER'], dbc['PASS'], dbc['HOST'], dbc['DBNAME']))
 db_inspector = inspect(engine)
 
-
 Session = sessionmaker(bind=engine)
-
-

@@ -13,7 +13,6 @@ from .init_models import init_models
 from app.mixins import AuthMixin
 
 
-
 class User(Base, IdMixin):
 	__tablename__ = dbprefix + 'users'
 
@@ -44,5 +43,3 @@ def create_init_user():
 			is_active=True)
 		session.add(newusr)
 		session.commit()
-
-

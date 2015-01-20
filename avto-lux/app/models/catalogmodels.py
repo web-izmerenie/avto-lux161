@@ -19,13 +19,6 @@ import sys
 session = Session()
 
 
-def parse_main_image():
-	pass
-
-def parse_images():
-	pass
-
-
 class CatalogSectionModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'catalog'
 

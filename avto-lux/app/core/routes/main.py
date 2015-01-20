@@ -3,6 +3,7 @@ import sys
 import tornado.template
 from tornado.web import HTTPError, MissingArgumentError
 from .base import BaseHandler
+from .menu import MenuProvider
 
 from app.mixins.routes_mixin import Custom404Mixin, JsonResponseMixin
 from pyjade.ext.tornado import patch_tornado
@@ -10,16 +11,11 @@ from pyjade.ext.tornado import patch_tornado
 from app.models.dbconnect import Session
 from sqlalchemy import select, func
 
-## Debug
-from app.models.usermodels import User
 from app.models.pagemodels import (
 	StaticPageModel,
 	UrlMapping
 )
-from app.models.catalogmodels import(
-	CatalogSectionModel,
-	CatalogItemModel
-)
+from app.models.catalogmodels import CatalogItemModel
 
 from app.models.utilmodels import (
 	CallModel,
@@ -33,26 +29,12 @@ from app.utils import (
 )
 from app.configparser import config
 from sqlalchemy.orm.exc import NoResultFound
-session = Session()
+
+from .decorators import route_except_handler
+
 # patch_tornado()
 
-def route_except_handler(fn):
-	def wrap(*args, **kwargs):
-		self = args[0]
-		try:
-			return fn(*args, **kwargs)
-		except NoResultFound as e:
-			print(e, file=sys.stderr)
-			self.set_status(404)
-			page = session.query(StaticPageModel).filter_by(alias='/404.html').one()
-			page.to_frontend.update({'is_catalog': False})
-			return self.render('client/error_404.html', **page.to_frontend)
-		except Exception as e:
-			print(e, file=sys.stderr)
-			self.set_status(500)
-			return self.write('500: Internal server error')
-	wrap.__name__ = fn.__name__
-	return wrap
+session = Session()
 
 
 class MainRoute(BaseHandler, Custom404Mixin):
@@ -79,35 +61,6 @@ class StaticPageRoute(BaseHandler, Custom404Mixin):
 		page = session.query(StaticPageModel).filter_by(alias=alias).one()
 		page.to_frontend.update({'is_catalog': False})
 		return self.render('client/content_page.html', **page.to_frontend)
-
-
-class CatalogSectionRoute(BaseHandler, Custom404Mixin):
-	@route_except_handler
-	def get(self, alias):
-		if alias.endswith(".html"):
-			alias = alias.replace('.html', '').replace('/', '')
-		page = session.query(CatalogSectionModel).filter_by(alias=alias).one()
-		items = session.query(CatalogItemModel).filter_by(section_id=page.id).all()
-
-		data = page.to_frontend
-		data.update({
-			'is_catalog': True,
-			'is_main_page': False,
-			'items': [x.to_frontend for x in items]
-			})
-
-		self.render('client/catalog_sections.html', **data)
-
-
-class CatalogItemRoute(BaseHandler, Custom404Mixin):
-	@route_except_handler
-	def get(self, category, item):
-		if item.endswith(".html"):
-			item = item.replace('.html', '').replace('/', '')
-		page = session.query(CatalogItemModel).filter_by(alias=item).one()
-		data = page.to_frontend
-		data.update({'is_catalog': True, 'is_main_page': False})
-		return self.render('client/catalog_detail.html', **data)
 
 
 class FormsHandler(JsonResponseMixin):

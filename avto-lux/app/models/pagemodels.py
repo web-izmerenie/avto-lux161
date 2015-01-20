@@ -14,7 +14,6 @@ from app.configparser import config
 from sqlalchemy.orm import relationship
 from .dbconnect import Base, dbprefix
 from .mixins import PageMixin, IdMixin
-import base64
 
 
 class StaticPageModel(Base, PageMixin, IdMixin):
