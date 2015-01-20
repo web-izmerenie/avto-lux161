@@ -42,8 +42,11 @@ class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 		page = session.query(StaticPageModel).filter_by(alias='/').one()
 		menu = self.getmenu(page_alias='/')
 		data = page.to_frontend
-		data.update({ 'menu': menu })
-		data.update({ 'is_catalog': False })
+		data.update({
+			'is_catalog': False,
+			'is_catalog_item': False,
+			'menu': menu
+		})
 		return self.render('client/content-page.jade', autoescape=False, **data)
 
 
@@ -64,7 +67,11 @@ class StaticPageRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 		menu = self.getmenu(page_alias=alias)
 		data = page.to_frontend
 		data.update({ 'menu': menu })
-		data.update({'is_catalog': False})
+		data.update({
+			'is_catalog': False,
+			'is_catalog_item': False,
+			'menu': menu
+		})
 		return self.render('client/content-page.jade', **data)
 
 

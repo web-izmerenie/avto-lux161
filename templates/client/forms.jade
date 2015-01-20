@@ -10,11 +10,11 @@ form#call-me-form(action="/api/forms/", method="post")
 	label.submit
 		input(type="submit", value="Отправить")
 
-if is_catalog
+if is_catalog_item
 	form#order-form(action="/api/forms/", method="post")
 		h2= 'Сделать заказ ' + title
 		input(type="hidden", name="action", value="order")
-		input(type="hidden", name="id", value="1")
+		input(type="hidden", name="id", value=catalog_item_id)
 		label.text
 			input(type="text", name="name", value="", placeholder="Имя")
 		label.text

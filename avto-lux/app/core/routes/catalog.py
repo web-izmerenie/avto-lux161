@@ -20,11 +20,12 @@ class CatalogSectionRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 		items = session.query(CatalogItemModel).filter_by(section_id=page.id).all()
 		menu = self.getmenu(catalog_section_alias=alias)
 		data = page.to_frontend
-		data.update({'menu': menu})
 		data.update({
 			'is_catalog': True,
+			'is_catalog_item': False,
 			'is_main_page': False,
-			'items': [x.to_frontend for x in items]
+			'items': [x.to_frontend for x in items],
+			'menu': menu
 		})
 
 		self.render('client/catalog-sections.jade', **data)
@@ -40,6 +41,11 @@ class CatalogItemRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 			catalog_section_alias=category,
 			catalog_item_alias=item)
 		data = page.to_frontend
-		data.update({'menu': menu})
-		data.update({'is_catalog': True, 'is_main_page': False})
+		data.update({
+			'is_catalog': True,
+			'is_catalog_item': True,
+			'catalog_item_id': data['id'],
+			'is_main_page': False,
+			'menu': menu
+		})
 		return self.render('client/catalog-detail.jade', **data)

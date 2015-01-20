@@ -19,8 +19,11 @@ def route_except_handler(fn):
 			page = session.query(StaticPageModel).filter_by(alias='/404.html').one()
 			menu = self.getmenu()
 			data = page.to_frontend
-			data.update({'menu': menu})
-			data.update({ 'is_catalog': False })
+			data.update({
+				'is_catalog': False,
+				'is_catalog_item': False,
+				'menu': menu
+			})
 			return self.render('client/error-404.jade', **data)
 		except Exception as e:
 			print(e, file=sys.stderr)
