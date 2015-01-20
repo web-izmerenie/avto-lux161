@@ -280,6 +280,7 @@ class AdminMainHandler(JsonResponseMixin):
 			models[model].__tablename__
 			)
 
+		# TODO :: this shit really needs refactoring
 		types_map = {
 			'BOOLEAN': 'checkbox',
 			'TEXT': 'html',
