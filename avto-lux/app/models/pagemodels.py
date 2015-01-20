@@ -29,17 +29,19 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 			'title': self.title,
 			'id': self.id,
 			'alias': self.alias
-			}
+		}
 
 	@property
 	def item(self):
-		return vars(self)
+		return vars(self).copy()
 
 	@property
 	def to_frontend(self):
-		vals = vars(self)
+		vals = vars(self).copy()
 
-		deprecated = ['_sa_instance_state', 'id', 'create_date', 'files', 'last_change', 'alias']
+		deprecated = [
+			'_sa_instance_state', 'id', 'create_date', 'files', 'last_change',
+			'alias']
 		for item in deprecated:
 			if item in vals:
 				del vals[item]
@@ -57,4 +59,4 @@ class UrlMapping(Base, IdMixin):
 
 	@property
 	def item(self):
-		return vars(self)
+		return vars(self).copy()

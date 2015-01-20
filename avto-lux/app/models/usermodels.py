@@ -26,7 +26,7 @@ class User(Base, IdMixin):
 
 	@property
 	def item(self):
-		return vars(self)
+		return vars(self).copy()
 
 
 def create_init_user():

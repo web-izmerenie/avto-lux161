@@ -27,12 +27,16 @@
 .catalog-menu
 	nav
 		ul
-			li.active
-				span
-					span Аренда автомобиля
-			li.active
-				a(href="#bus")
-					span Аренда микроавтобуса
-			li
-				a(href="#wedding")
-					span Свадебные укражения
+			each item in menu['catalog']
+				if item['active']
+					li.active
+						if item['current']
+							span
+								span= item['title']
+						else
+							a(href=item['link'])
+								span= item['title']
+				else
+					li
+						a(href=item['link'])
+							span= item['title']

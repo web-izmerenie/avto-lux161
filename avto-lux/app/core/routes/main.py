@@ -3,9 +3,12 @@ import sys
 import tornado.template
 from tornado.web import HTTPError, MissingArgumentError
 from .base import BaseHandler
-from .menu import MenuProvider
 
-from app.mixins.routes_mixin import Custom404Mixin, JsonResponseMixin
+from app.mixins.routes_mixin import (
+	ErrorHandlerMixin,
+	JsonResponseMixin,
+	MenuProviderMixin
+)
 
 from app.models.dbconnect import Session
 from sqlalchemy import select, func
@@ -33,11 +36,13 @@ from .decorators import route_except_handler
 session = Session()
 
 
-class MainRoute(BaseHandler, Custom404Mixin):
+class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 	@route_except_handler
 	def get(self):
 		page = session.query(StaticPageModel).filter_by(alias='/').one()
+		menu = self.getmenu(page_alias='/')
 		data = page.to_frontend
+		data.update({ 'menu': menu })
 		data.update({ 'is_catalog': False })
 		return self.render('client/content-page.jade', autoescape=False, **data)
 
@@ -50,13 +55,15 @@ class UrlToRedirect(BaseHandler):
 		return self.redirect(str(new_url[0][0]), permanent=False, status=None)
 
 
-class StaticPageRoute(BaseHandler, Custom404Mixin):
+class StaticPageRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 	@route_except_handler
 	def get(self, alias):
 		if not alias.endswith(".html"):
 			alias = '/' + alias + '.html'
 		page = session.query(StaticPageModel).filter_by(alias=alias).one()
+		menu = self.getmenu(page_alias=alias)
 		data = page.to_frontend
+		data.update({ 'menu': menu })
 		data.update({'is_catalog': False})
 		return self.render('client/content-page.jade', **page.to_frontend)
 

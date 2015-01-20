@@ -3,6 +3,38 @@ import json
 from app.utils import is_date
 from app.models.pagemodels import StaticPageModel
 from app.models.dbconnect import Session
+from app.models.catalogmodels import CatalogSectionModel
+
+session = Session()
+
+
+class MenuProviderMixin():
+	def getmenu(self,
+		page_alias=None,
+		catalog_section_alias=None,
+		catalog_item_alias=None
+	):
+		menu = {
+			'main': [],
+			'catalog': []
+		}
+
+		sections = session.query(CatalogSectionModel).all()
+		for section in [x.item for x in sections]:
+			item = {
+				'active': False,
+				'current': False,
+				'link': '/catalog/' + section['alias'] + '.html',
+				'title': section['title']
+			}
+			if section['alias'] == catalog_section_alias:
+				item['active'] = True
+				item['current'] = True
+				if catalog_item_alias is not None:
+					item['current'] = False
+			menu['catalog'].append(item)
+
+		return menu
 
 
 class JsonResponseMixin(RequestHandler):
@@ -10,21 +42,16 @@ class JsonResponseMixin(RequestHandler):
 		return self.write(json.dumps(data, default=is_date))
 
 
-class Custom404Mixin(RequestHandler):
+class ErrorHandlerMixin(RequestHandler):
 	def write_error(self, status_code, **kwargs):
-		session = Session()
 		error_class_name = kwargs["exc_info"][1].__class__.__name__
 		errors = {
-			'FileNotFoundError': 404
+			'FileNotFoundError': 500
 		}
 		status = errors[error_class_name]
 		self.set_status(status)
-		page = session.query(StaticPageModel).filter_by(alias='/404.html').one()
-		data = page.to_frontend
-		data.update({'is_catalog': False})
 
-		# TODO: rename to error_page.jade
-		return self.render('client/error-404.jade', **data)
+		return self.write('500: Internal server error')
 
 
 class JResponse(RequestHandler):

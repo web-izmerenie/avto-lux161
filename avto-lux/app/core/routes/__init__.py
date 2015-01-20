@@ -12,8 +12,7 @@ from .main import (
 	UrlToRedirect,
 	FormsHandler
 )
-from .catalogitem import CatalogItemRoute
-from .catalogsection import CatalogSectionRoute
+from .catalog import (CatalogItemRoute, CatalogSectionRoute)
 
 from .testroute import TestRoute
 

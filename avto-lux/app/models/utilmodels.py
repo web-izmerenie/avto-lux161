@@ -22,7 +22,7 @@ class CallModel(Base, IdMixin):
 
 	@property
 	def item(self):
-		return vars(self)
+		return vars(self).copy()
 
 
 class OrderModel(Base, IdMixin):
@@ -35,7 +35,7 @@ class OrderModel(Base, IdMixin):
 
 	@property
 	def item(self):
-		return vars(self)
+		return vars(self).copy()
 
 
 class PhoneModel(Base, IdMixin):
@@ -50,4 +50,4 @@ class PhoneModel(Base, IdMixin):
 
 	@property
 	def item(self):
-		return vars(self)
+		return vars(self).copy()

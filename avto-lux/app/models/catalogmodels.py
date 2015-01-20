@@ -31,7 +31,7 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 
 	@property
 	def item(self):
-		return vars(self)
+		return vars(self).copy()
 
 	@property
 	def to_frontend(self):
@@ -62,7 +62,7 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 
 	@property
 	def item(self):
-		return vars(self)
+		return vars(self).copy()
 
 	@property
 	def to_frontend(self):
