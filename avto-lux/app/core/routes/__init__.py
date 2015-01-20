@@ -6,10 +6,10 @@ from app.configparser import config
 from .main import (
 	MainRoute,
 	StaticPageRoute,
-	ItemRoute,
 	UrlToRedirect,
 	FormsHandler,
-	CatalogPageRoute
+	CatalogSectionRoute,
+	CatalogItemRoute
 )
 
 from .testroute import TestRoute
@@ -25,10 +25,10 @@ routes = [
 	('/([-0-9])+(.html)', UrlToRedirect),
 	('/(.*?)/item/(.*?).html', UrlToRedirect),
 
-	('/catalog/(.*?)/(.*?).html', ItemRoute),
-	('/catalog/(.*?)/(.*?)', ItemRoute),
-	('/catalog/(.*?)', CatalogPageRoute),
-	('/catalog/(.*?).html', CatalogPageRoute),
+	('/catalog/(.*?)/(.*?).html', CatalogItemRoute),
+	('/catalog/(.*?)/(.*?)', CatalogItemRoute),
+	('/catalog/(.*?)', CatalogSectionRoute),
+	('/catalog/(.*?).html', CatalogSectionRoute),
 	('/(.*?).html', StaticPageRoute),
 	('/(.*?)', StaticPageRoute)
 ]

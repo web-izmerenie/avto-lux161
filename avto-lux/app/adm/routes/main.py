@@ -48,7 +48,6 @@ def request_except_handler(fn):
 	return wrap
 
 
-
 class AdminMainRoute(JsonResponseMixin):
 	def get(self, *args):
 

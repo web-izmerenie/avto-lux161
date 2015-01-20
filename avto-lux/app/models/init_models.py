@@ -1,6 +1,6 @@
 from .pagemodels import *
-from .catalogmodels import * 
-from .utilmodels import *  
+from .catalogmodels import *
+from .utilmodels import *
 from .usermodels import *
 from .dbconnect import Base, engine
 

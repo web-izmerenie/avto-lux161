@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+
 {% block 'page-specific' %}
 <div class="catalog-page detail">
 	<div class="content">
@@ -10,11 +11,13 @@
 		<main>
 			<a class="order" href="#order-form">Сделать заказ</a>
 			<div class="catalog-detail-item">
-				<img class="big-pic" alt="Фото Тойота Камри" src="{{ main_image }}">
+				{% if main_image %}
+					<img class="big-pic" alt="Фото Тойота Камри" src="{{ main_image['filename'] }}">
+				{% end %}
 				<div class="description">
 					{% autoescape None %}
-					{{ desctiption_text }}
-				</div><!--TODO rename-->
+					{{ desctiption_text }}<!--TODO rename-->
+				</div>
 				<ul class="photos">
 					{% for item in images %}
 						<li>

@@ -1,4 +1,5 @@
 import json
+import sys
 import tornado.template
 from tornado.web import HTTPError, MissingArgumentError
 from .base import BaseHandler
@@ -41,13 +42,13 @@ def route_except_handler(fn):
 		try:
 			return fn(*args, **kwargs)
 		except NoResultFound as e:
-			print(e)
+			print(e, file=sys.stderr)
 			self.set_status(404)
 			page = session.query(StaticPageModel).filter_by(alias='/404.html').one()
 			page.to_frontend.update({'is_catalog': False})
 			return self.render('client/error_404.html', **page.to_frontend)
 		except Exception as e:
-			print(e)
+			print(e, file=sys.stderr)
 			self.set_status(500)
 			return self.write('500: Internal server error')
 	wrap.__name__ = fn.__name__
@@ -58,7 +59,6 @@ class MainRoute(BaseHandler, Custom404Mixin):
 	@route_except_handler
 	def get(self):
 		page = session.query(StaticPageModel).filter_by(alias='/').one()
-		print(page.to_frontend)
 		page.to_frontend.update({'is_catalog': False})
 		return self.render('client/content_page.html', **page.to_frontend)
 
@@ -74,50 +74,36 @@ class UrlToRedirect(BaseHandler):
 class StaticPageRoute(BaseHandler, Custom404Mixin):
 	@route_except_handler
 	def get(self, alias):
-		print(alias)
 		if not alias.endswith(".html"):
 			alias = '/' + alias + '.html'
 		page = session.query(StaticPageModel).filter_by(alias=alias).one()
-		print(page.to_frontend)
-		page.to_frontend.update({'is_catalog': False })
+		page.to_frontend.update({'is_catalog': False})
 		return self.render('client/content_page.html', **page.to_frontend)
 
 
-class CatalogPageRoute(BaseHandler, Custom404Mixin):
+class CatalogSectionRoute(BaseHandler, Custom404Mixin):
 	@route_except_handler
 	def get(self, alias):
-		print(alias)
 		if alias.endswith(".html"):
 			alias = alias.replace('.html', '').replace('/', '')
-			print(alias)
 		page = session.query(CatalogSectionModel).filter_by(alias=alias).one()
 		items = session.query(CatalogItemModel).filter_by(section_id=page.id).all()
 
 		page.to_frontend.update({'is_catalog': True, 'is_main_page': False})
 		page.to_frontend.update({'items': [x.to_frontend for x in items]})
-		print(page.to_frontend)
+
 		self.render('client/catalog_sections.html', **page.to_frontend)
 
 
-class ItemRoute(BaseHandler, Custom404Mixin):
+class CatalogItemRoute(BaseHandler, Custom404Mixin):
 	@route_except_handler
 	def get(self, category, item):
-		print(item)
 		if item.endswith(".html"):
 			item = item.replace('.html', '').replace('/', '')
 		page = session.query(CatalogItemModel).filter_by(alias=item).one()
-		page.to_frontend['images'] = json.loads(page.to_frontend['images'])
-		for i in page.to_frontend['images']:
-			i['filename'] = '/uploaded-files/%s' % i['filename']
-			print(i)
-
-		main_image = json.loads(page.to_frontend['main_image'])[0]['filename']
-
-		page.to_frontend['main_image'] = '/uploaded-files/%s' % main_image
-
-		page.to_frontend.update({'is_catalog': True, 'is_main_page': False})
-		return self.render('client/catalog_detail.html', **page.to_frontend)
-
+		data = page.to_frontend
+		data.update({'is_catalog': True, 'is_main_page': False})
+		return self.render('client/catalog_detail.html', **data)
 
 
 class FormsHandler(JsonResponseMixin):
@@ -158,7 +144,7 @@ class FormsHandler(JsonResponseMixin):
 			try:
 				fn(args)
 			except Exception as e:
-				print(e)
+				print(e, file=sys.stderr)
 				self.set_status(500)
 				return self.json_response({'status': 'system_fail'})\
 					if is_ajax\
@@ -226,7 +212,7 @@ class FormsHandler(JsonResponseMixin):
 			date = datetime.combine(
 				date(int(dt[2]), int(dt[1]), int(dt[0])),
 				time(int(d['hours']), int(d['minutes']))),
-			item_id=item.id
+				item_id=item.id
 			)
 
 		session.add(order)

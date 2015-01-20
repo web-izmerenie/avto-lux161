@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from sqlalchemy import (
 	Column,
@@ -39,21 +39,14 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	@property
 	def to_frontend(self):
 		vals = vars(self)
+
 		deprecated = ['_sa_instance_state', 'id', 'create_date', 'files', 'last_change', 'alias']
-		escaped = ['footer_slogan']
-		try:
-			for item in deprecated:
+		for item in deprecated:
+			if item in vals:
 				del vals[item]
-		except:
-			pass
-		# for item in escaped:
-		# 	print(vals[item])
-		# 	vals[item] = base64.b64encode(vals[item])
 
 		vals.update({'success_msg_list': '', 'error_msg_list': ''})
 		return vals
-
-
 
 
 class UrlMapping(Base, IdMixin):

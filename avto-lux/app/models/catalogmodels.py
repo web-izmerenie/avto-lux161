@@ -15,7 +15,16 @@ from .pagemodels import PageMixin, IdMixin
 from sqlalchemy.dialects.postgresql import JSON
 from app.models.dbconnect import Session
 import json
+import sys
 session = Session()
+
+
+def parse_main_image():
+	pass
+
+def parse_images():
+	pass
+
 
 class CatalogSectionModel(Base, PageMixin, IdMixin):
 	__tablename__ = dbprefix + 'catalog'
@@ -34,15 +43,13 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 	@property
 	def to_frontend(self):
 		vals = vars(self)
-		deprecated = ['_sa_instance_state', 'id', 'create_date', 'files', 'last_change', 'alias']
-		escaped = ['footer_slogan']
-		try:
-			for item in deprecated:
-				del vals[item]
-		except:
-			pass
-		return vals
 
+		deprecated = ['_sa_instance_state', 'id', 'create_date', 'files', 'last_change', 'alias']
+		for item in deprecated:
+			if item in vals:
+				del vals[item]
+
+		return vals
 
 
 class CatalogItemModel(Base, PageMixin, IdMixin):
@@ -66,27 +73,58 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 
 	@property
 	def to_frontend(self):
-		vals = vars(self)
-		deprecated = ['_sa_instance_state', 'id','create_date', 'files', 'last_change']
-		try:
-			for item in deprecated:
-				del vals[item]
-		except:
-			pass
+		vals = vars(self).copy()
 
+		deprecated = ['_sa_instance_state', 'id', 'create_date', 'files', 'last_change']
+		for item in deprecated:
+			if item in vals:
+				del vals[item]
+
+		# get section alias
 		s = session.query(CatalogSectionModel.alias).filter_by(id=vals['section_id']).one()
 
-		# if vals['main_image'] == '':
-		# 	main_img = ''
-		# else:
-		# 	main_img = vals['main_image']
-		# 	if len(main_img) == 0:
-		# 		main_img = ''
-		# 	else:
-		# 		main_img = main_img
-		# print(main_img)
+		# main image parse {{{
 
-		vals.update({'detail_link': '/catalog/{0}/{1}.html'.format(s[0], vals['alias'])})
+		main_image = None
+
+		try:
+			main_image = json.loads(vals['main_image'])
+			if type(main_image) is not list:
+				raise Exception('Must be an array')
+		except Exception as e:
+			main_image = None
+			print(e, file=sys.stderr)
+
+		if main_image and len(main_image) > 0 and 'filename' in main_image[0]:
+			main_image = main_image[0]
+			main_image['filename'] = '/uploaded-files/%s' % main_image['filename']
+
+		vals['main_image'] = main_image
+
+		# }}}
+
+		# images parse {{{
+
+		images = []
+
+		try:
+			images = json.loads(vals['images'])
+			if type(images) is not list:
+				raise Exception('Must be an array')
+		except Exception as e:
+			images = []
+			print(e, file=sys.stderr)
+
+		for item in images:
+			if 'filename' not in item:
+				continue
+			item['filename'] = '/uploaded-files/%s' % item['filename']
+
+		vals['images'] = images
+
+		# }}}
+
+		vals['detail_link'] = '/catalog/{0}/{1}.html'.format(s[0], vals['alias'])
 
 		return vals
 
