@@ -18,7 +18,7 @@ DATABASE:
 TEMPLATES_PATH: './templates'
 STATIC_PATH: './static'
 
-UPLOAD_FILES_PATH: ''
+UPLOAD_FILES_PATH: './files/uploaded'
 
 IMAGE_TMP_PATH: ''
 IMAGE_PERM_PATH: ''

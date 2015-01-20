@@ -29,5 +29,5 @@ static/tmp
 images_sizes.txt
 
 # todo symbolic links via deploy task
-uploaded
+files/uploaded
 
