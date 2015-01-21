@@ -18,6 +18,7 @@ module.exports = (options)->
 		method: \POST
 		cache: false
 		error: (xhr, status, err)!->
+			return if status is \abort
 			W.radio.commands .execute \police, \panic, err
 	} <<<< options
 
