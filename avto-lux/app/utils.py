@@ -50,20 +50,26 @@ def get_json_localization(side):
 	return jn
 
 
-def send_mail(msg=None):
+def send_mail(msg=None, theme=None):
 	mailc = config('MAIL')
 	to = mailc['MAIN_RECIPIENT']
-	gmail_user = mailc['USER']
-	gmail_pwd = mailc['PASS']
+	user = mailc['USER']
+	pwd = mailc['PASS']
 
 	smtpserver = smtplib.SMTP(mailc['SMTP_PROVIDER']['HOST'], mailc['SMTP_PROVIDER']['PORT'])
 	smtpserver.ehlo()
 	smtpserver.starttls()
-	smtpserver.ehlo
-	smtpserver.login(gmail_user, gmail_pwd)
-	header = 'To:' + to + '\n' + 'From: WEBSITE:: avto-lux.ru\n' + 'Subject:testing \n'
-	msg = msg or ''
-	smtpserver.sendmail(gmail_user, to, msg)
+	smtpserver.login(user, pwd)
+	BODY = ''.join(
+			"Content-Type: text/html; charset=utf-8 \n" +
+			"From: %s \n" % mailc['USER'] +
+			"To: %s \n" % mailc['MAIN_RECIPIENT'] +
+			"Subject: %s \n" % "lolz" +
+			"\n" +
+			msg + "\n" +
+			"\r\n"
+			)
+	smtpserver.sendmail(user, to, BODY)
 	smtpserver.close()
 
 

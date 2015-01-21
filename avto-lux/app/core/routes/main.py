@@ -115,13 +115,13 @@ class FormsHandler(JsonResponseMixin):
 
 		errors = self.validate_fields(args)
 		if len(errors) == 0:
-			try:
-				fn(args)
-			except Exception as e:
-				self.set_status(500)
-				return self.json_response({'status': 'system_fail'})\
-					if is_ajax\
-					else self.write('Internal server Error')
+			# try:
+			fn(args)
+			# except Exception as e:
+			# 	self.set_status(500)
+			# 	return self.json_response({'status': 'system_fail'})\
+			# 		if is_ajax\
+			# 		else self.write('Internal server Error')
 
 			if is_ajax:
 				return self.json_response({'status': 'success'})
@@ -172,7 +172,7 @@ class FormsHandler(JsonResponseMixin):
 			)
 		session.add(call)
 		session.commit()
-		send_mail(msg="Call sent")
+		send_mail(msg="%s, %s" % (d['name'], d['phone']))
 
 
 	def save_order(self, d):
@@ -189,4 +189,4 @@ class FormsHandler(JsonResponseMixin):
 
 		session.add(order)
 		session.commit()
-		send_mail('Order sent')
+		send_mail("%s, %s, %s" % (name, callback, date))
