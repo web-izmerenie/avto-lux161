@@ -33,4 +33,5 @@ html(lang="ru", class=html_classes, data-local-file=static_url('client-local.jso
 		footer
 			include footer
 		include forms
-		include counters
+		unless is_debug
+			include counters

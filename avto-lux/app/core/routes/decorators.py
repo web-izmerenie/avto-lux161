@@ -3,6 +3,7 @@
 import sys
 from sqlalchemy.orm.exc import NoResultFound
 from app.models.dbconnect import Session
+from app.configparser import config
 
 from app.models.pagemodels import (
 	StaticPageModel
@@ -24,7 +25,8 @@ def route_except_handler(fn):
 			data.update({
 				'is_catalog': False,
 				'is_catalog_item': False,
-				'menu': menu
+				'menu': menu,
+				'is_debug': config('DEBUG')
 			})
 			return self.render('client/error-404.jade', **data)
 		except Exception as e:

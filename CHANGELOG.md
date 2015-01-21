@@ -7,4 +7,5 @@ r2
 - Fixed redirects for all pages;
 - Removed debug prints;
 - Added counters;
-- Fixed 3 columns in catalog for Android native browsers.
+- Fixed 3 columns in catalog for Android native browsers;
+- Added DEBUG flag to config and debug conditions.
