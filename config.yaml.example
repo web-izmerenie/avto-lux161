@@ -1,4 +1,4 @@
-DEBUG: 'false'
+DEBUG: 0
 
 DEV_SERVER:
   PORT: 8002
