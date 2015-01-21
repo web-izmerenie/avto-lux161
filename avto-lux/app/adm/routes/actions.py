@@ -213,10 +213,11 @@ class AdminMainHandler(JsonResponseMixin):
 
 		page = section_map[section](**kwargs)
 		session.add(page)
-		print(kwargs)
+
 		if section == 'redirect':
-			permanent = (lambda: True if int(kwargs['status']) == 301 else False)()
+			permanent = (lambda: True if kwargs['status'] == '301' else False)()
 			from app.app import application
+
 			application.handlers[0][1][:0] = [
 				URLSpec(
 					kwargs['old_url'] + '$',
@@ -262,9 +263,29 @@ class AdminMainHandler(JsonResponseMixin):
 				kwargs[item['name']] = True
 
 		session = Session()
-		session.query(
+		data = session.query(
 			section_map[section]
-				).filter_by(id=id).update(kwargs)
+				).filter_by(id=id)
+
+		if section == 'redirect':
+			permanent = (lambda: True if kwargs['status'] == '301' else False)()
+			from app.app import application
+			counter = 0
+			hndlr = application.handlers[0][1]
+			for item in range(len(hndlr)):
+				try:
+					if(hndlr[item].__dict__['kwargs']['url'] == data.one().new_url):
+						hndlr[item] = URLSpec(
+							kwargs['old_url'] + '$',
+							RedirectHandler,
+							kwargs={
+								'url': kwargs['new_url'],
+								'permanent': permanent
+								},
+							name=None)
+				except KeyError:
+					continue
+		data.update(kwargs)
 		session.commit()
 		return self.json_response({'status': 'success'})
 
