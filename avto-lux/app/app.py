@@ -10,6 +10,7 @@ from .adm.routes import routes as admin_routes
 from .configparser import config
 from .models.init_models import init_models
 from .utils import collect_handlers, error_log, get_json_localization
+from tornado.web import StaticFileHandler
 
 
 handlers = []
@@ -31,7 +32,30 @@ settings = dict(
 if not config('DEBUG'):
 	settings['log_function'] = (lambda arg: None)
 
-application = tornado.web.Application(handlers, **settings)
+
+class Application(tornado.web.Application):
+	def __init__(self, handlers=None, **kwargs):
+		""" hack for dynamic robots.txt """
+
+		tornado.web.Application.__init__(self, handlers, **kwargs)
+		new_handlers = []
+		for item in self.handlers[0][1]:
+			if 'robots' in item.regex.pattern \
+			and item.handler_class is StaticFileHandler:
+				continue
+			new_handlers.append(item)
+
+		new_tuple = []
+		for i in range(len(self.handlers[0])):
+			if i == 1:
+				new_tuple.append(new_handlers)
+				continue
+			new_tuple.append(self.handlers[0][i])
+
+		self.handlers[0] = tuple(new_tuple)
+
+
+application = Application(handlers, **settings)
 def run_instance(port, host):
 	tornado.options.parse_command_line()
 	srv = tornado.httpserver.HTTPServer(application)

@@ -50,7 +50,7 @@ class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 			'menu': menu,
 			'is_debug': config('DEBUG')
 		})
-		return self.render('client/content-page.jade', autoescape=False, **data)
+		return self.render('client/content-page.jade', **data)
 
 
 class StaticPageRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):

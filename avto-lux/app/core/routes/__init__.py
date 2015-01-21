@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['base', 'menu', 'main']
+__all__ = ['base', 'catalog', 'decorators', 'main', 'robots']
 
 from pyjade.ext.tornado import patch_tornado
 patch_tornado()
@@ -14,6 +14,7 @@ from .main import (
 	FormsHandler
 )
 from .catalog import (CatalogItemRoute, CatalogSectionRoute)
+from .robots import RobotsTxtRoute
 
 routes = [
 	('/', MainRoute),
@@ -22,11 +23,13 @@ routes = [
 		{"path": os.path.join(os.getcwd(), config('UPLOAD_FILES_PATH'))}),
 	('/api/forms/', FormsHandler),
 
-	('/catalog/(.*?)/(.*?).html', CatalogItemRoute),
+	('/catalog/(.*?)/(.*?)\.html', CatalogItemRoute),
 	('/catalog/(.*?)/(.*?)', CatalogItemRoute),
 	('/catalog/(.*?)', CatalogSectionRoute),
-	('/catalog/(.*?).html', CatalogSectionRoute),
+	('/catalog/(.*?)\.html', CatalogSectionRoute),
 
-	('/(.*?).html', StaticPageRoute),
+	('/robots\.txt', RobotsTxtRoute),
+
+	('/(.*?)\.html', StaticPageRoute),
 	('/(.*?)', StaticPageRoute)
 ]

@@ -1,0 +1,8 @@
+if is_debug
+	| User-Agent: *
+	| Disallow: /
+else
+	| User-agent: *
+	| Disallow: /adm/
+	| Disallow: /static/admin-templates/
+	| Disallow: /static/ckeditor/
