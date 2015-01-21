@@ -15,10 +15,14 @@ module.exports = (cb)->
 	unless url?
 		throw new Error "Can't get 'data-local-file' attribute from <html> tag"
 
-	$ .get url
-		.error !-> throw new Error "Can't get localization json file by url: #url"
-		.success (json)!->
+	$ .ajax {
+		url: url,
+		method: \GET,
+		data-type: \json,
+		error: !-> throw new Error "Can't get localization json file by url: #url"
+		success: (json)!->
 			unless json[lang]?
 				throw new Error "Can't get localization by this language: #lang"
 
 			cb json[lang]
+	}
