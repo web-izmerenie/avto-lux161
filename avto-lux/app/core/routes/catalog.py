@@ -9,13 +9,15 @@ from app.models.catalogmodels import(
 	CatalogSectionModel,
 	CatalogItemModel
 )
+from app.configparser import config
 
-session = Session()
+
 
 
 class CatalogSectionRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 	@route_except_handler
 	def get(self, alias):
+		session = Session()
 		if alias.endswith(".html"):
 			alias = alias.replace('.html', '').replace('/', '')
 		page = session.query(CatalogSectionModel).filter_by(alias=alias).one()
@@ -28,15 +30,17 @@ class CatalogSectionRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 			'is_catalog_item': False,
 			'is_main_page': False,
 			'items': [x.to_frontend for x in items],
-			'menu': menu
+			'menu': menu,
+			'is_debug': config('DEBUG')
 		})
-
-		self.render('client/catalog-sections.jade', **data)
+		session.close()
+		return self.render('client/catalog-sections.jade', **data)
 
 
 class CatalogItemRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 	@route_except_handler
 	def get(self, category, item):
+		session = Session()
 		if item.endswith(".html"):
 			item = item.replace('.html', '').replace('/', '')
 		page = session.query(CatalogItemModel).filter_by(alias=item).one()
@@ -49,6 +53,8 @@ class CatalogItemRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 			'is_catalog_item': True,
 			'catalog_item_id': data['id'],
 			'is_main_page': False,
-			'menu': menu
+			'menu': menu,
+			'is_debug': config('DEBUG')
 		})
+		session.close()
 		return self.render('client/catalog-detail.jade', **data)

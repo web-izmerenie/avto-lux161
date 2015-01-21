@@ -19,13 +19,17 @@ try:
 except Exception as e:
 	error_log(e)
 
+
 settings = dict(
 	template_path=os.path.join(os.getcwd(), config('TEMPLATES_PATH')),
 	static_path=os.path.join(os.getcwd(), config('STATIC_PATH')),
-	debug=False,
+	debug=config('DEBUG'),
 	autoreload=config('AUTO_RELOAD'),
 	xsrf_cookies = config('XSRF'),
 	cookie_secret = str(hashlib.sha512(os.urandom(300)).hexdigest()))
+
+if not config('DEBUG'):
+	settings['log_function'] = (lambda arg: None)
 
 application = tornado.web.Application(handlers, **settings)
 def run_instance(port, host):
