@@ -55,9 +55,9 @@ class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 class UrlToRedirect(BaseHandler):
 	@route_except_handler
 	def get(self, first, second):
-		old_url = self.request.uri
+		old_url = self.request.path
 		new_url = session.query(UrlMapping.new_url).filter_by(old_url=str(old_url)).one()
-		return self.redirect(str(new_url[0][0]), permanent=False, status=None)
+		return self.redirect(str(new_url[0]), permanent=False, status=None)
 
 
 class StaticPageRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
