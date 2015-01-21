@@ -10,4 +10,5 @@ r2
 - Fixed 3 columns in catalog for Android native browsers;
 - Added DEBUG flag to config and debug conditions;
 - Use native input[type=date] field if it supports;
-- robots.txt (diallow all for DEBUG mode).
+- robots.txt (diallow all for DEBUG mode);
+- Fixed bug in admin interface.
