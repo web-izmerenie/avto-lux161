@@ -50,7 +50,6 @@ class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 			'menu': menu
 		})
 		from app.app import handlers
-		print(handlers)
 		return self.render('client/content-page.jade', autoescape=False, **data)
 
 
@@ -117,6 +116,7 @@ class FormsHandler(JsonResponseMixin):
 			try:
 				fn(args)
 			except Exception as e:
+				print(e, file=sys.stderr)
 				self.set_status(500)
 				return self.json_response({'status': 'system_fail'})\
 					if is_ajax\
@@ -136,7 +136,7 @@ class FormsHandler(JsonResponseMixin):
 				self.json_response({
 					'status': 'error',
 					'error_fields': { x: 'required' for x in errors }
-					})
+				})
 			else:
 				err_list = [localization['err']['required_page'].format(localization['fields'][x]) \
 					for x in errors ]
@@ -148,9 +148,9 @@ class FormsHandler(JsonResponseMixin):
 
 	def set_kwargs(self, success_msg_list=[], error_msg_list=[], title=''):
 		return {
-				'success_msg_list': success_msg_list,
-				'error_msg_list':error_msg_list
-			}
+			'success_msg_list': success_msg_list,
+			'error_msg_list': error_msg_list
+		}
 
 	def validate_fields(self, fields):
 		err_stack = []
@@ -168,7 +168,7 @@ class FormsHandler(JsonResponseMixin):
 			name = d['name'],
 			phone = d['phone'],
 			date = datetime.utcnow()
-			)
+		)
 		session.add(call)
 		session.commit()
 		send_mail(msg="Call sent")
@@ -184,7 +184,7 @@ class FormsHandler(JsonResponseMixin):
 				date(int(dt[2]), int(dt[1]), int(dt[0])),
 				time(int(d['hours']), int(d['minutes']))),
 				item_id=item.id
-			)
+		)
 
 		session.add(order)
 		session.commit()
