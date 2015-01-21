@@ -25,11 +25,6 @@ routes = [
 		{"path": os.path.join(os.getcwd(), config('UPLOAD_FILES_PATH'))}),
 	('/api/forms/', FormsHandler),
 
-	# TODO :: remove test routes for production (only for development)
-	# Only for testing slised pages
-	('/test/(.*?).html', TestRoute),
-	('/test/(.*?)', TestRoute),
-
 	('/([-0-9])+(.html)', UrlToRedirect),
 	('/(.*?)/item/(.*?).html', UrlToRedirect),
 
