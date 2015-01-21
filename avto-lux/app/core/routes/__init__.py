@@ -25,18 +25,10 @@ routes = [
 		{"path": os.path.join(os.getcwd(), config('UPLOAD_FILES_PATH'))}),
 	('/api/forms/', FormsHandler),
 
-	('/([-0-9])+(.html)', UrlToRedirect),
-
 	('/catalog/(.*?)/(.*?).html', CatalogItemRoute),
 	('/catalog/(.*?)/(.*?)', CatalogItemRoute),
 	('/catalog/(.*?)', CatalogSectionRoute),
 	('/catalog/(.*?).html', CatalogSectionRoute),
-
-	##TODO:: Delete permanently solution
-
-	('/bus.html', UrlToRedirect),
-	('/car.html', UrlToRedirect),
-	('/wedding.html', UrlToRedirect),
 
 	('/(.*?).html', StaticPageRoute),
 	('/(.*?)', StaticPageRoute)

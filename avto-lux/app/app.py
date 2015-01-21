@@ -27,10 +27,10 @@ settings = dict(
 	xsrf_cookies = config('XSRF'),
 	cookie_secret = str(hashlib.sha512(os.urandom(300)).hexdigest()))
 
-
+application = tornado.web.Application(handlers, **settings)
 def run_instance(port, host):
 	tornado.options.parse_command_line()
-	srv = tornado.httpserver.HTTPServer(tornado.web.Application(handlers, **settings))
+	srv = tornado.httpserver.HTTPServer(application)
 	srv.listen(port, address=host)
 	print("Server run on %s:%s" % (host, port))
 	tornado.ioloop.IOLoop.instance().start()

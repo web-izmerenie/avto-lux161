@@ -26,6 +26,8 @@ from sqlalchemy.sql import func
 import datetime
 import time
 
+from tornado.web import RedirectHandler, URLSpec
+
 
 def query_except_handler(fn):
 	def wrap(*args, **kwargs):
@@ -124,8 +126,6 @@ class AdminMainHandler(JsonResponseMixin):
 			CatalogSectionModel.id,
 			CatalogSectionModel.is_active
 			).all()
-		print(counts)
-		print(list(zip(counts, data)))
 		return self.json_response({
 			'status': 'success',
 			'data_list': [{
@@ -194,8 +194,6 @@ class AdminMainHandler(JsonResponseMixin):
 
 	@query_except_handler
 	def create_page(self, **kwargs):
-		print(kwargs)
-		print("CREATE")
 		section = kwargs['section']
 		del kwargs['section']
 
@@ -212,12 +210,25 @@ class AdminMainHandler(JsonResponseMixin):
 			'catalog_element': CatalogItemModel,
 		}
 		session = Session()
-		print(section_map[section])
-
 
 		page = section_map[section](**kwargs)
 		session.add(page)
+		print(kwargs)
+		if section == 'redirect':
+			permanent = (lambda: True if int(kwargs['status']) == 301 else False)()
+			from app.app import application
+			application.handlers[0][1][:0] = [
+				URLSpec(
+					kwargs['old_url'] + '$',
+					RedirectHandler,
+					kwargs={
+						'url': kwargs['new_url'],
+						'permanent': permanent
+						},
+					name=None)
+			]
 		session.commit()
+		session.close()
 
 		return self.json_response({'status': 'success'})
 
@@ -227,7 +238,6 @@ class AdminMainHandler(JsonResponseMixin):
 		section = kwargs['section']
 		del kwargs['section']
 		id = kwargs['id']
-		print(id)
 		del kwargs['id']
 
 		section_map = {
@@ -251,8 +261,6 @@ class AdminMainHandler(JsonResponseMixin):
 			else:
 				kwargs[item['name']] = True
 
-		print(kwargs)
-
 		session = Session()
 		session.query(
 			section_map[section]
@@ -263,9 +271,6 @@ class AdminMainHandler(JsonResponseMixin):
 
 	@query_except_handler
 	def get_fields(self, model=None, edit=False, id=None):
-		print("Edit: %s" % edit)
-		print("Model: %s" % model)
-		print("Id: %s" % id)
 		session = Session()
 		models = {
 			'pages': StaticPageModel,

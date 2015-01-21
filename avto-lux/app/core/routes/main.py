@@ -49,6 +49,8 @@ class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 			'is_catalog_item': False,
 			'menu': menu
 		})
+		from app.app import handlers
+		print(handlers)
 		return self.render('client/content-page.jade', autoescape=False, **data)
 
 

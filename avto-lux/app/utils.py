@@ -4,6 +4,9 @@ import os, sys, json
 import smtplib
 from app.configparser import config
 import decimal, datetime
+from app.models.dbconnect import Session
+from tornado.web import RedirectHandler
+from app.models.pagemodels import UrlMapping
 
 class CollectHandlersException(Exception):
 	def __repr__(self, e, list):
@@ -12,20 +15,23 @@ class CollectHandlersException(Exception):
 
 
 def collect_handlers(*args):
-	def sort_func():
-		pass
-
 	routes  = []
 	for item in args:
 		routes += item
-	routeslist = [(lambda y: y + '/' if not y.endswith('/') else y)(x[0]) for x in routes]
-	duplicated = { x for x in routeslist if routeslist.count(x) > 1 }
+	duplicated = { x for x in routes if routes.count(x) > 1 }
 	if len(duplicated) > 0:
 		raise CollectHandlersException("Duplicate routes! {0}".format(duplicated))
 
-	# print("Sorted: {0}".format(sorted(routes, key=sort_func, reverse=False)))
-	# return sorted(routes, key=lambda x: x[0], reverse=True)
-	return routes
+	redirect_routes = []
+	session = Session()
+	_rr = session.query(UrlMapping).all()
+	for redirect in _rr:
+		redirect_routes.append((redirect.old_url, RedirectHandler, {
+			'url': redirect.new_url,
+			'permanent': (lambda: True if int(redirect.status) == 302 else False)()
+			}))
+	session.close()
+	return redirect_routes + routes
 
 
 def error_log(error):
