@@ -72,6 +72,10 @@
             "path": "./bower_components/jquery-ui/ui/datepicker.js",
             "exports": "",
             "depends": { "jquery": "jQuery" }
+          },
+          "modernizr": {
+            "path": "./bower_components/modernizr/modernizr.js",
+            "exports": "Modernizr"
           }
         }
       },
