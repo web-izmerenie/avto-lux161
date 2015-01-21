@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __all__ = ['base', 'menu', 'main']
 
 from pyjade.ext.tornado import patch_tornado

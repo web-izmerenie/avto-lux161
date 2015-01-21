@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys, re, os.path
 import tornado.httpserver, tornado.ioloop, tornado.web
 from tornado.options import define, options

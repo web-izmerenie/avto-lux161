@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __all__ = ['main']
 
 from pyjade.ext.tornado import patch_tornado

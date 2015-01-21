@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .dbconnect import Base
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy import (

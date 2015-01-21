@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os, json, sys
 from app.configparser import config
 from app.utils import get_json_localization

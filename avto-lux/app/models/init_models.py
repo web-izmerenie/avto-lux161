@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .pagemodels import *
 from .catalogmodels import *
 from .utilmodels import *

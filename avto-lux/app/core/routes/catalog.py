@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .base import BaseHandler
 from .decorators import route_except_handler
 from app.models.dbconnect import Session

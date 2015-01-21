@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from sqlalchemy import create_engine
 from app.configparser import config
 from sqlalchemy.ext.declarative import declarative_base

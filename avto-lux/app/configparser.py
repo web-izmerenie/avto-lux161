@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import yaml
 import os
 
@@ -38,7 +40,7 @@ class Config:
 		self.config = config
 
 	# def check_environ(self, element):
-	# 	if 
+	# 	if
 
 	def __call__(self, key):
 		return self.config[key]
