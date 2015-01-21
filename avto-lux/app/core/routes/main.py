@@ -47,19 +47,19 @@ class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 		data.update({
 			'is_catalog': False,
 			'is_catalog_item': False,
-			'menu': menu
+			'menu': menu,
+			'is_debug': config('DEBUG')
 		})
-		from app.app import handlers
-		print(handlers)
 		return self.render('client/content-page.jade', autoescape=False, **data)
 
 
-class UrlToRedirect(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
-	@route_except_handler
-	def get(self):
-		old_url = self.request.path
-		new_url = session.query(UrlMapping.new_url).filter_by(old_url=str(old_url)).one()
-		return self.redirect(str(new_url[0]), permanent=False, status=None)
+##Remove
+# class UrlToRedirect(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
+# 	@route_except_handler
+# 	def get(self):
+# 		old_url = self.request.path
+# 		new_url = session.query(UrlMapping.new_url).filter_by(old_url=str(old_url)).one()
+# 		return self.redirect(str(new_url[0]), permanent=False, status=None)
 
 
 class StaticPageRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
@@ -74,7 +74,8 @@ class StaticPageRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 		data.update({
 			'is_catalog': False,
 			'is_catalog_item': False,
-			'menu': menu
+			'menu': menu,
+			'is_debug': config('DEBUG')
 		})
 		return self.render('client/content-page.jade', **data)
 

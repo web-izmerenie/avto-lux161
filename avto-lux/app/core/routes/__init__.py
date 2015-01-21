@@ -11,7 +11,7 @@ from app.configparser import config
 from .main import (
 	MainRoute,
 	StaticPageRoute,
-	UrlToRedirect,
+	# UrlToRedirect,
 	FormsHandler
 )
 from .catalog import (CatalogItemRoute, CatalogSectionRoute)
