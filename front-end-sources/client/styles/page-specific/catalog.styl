@@ -9,6 +9,7 @@
 
 .catalog-page
 	$w = 284px
+	$h = 174px
 	$margin-X = 43px
 	$sections-p = 31px
 	$detail-p = 15px
@@ -120,7 +121,17 @@
 						&:before
 							display none
 
-						img
+						a
 							display block
-							size $w auto
+							size $w $h
+							overflow hidden
 							border-radius 10px
+							border-bottom 0
+
+							img
+								display block
+								size auto
+								min-width 100%
+								min-height 100%
+								relative top 50%
+								transform translateY(-50%)
