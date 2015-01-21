@@ -11,4 +11,5 @@ r2
 - Added DEBUG flag to config and debug conditions;
 - Use native input[type=date] field if it supports;
 - robots.txt (diallow all for DEBUG mode);
-- Fixed bug in admin interface.
+- Fixed bug in admin interface;
+- Catalog detail page photos crop.
