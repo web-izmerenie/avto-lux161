@@ -11,12 +11,9 @@ from app.configparser import config
 from .main import (
 	MainRoute,
 	StaticPageRoute,
-	# UrlToRedirect,
 	FormsHandler
 )
 from .catalog import (CatalogItemRoute, CatalogSectionRoute)
-
-from .testroute import TestRoute
 
 routes = [
 	('/', MainRoute),
