@@ -33,8 +33,10 @@
 			& > li
 				reset-box-model()
 				display inline-block
-				margin-right $sections-p
 				vertical-align top
+
+				// -1px is fix for native android browser
+				margin-right ($sections-p - 1px)
 
 				&:before
 					display none
