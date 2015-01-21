@@ -52,9 +52,9 @@ class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 		return self.render('client/content-page.jade', autoescape=False, **data)
 
 
-class UrlToRedirect(BaseHandler):
+class UrlToRedirect(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 	@route_except_handler
-	def get(self, first, second):
+	def get(self):
 		old_url = self.request.path
 		new_url = session.query(UrlMapping.new_url).filter_by(old_url=str(old_url)).one()
 		return self.redirect(str(new_url[0]), permanent=False, status=None)
@@ -115,7 +115,6 @@ class FormsHandler(JsonResponseMixin):
 			try:
 				fn(args)
 			except Exception as e:
-				print(e, file=sys.stderr)
 				self.set_status(500)
 				return self.json_response({'status': 'system_fail'})\
 					if is_ajax\
@@ -174,7 +173,6 @@ class FormsHandler(JsonResponseMixin):
 
 
 	def save_order(self, d):
-		print(d['date'], d['hours'], d['minutes'])
 		dt = d['date'].split('.')
 		item = session.query(CatalogItemModel.id).filter_by(id=d['id']).one()
 		order = OrderModel(

@@ -26,12 +26,18 @@ routes = [
 	('/api/forms/', FormsHandler),
 
 	('/([-0-9])+(.html)', UrlToRedirect),
-	('/(.*?)/item/(.*?).html', UrlToRedirect),
 
 	('/catalog/(.*?)/(.*?).html', CatalogItemRoute),
 	('/catalog/(.*?)/(.*?)', CatalogItemRoute),
 	('/catalog/(.*?)', CatalogSectionRoute),
 	('/catalog/(.*?).html', CatalogSectionRoute),
+
+	##TODO:: Delete permanently solution
+
+	('/bus.html', UrlToRedirect),
+	('/car.html', UrlToRedirect),
+	('/wedding.html', UrlToRedirect),
+
 	('/(.*?).html', StaticPageRoute),
 	('/(.*?)', StaticPageRoute)
 ]

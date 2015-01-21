@@ -16,7 +16,6 @@ def route_except_handler(fn):
 		try:
 			return fn(*args, **kwargs)
 		except NoResultFound as e:
-			print(e, file=sys.stderr)
 			self.set_status(404)
 			page = session.query(StaticPageModel).filter_by(alias='/404.html').one()
 			menu = self.getmenu()
@@ -28,7 +27,6 @@ def route_except_handler(fn):
 			})
 			return self.render('client/error-404.jade', **data)
 		except Exception as e:
-			print(e, file=sys.stderr)
 			self.set_status(500)
 			return self.write('500: Internal server error')
 	wrap.__name__ = fn.__name__
