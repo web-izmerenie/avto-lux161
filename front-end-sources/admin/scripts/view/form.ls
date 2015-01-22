@@ -7,6 +7,9 @@
 
 require! {
 	\jquery : $
+	\jquery-ui
+	\jquery-ui.sortable
+
 	\marionette : M
 	\backbone.wreqr : W
 	'../config.json'
@@ -64,11 +67,19 @@ class FilesItemView extends InputItemView
 		name = @model.get \name
 		if name is \images or name is \main_image
 			@ui.list.css \max-width \400px
+			@ui.list.sortable update: !~>
+				new_json = []
+				@ui.list.find 'li' .each !->
+					data = $ @ .data \val
+					return unless data?
+					new_json.push ($ @ .data \val)
+				@ui.json.val JSON.stringify new_json
 
 		json = JSON.parse @ui.json.val!
 		@ui.list.html ''
 		for item in json
 			$el = $ '<li/>' class: 'list-group-item'
+			$el.data \val, item
 			$inp = $ '<input/>' {
 				type: \text
 				value: config.uploaded_file_prefix + item.filename
@@ -141,6 +152,9 @@ class FilesItemView extends InputItemView
 	on-destroy: !->
 		@ajax.abort! if @ajax?
 		@ui.file.off \change
+
+		# TODO :: need to check if initialized
+		#@ui.list.sortable \destroy
 
 	# TODO :: backend fix
 	#ui:

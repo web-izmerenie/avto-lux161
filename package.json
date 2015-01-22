@@ -126,6 +126,16 @@
           "jquery.dragndrop-file-upload": {
             "path": "./jquery.dragndrop-file-upload/jquery.dragndrop-file-upload.min.js",
             "exports": ""
+          },
+          "jquery-ui": {
+            "path": "./bower_components/jquery-ui/jquery-ui.min.js",
+            "exports": "",
+            "depends": { "jquery": "jQuery" }
+          },
+          "jquery-ui.sortable": {
+            "path": "./bower_components/jquery-ui/ui/sortable.js",
+            "exports": "",
+            "depends": { "jquery": "jQuery" }
           }
         }
       }
