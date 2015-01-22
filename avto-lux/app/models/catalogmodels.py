@@ -29,7 +29,7 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 	delegate_seo_meta_descrtption = Column(Boolean)
 	delegate_seo_title = Column(Boolean)
 
-	items = relationship('CatalogItemModel')
+	items = relationship('CatalogItemModel', cascade = "all,delete")
 
 	@property
 	def item(self):
@@ -39,7 +39,9 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 	def to_frontend(self):
 		vals = vars(self).copy()
 
-		deprecated = ['_sa_instance_state', 'id', 'create_date', 'files', 'last_change', 'alias']
+		deprecated = [
+			'_sa_instance_state', 'id', 'create_date', 'files', 'last_change', 'alias'
+			]
 		for item in deprecated:
 			if item in vals:
 				del vals[item]
@@ -55,7 +57,7 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 	images = Column(JSON)
 
 	section_id = Column(Integer, ForeignKey(dbprefix + 'catalog.id'))
-	orders = relationship('OrderModel')
+	orders = relationship('OrderModel', cascade = "all,delete")
 
 	inherit_seo_meta_title = Column(Boolean)
 	inherit_seo_meta_keywords = Column(Boolean)

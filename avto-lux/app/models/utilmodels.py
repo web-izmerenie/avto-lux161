@@ -53,3 +53,15 @@ class PhoneModel(Base, IdMixin):
 	@property
 	def item(self):
 		return vars(self).copy()
+
+## Manual: Uncomment this and try make dbsync
+# class NonRelationData(Base, IdMixin):
+# 	data_type = Column(String(1024))
+# 	data_json = Column(JSON)
+
+# 	def __repr__(self):
+# 		return self.data_json
+
+# 	@property
+# 	def item(self):
+# 		return vars(self).copy()
