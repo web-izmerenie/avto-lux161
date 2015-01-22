@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .base import BaseHandler
 from app.configparser import config
 
