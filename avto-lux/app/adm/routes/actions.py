@@ -85,7 +85,8 @@ class AdminMainHandler(JsonResponseMixin):
 			'get_accounts_list': self.get_accounts_list,
 			'get_fields': self.get_fields,
 			'add': self.create_page,
-			'update': self.update_page
+			'update': self.update_page,
+			'delete': self.delete_page
 		}
 
 		if action not in actions.keys():
@@ -288,6 +289,30 @@ class AdminMainHandler(JsonResponseMixin):
 		data.update(kwargs)
 		session.commit()
 		return self.json_response({'status': 'success'})
+
+
+	@query_except_handler
+	def delete_page(self, model=None, id=None):
+		session = Session()
+		models = {
+			'pages': StaticPageModel,
+			'redirect': UrlMapping,
+			'catalog_section': CatalogSectionModel,
+			'catalog_element': CatalogItemModel,
+			'accounts': User
+		}
+		try:
+			session.query(
+				models[model]).filter_by(id=id).delete(synchronize_session=True)
+			session.commit()
+		except:
+			return self.json_response({
+				'status': 'error',
+				'error_code': 'system_fail'
+				})
+
+		return self.json_response({'status': 'success'})
+
 
 
 	@query_except_handler

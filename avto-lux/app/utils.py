@@ -64,12 +64,13 @@ def send_mail(msg=None, theme=None):
 			"Content-Type: text/html; charset=utf-8 \n" +
 			"From: %s \n" % mailc['USER'] +
 			"To: %s \n" % mailc['MAIN_RECIPIENT'] +
-			"Subject: %s \n" % "lolz" +
+			"Subject: %s \n" % theme +
 			"\n" +
-			msg + "\n" +
+			msg +
 			"\r\n"
 			)
-	smtpserver.sendmail(user, to, BODY)
+	print(msg)
+	smtpserver.sendmail(user, to, BODY.encode('utf-8'))
 	smtpserver.close()
 
 

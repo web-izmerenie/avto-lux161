@@ -99,9 +99,13 @@ class FormsHandler(JsonResponseMixin):
 		except MissingArgumentError:
 			pass
 
-		body = str(self.request.body)
-		action = self.get_argument('action')
+		args = dict([ x.split('=') for x
+			in str(self.request.body).split('&')
+				if 'action' not in x ])
+		for key in args:
+			args[key] = self.get_argument(key)
 
+		action = self.get_argument('action')
 
 		if action not in actions.keys():
 			if is_ajax:
@@ -111,17 +115,16 @@ class FormsHandler(JsonResponseMixin):
 
 		p_title = localization['response_page'][action]
 		fn = actions[action]['fn']
-		args = dict([ x.split('=') for x in body.split('&') if 'action' not in x ])
 
 		errors = self.validate_fields(args)
 		if len(errors) == 0:
-			# try:
-			fn(args)
-			# except Exception as e:
-			# 	self.set_status(500)
-			# 	return self.json_response({'status': 'system_fail'})\
-			# 		if is_ajax\
-			# 		else self.write('Internal server Error')
+			try:
+				fn(args)
+			except Exception as e:
+				self.set_status(500)
+				return self.json_response({'status': 'system_fail'})\
+					if is_ajax\
+					else self.write('Internal server Error')
 
 			if is_ajax:
 				return self.json_response({'status': 'success'})
@@ -172,21 +175,31 @@ class FormsHandler(JsonResponseMixin):
 			)
 		session.add(call)
 		session.commit()
-		send_mail(msg="%s, %s" % (d['name'], d['phone']))
+
+		send_mail(
+			msg="Заказ звонка - Имя: %s, телефон: %s" % (d['name'], d['phone']),
+			theme='Заказ звонка с сайта'
+			)
 
 
 	def save_order(self, d):
 		dt = d['date'].split('.')
-		item = session.query(CatalogItemModel.id).filter_by(id=d['id']).one()
+		item = session.query(CatalogItemModel).filter_by(id=d['id']).one()
+		full_date = datetime.combine(
+				date(int(dt[2]), int(dt[1]), int(dt[0])),
+				time(int(d['hours']), int(d['minutes']))),
 		order = OrderModel(
 			name=d['name'],
 			callback=d['callback'],
-			date = datetime.combine(
-				date(int(dt[2]), int(dt[1]), int(dt[0])),
-				time(int(d['hours']), int(d['minutes']))),
-				item_id=item.id
+			date = full_date,
+			item_id=item.id
 			)
 
 		session.add(order)
 		session.commit()
-		send_mail("%s, %s, %s" % (name, callback, date))
+		send_mail(
+			msg="Заказ автомобиля %s - Имя: %s, контакты: %s, дата заказа: %s" % (
+				item.title, d['name'], d['callback'], full_date[0].strftime('%m/%d/%Y %H:%M')
+				),
+			theme='Заказ автомобиля %s с сайта' % item.title,
+			)
