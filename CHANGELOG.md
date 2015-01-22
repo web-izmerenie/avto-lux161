@@ -4,7 +4,10 @@ Changelog
 r4
 ---------
 
-- Added photos sorting in admin front-end catalog.
+- Added photos sorting in admin front-end catalog;
+- <strong>WARNING!</strong> Fixed E-Mail send notify by forms, added new field
+  (e-mail sender) to config.yaml.example
+  (don't forget add it to your local config.yaml).
 
 r3
 ---------
