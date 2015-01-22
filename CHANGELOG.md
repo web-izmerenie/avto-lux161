@@ -1,6 +1,11 @@
 Changelog
 =========
 
+r4
+---------
+
+- Added photos sorting in admin front-end catalog.
+
 r3
 ---------
 
