@@ -24,7 +24,7 @@ except Exception as e:
 settings = dict(
 	template_path=os.path.join(os.getcwd(), config('TEMPLATES_PATH')),
 	static_path=os.path.join(os.getcwd(), config('STATIC_PATH')),
-	debug=config('DEBUG'),
+	debug=(lambda: True if config('DEBUG') else False),
 	autoreload=config('AUTO_RELOAD'),
 	xsrf_cookies = config('XSRF'),
 	cookie_secret = str(hashlib.sha512(os.urandom(300)).hexdigest()))

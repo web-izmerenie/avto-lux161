@@ -37,6 +37,7 @@ MAIL:
   SMTP_PROVIDER:
     PORT: 587
     HOST: 'smtp.gmail.com'
+  FROM_ADDRESS: 'АвтоЛюкс <noreply@avto-lux161.ru>'
   MAIN_RECIPIENT: 'username@gmail.com'
   USER: 'username'
   PASS: '******'

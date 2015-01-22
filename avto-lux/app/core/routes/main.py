@@ -90,9 +90,13 @@ class FormsHandler(JsonResponseMixin):
 		except MissingArgumentError:
 			pass
 
-		body = str(self.request.body)
-		action = self.get_argument('action')
+		args = dict([ x.split('=') for x
+			in str(self.request.body).split('&')
+				if 'action' not in x ])
+		for key in args:
+			args[key] = self.get_argument(key)
 
+		action = self.get_argument('action')
 
 		if action not in actions.keys():
 			if is_ajax:
@@ -102,7 +106,6 @@ class FormsHandler(JsonResponseMixin):
 
 		p_title = localization['response_page'][action]
 		fn = actions[action]['fn']
-		args = dict([ x.split('=') for x in body.split('&') if 'action' not in x ])
 
 		errors = self.validate_fields(args)
 		if len(errors) == 0:
@@ -164,21 +167,35 @@ class FormsHandler(JsonResponseMixin):
 		)
 		session.add(call)
 		session.commit()
-		send_mail(msg="Call sent")
+
+		send_mail(
+			msg='<h1>Заказ звонка</h1>' +
+				'<dl><dt>Имя:</dt><dd>%s</dd>' % d['name'] +
+				'<dt>Телефон:</dt><dd>%s</dd></dl>' % d['phone'],
+			theme='АвтоЛюкс: заказ звонка'
+		)
 
 
 	def save_order(self, d):
 		dt = d['date'].split('.')
-		item = session.query(CatalogItemModel.id).filter_by(id=d['id']).one()
+		item = session.query(CatalogItemModel).filter_by(id=d['id']).one()
+		full_date = datetime.combine(
+				date(int(dt[2]), int(dt[1]), int(dt[0])),
+				time(int(d['hours']), int(d['minutes']))),
 		order = OrderModel(
 			name=d['name'],
 			callback=d['callback'],
-			date = datetime.combine(
-				date(int(dt[2]), int(dt[1]), int(dt[0])),
-				time(int(d['hours']), int(d['minutes']))),
-				item_id=item.id
+			date=full_date,
+			item_id=item.id
 		)
 
 		session.add(order)
 		session.commit()
-		send_mail('Order sent')
+		send_mail(
+			msg='<h1>Заказ автомобиля "%s"</h1>' % item.title +
+				'<dl><dt>Имя:</dt><dd>%s</dd>' % d['name'] +
+				'<dt>Контакты:</dt><dd>%s</dd>' % d['callback'] +
+				'<dt>Дата заказа:</dt><dd>%s</dd></dl>' % (
+					full_date[0].strftime('%d.%m.%Y %H:%M')),
+			theme='АвтоЛюкс: заказ автомобиля "%s"' % item.title
+		)
