@@ -17,6 +17,23 @@ require! {
 	'../ask-sure' : AskSureView
 }
 
+sort-collection-cb = (e, ui)!->
+	models = @collection.models
+	model = ui.item.data \model
+	index = ui.item.index!
+
+	new-order = []
+	for i from 0 til models.length
+		new-order.push models[i] if models[i] isnt model
+
+	new-list = []
+	for i from 0 til models.length
+		new-list.push model if i is index
+		new-list.push new-order[i] if new-order[i]?
+
+	@collection.set new-list
+	@collection.trigger \change
+
 # {{{
 class FieldView extends M.CompositeView
 	tag-name: \li
@@ -31,7 +48,11 @@ class FieldView extends M.CompositeView
 		...
 	initialize: !->
 		@collection = new B.Collection @model.get \values
+		@$el.data \model, @model
 	on-render: !->
+		if @model.get \multiple
+			@ui.list.sortable update: (e, ui)!~>
+				sort-collection-cb ...
 		@collection.on 'change remove add', !~>
 			arr = @collection.toJSON!
 			new-arr = []
@@ -46,6 +67,7 @@ class FieldView extends M.CompositeView
 		delmsg: '.del-area .del-msg'
 		add: '.add-area .add-value'
 		name: \input.name
+		list: \ul.input-container
 	events:
 		'click @ui.del': \del-field
 		'click @ui.add': \add-value
@@ -82,6 +104,8 @@ class FieldItemView extends M.ItemView
 	add: ->
 		@model.collection.add {value: ''}, {at: (+ 1) @$el.index!}
 		false
+	initialize: !->
+		@$el.data \model, @model
 # }}}
 
 # {{{
@@ -171,6 +195,9 @@ class ListView extends M.CollectionView
 		| \text => return TextFieldView
 		| \textarea => return TextareaFieldView
 		| _ => ...
+	on-render: !->
+		@$el.sortable update: (e, ui)!~>
+			sort-collection-cb ...
 
 class DataFieldsItemView extends M.ItemView
 	tag-name: \div
