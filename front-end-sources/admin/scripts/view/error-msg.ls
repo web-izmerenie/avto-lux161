@@ -14,9 +14,7 @@ require! {
 class ErrorMessageView extends SmoothView
 	initialize: (options)!->
 		SmoothView.prototype.initialize ...
-		@.model = new BasicModel {
-			message: options.message or ''
-		}
+		@model = new BasicModel message: options.message or ''
 	template: \err-msg
 
 module.exports = ErrorMessageView

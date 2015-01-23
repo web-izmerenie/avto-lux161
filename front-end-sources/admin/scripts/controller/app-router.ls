@@ -28,6 +28,9 @@ require! {
 	'../view/sections/redirect/list' : RedirectListView
 	'../view/sections/redirect/add' : AddRedirectView
 	'../view/sections/redirect/edit' : EditRedirectView
+	'../view/sections/data/list' : DataListView
+	'../view/sections/data/add' : AddDataView
+	'../view/sections/data/edit' : EditDataView
 	'../view/sections/accounts/list' : AccountsListView
 	'../view/sections/accounts/add' : AddAccountView
 	'../view/sections/accounts/edit' : EditAccountView
@@ -109,20 +112,16 @@ class AppRouterController extends M.Controller
 
 	\pages-list : !->
 		panel-page-handler @, (new PagesListView!).render!
-
 	\add-page : !->
 		panel-page-handler @, (new AddPageView!).render!
-
 	\edit-page : (id)!->
 		panel-page-handler @, (new EditPageView id: id).render!
 
 	\catalog-sections-list : !->
 		panel-page-handler @, (new CatalogSectionsListView!).render!
-
 	\catalog-section-add : (sid)!->
 		view = (new CatalogSectionAddView).render!
 		panel-page-handler @, view
-
 	\catalog-section-edit : (sid)!->
 		view = (new CatalogSectionEditView {\section-id : sid, id: sid}).render!
 		panel-page-handler @, view
@@ -130,30 +129,31 @@ class AppRouterController extends M.Controller
 	\catalog-elements-list : (section-id)!->
 		view = (new CatalogElementsListView \section-id : section-id).render!
 		panel-page-handler @, view
-
 	\catalog-element-add : (sid)!->
 		view = (new CatalogElementAddView {\section-id : sid}).render!
 		panel-page-handler @, view
-
 	\catalog-element-edit : (sid, eid)!->
 		view = (new CatalogElementEditView {\section-id : sid, id: eid}).render!
 		panel-page-handler @, view
 
 	\redirect-list : !->
 		panel-page-handler @, (new RedirectListView!).render!
-
 	\add-redirect : !->
 		panel-page-handler @, (new AddRedirectView!).render!
-
 	\edit-redirect : (id)!->
 		panel-page-handler @, (new EditRedirectView id: id).render!
 
+	\data-list : !->
+		panel-page-handler @, (new DataListView!).render!
+	\add-data : !->
+		panel-page-handler @, (new AddDataView!).render!
+	\edit-data : (id)!->
+		panel-page-handler @, (new EditDataView id: id).render!
+
 	\accounts : !->
 		panel-page-handler @, (new AccountsListView!).render!
-
 	\account-add : !->
 		panel-page-handler @, (new AddAccountView!).render!
-
 	\account-edit : (id)!->
 		panel-page-handler @, (new EditAccountView id: id).render!
 

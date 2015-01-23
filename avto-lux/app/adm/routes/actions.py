@@ -17,6 +17,7 @@ from app.models.pagemodels import (
 	StaticPageModel,
 	UrlMapping
 )
+from app.models.non_relation_data import NonRelationData
 from app.models.catalogmodels import(
 	CatalogSectionModel,
 	CatalogItemModel
@@ -83,10 +84,11 @@ class AdminMainHandler(JsonResponseMixin):
 			'get_catalog_elements': self.get_catalog_elements,
 			'get_redirect_list': self.get_redirect_list,
 			'get_accounts_list': self.get_accounts_list,
+			'get_data_list': self.get_data_list,
 			'get_fields': self.get_fields,
-			'add': self.create_page,
+			'add': self.create,
 			'update': self.update_page,
-			'delete': self.delete_page
+			'delete': self.delete_smth
 		}
 
 		if action not in actions.keys():
@@ -119,7 +121,9 @@ class AdminMainHandler(JsonResponseMixin):
 		counts = []
 		for i in cats:
 			count = session.query(
-				CatalogItemModel.id).filter_by(section_id=i[0]).all()
+				CatalogItemModel.id).filter_by(
+					section_id=i[0]
+				).all()
 			counts.append((len(count),))
 
 		data = session.query(
@@ -163,6 +167,7 @@ class AdminMainHandler(JsonResponseMixin):
 	def get_redirect_list(self):
 		session = Session()
 		data = session.query(UrlMapping).all()
+		session.close()
 		return self.json_response({
 			'status':'success',
 			'data_list': [x.item for x in data]
@@ -194,7 +199,7 @@ class AdminMainHandler(JsonResponseMixin):
 
 
 	@query_except_handler
-	def create_page(self, **kwargs):
+	def create(self, **kwargs):
 		section = kwargs['section']
 		del kwargs['section']
 
@@ -209,6 +214,7 @@ class AdminMainHandler(JsonResponseMixin):
 			'redirect': UrlMapping,
 			'catalog_section': CatalogSectionModel,
 			'catalog_element': CatalogItemModel,
+			'data': NonRelationData
 		}
 		session = Session()
 
@@ -247,6 +253,7 @@ class AdminMainHandler(JsonResponseMixin):
 			'redirect': UrlMapping,
 			'catalog_section': CatalogSectionModel,
 			'catalog_element': CatalogItemModel,
+			'data': NonRelationData
 		}
 
 		fields = db_inspector.get_columns(
@@ -269,7 +276,9 @@ class AdminMainHandler(JsonResponseMixin):
 				).filter_by(id=id)
 
 		if section == 'redirect':
-			permanent = (lambda: True if kwargs['status'] == '301' else False)()
+			permanent = (
+				lambda: True if kwargs['status'] == '301' else False
+				)()
 			from app.app import application
 			counter = 0
 			hndlr = application.handlers[0][1]
@@ -292,7 +301,7 @@ class AdminMainHandler(JsonResponseMixin):
 
 
 	@query_except_handler
-	def delete_page(self, model=None, id=None):
+	def delete_smth(self, model=None, id=None):
 		session = Session()
 		models = {
 			'pages': StaticPageModel,
@@ -303,7 +312,8 @@ class AdminMainHandler(JsonResponseMixin):
 		}
 		try:
 			session.query(
-				models[model]).filter_by(id=id).delete(synchronize_session=True)
+				models[model]
+				).filter_by(id=id).delete(synchronize_session=True)
 			session.commit()
 		except:
 			return self.json_response({
@@ -314,6 +324,16 @@ class AdminMainHandler(JsonResponseMixin):
 		return self.json_response({'status': 'success'})
 
 
+	@query_except_handler
+	def get_data_list(self):
+		session = Session()
+		data = session.query(NonRelationData).all()
+		session.close()
+		return self.json_response({
+			'status': 'success',
+			'data_list': [x.item for x in data]
+			})
+
 
 	@query_except_handler
 	def get_fields(self, model=None, edit=False, id=None):
@@ -323,21 +343,26 @@ class AdminMainHandler(JsonResponseMixin):
 			'redirect': UrlMapping,
 			'catalog_section': CatalogSectionModel,
 			'catalog_element': CatalogItemModel,
-			'accounts': User
+			'accounts': User,
+			'data': NonRelationData
 		}
 
 		fields = db_inspector.get_columns(
 			models[model].__tablename__
 			)
 
-		# TODO :: this shit really needs refactoring
 		types_map = {
 			'BOOLEAN': 'checkbox',
 			'TEXT': 'html',
 			'VARCHAR(4096)': 'text',
 			'VARCHAR(8192)': 'text',
+			'VARCHAR(1024)': 'text',
 			'VARCHAR(5000)': 'password',
-			'JSON': 'files',
+			'JSON': (
+				lambda: 'data_fields'
+					if model == 'data'
+					else 'files'
+				)(),
 			'INTEGER': 'text'
 		}
 		vidgets = []
@@ -357,7 +382,8 @@ class AdminMainHandler(JsonResponseMixin):
 
 		values = None
 		if edit and id is not None:
-			data = session.query(models[model]).filter_by(id=id).one()
+			data = session.query(
+				models[model]).filter_by(id=id).one()
 			values = data.item
 
 			if model == 'catalog_element':

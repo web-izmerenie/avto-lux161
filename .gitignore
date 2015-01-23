@@ -3,7 +3,6 @@
 *.bz2
 *.zip
 *.rar
-*.sql
 *.log
 
 # python

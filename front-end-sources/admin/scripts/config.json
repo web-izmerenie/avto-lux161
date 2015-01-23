@@ -25,13 +25,6 @@
         "footer_slogan"
       ]
     },
-    "redirect": {
-      "fields_sort": [
-        "status",
-        "old_url",
-        "new_url"
-      ]
-    },
     "catalog_element": {
       "fields_sort": [
         "is_active",
@@ -70,6 +63,21 @@
         "seo_meta_keywords",
         "has_footer_slogan",
         "footer_slogan"
+      ]
+    },
+    "redirect": {
+      "fields_sort": [
+        "status",
+        "old_url",
+        "new_url"
+      ]
+    },
+    "data": {
+      "fields_sort": [
+        "name",
+        "code",
+        "sort",
+        "data_json"
       ]
     },
     "accounts": {

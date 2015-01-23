@@ -26,6 +26,9 @@ class AppRouter extends M.AppRouter
 		'panel/redirect' : \redirect-list
 		'panel/redirect/add.html' : \add-redirect
 		'panel/redirect/edit_:id.html' : \edit-redirect
+		'panel/data' : \data-list
+		'panel/data/add.html' : \add-data
+		'panel/data/edit_:eid.html' : \edit-data
 		'panel/accounts' : \accounts
 		'panel/accounts/add.html' : \account-add
 		'panel/accounts/edit_:id.html' : \account-edit

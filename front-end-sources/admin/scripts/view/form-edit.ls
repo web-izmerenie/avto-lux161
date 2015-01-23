@@ -17,7 +17,7 @@ require! {
 	# views
 	'./smooth' : SmoothView
 	'./loader' : LoaderView
-	'./form' : FormView
+	'./form/form' : FormView
 }
 
 class FormEditView extends SmoothView

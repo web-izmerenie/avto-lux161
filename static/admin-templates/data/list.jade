@@ -1,0 +1,20 @@
+.panel-heading
+	.row
+		.col.col-md-6
+			h1.h5= local.get('sections').data.data_list
+		.col.col-md-6.align-right
+			.btn-group
+				button.refresh.btn.btn-default
+					span.glyphicon.glyphicon-transfer
+					= ' ' + local.get('sections').data.refresh
+				a.add.btn.btn-default.btn-success(href="#panel/data/add.html")
+					span.glyphicon.glyphicon-plus
+					= ' ' + local.get('sections').data.add
+table.table
+	thead
+		tr
+			th= local.get('sections').data.id
+			th= local.get('sections').data.name
+			th= local.get('sections').data.code
+			th= local.get('sections').data.sort
+	tbody

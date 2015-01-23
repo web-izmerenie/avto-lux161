@@ -1,0 +1,16 @@
+- var types = ['text', 'textarea']
+
+.err-block
+label.text
+	span= local.get('forms').data_fields.code
+	=' '
+	input.code.form-control
+select.type-chooser
+	each type in types
+		option(value=type)= local.get('forms').data_fields.fields_types[type]
+label.checkbox
+	input.multiple(type="checkbox")
+	=' ' + local.get('forms').data_fields.multiple
+button.add-field.btn.btn-success.btn-xs= local.get('forms').data_fields.add
+=' '
+button.cancel.btn.btn-danger.btn-xs= local.get('forms').data_fields.cancel

@@ -1,0 +1,18 @@
+label.name
+	span= local.get('forms').data_fields.name
+	input.name.form-control(type="text" value=name)
+label.code
+	span= local.get('forms').data_fields.code
+	input.code.form-control(type="text" value=code readonly)
+
+ul.input-container.list-group
+
+if multiple
+	.add-area
+		button.add-value.btn.btn-success.btn-xs
+			span.glyphicon.glyphicon-plus
+			= ' ' + local.get('forms').data_fields.add_value
+
+.del-area
+	.del-msg
+	button.del-field.btn.btn-danger.btn-xs= local.get('forms').data_fields.del

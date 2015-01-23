@@ -1,0 +1,11 @@
+if multiple
+	.input-group
+		span.moveit.glyphicon.glyphicon-move.input-group-addon
+		input.form-control(type="text", value=value)
+		.input-group-btn
+			button.del.btn.btn-danger(title=local.get('forms').data_fields.del)
+				span.glyphicon.glyphicon-minus
+			button.add.btn.btn-success(title=local.get('forms').data_fields.add)
+				span.glyphicon.glyphicon-plus
+else
+	input.form-control(type="text", value=value)

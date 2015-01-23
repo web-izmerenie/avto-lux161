@@ -1,0 +1,12 @@
+label
+	div= local.get('sections')[page].form[name]
+
+- var value = ''
+if values[name]
+	- var value = values[name]
+input(type="hidden", name=name, value=value)
+
+.data-fields-area
+
+button.add-new-field.btn.btn-success.btn-sm
+	= local.get('forms').data_fields.add_field

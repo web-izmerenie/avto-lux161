@@ -1,0 +1,11 @@
+.alert.alert-warning
+	div
+		span.glyphicon.glyphicon-question-sign
+		= ' ' + message
+	.btn-group
+		button.yes.btn.btn-success.btn-sm
+			span.glyphicon.glyphicon-ok-sign
+			= ' ' + local.get('sure').yes
+		button.no.btn.btn-danger.btn-sm
+			span.glyphicon.glyphicon-remove-sign
+			= ' ' + local.get('sure').no
