@@ -9,7 +9,8 @@ from .base import BaseHandler
 from app.mixins.routes_mixin import (
 	ErrorHandlerMixin,
 	JsonResponseMixin,
-	MenuProviderMixin
+	MenuProviderMixin,
+	NonRelationDataProvider
 )
 
 from app.models.dbconnect import Session
@@ -38,7 +39,10 @@ from .decorators import route_except_handler
 session = Session()
 
 
-class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
+class MainRoute(
+	BaseHandler, MenuProviderMixin, NonRelationDataProvider,
+	ErrorHandlerMixin
+):
 	@route_except_handler
 	def get(self):
 		page = session.query(StaticPageModel).filter_by(alias='/').one()
@@ -50,6 +54,7 @@ class MainRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 			'menu': menu,
 			'is_debug': config('DEBUG')
 		})
+		data.update(self.get_nonrel_handlers())
 		return self.render('client/content-page.jade', **data)
 
 

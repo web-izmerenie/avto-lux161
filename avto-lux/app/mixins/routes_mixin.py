@@ -6,12 +6,13 @@ from app.utils import is_date
 from app.models.pagemodels import StaticPageModel
 from app.models.dbconnect import Session
 from app.models.catalogmodels import CatalogSectionModel
-
-session = Session()
+from app.models.non_relation_data import NonRelationData
+import sys
 
 
 class MenuProviderMixin():
-	def getmenu(self,
+	def getmenu(
+		self,
 		page_alias=None,
 		catalog_section_alias=None,
 		catalog_item_alias=None
@@ -20,6 +21,8 @@ class MenuProviderMixin():
 			'main': [],
 			'catalog': []
 		}
+
+		session = Session()
 
 		static_pages = session.query(StaticPageModel)\
 			.filter_by(is_main_menu_item=True)\
@@ -51,7 +54,63 @@ class MenuProviderMixin():
 						item['current'] = False
 			menu['catalog'].append(item)
 
+		session.close()
 		return menu
+
+
+class NonRelationDataProvider():
+	def get_nonrel_arr(self, code1, code2):
+		res = []
+		level1 = None
+
+		if code1 not in self.nonrel_list:
+			print('data code "%s" not found' % code1, file=sys.stderr)
+
+		level1 = self.nonrel_list[code1]
+
+		for item in level1:
+			if 'code' not in item.keys():
+				continue
+			if item['code'] == code2:
+				values = item['values']
+				for val in values:
+					res.append(val['value'])
+
+		return tuple(res)
+
+	def get_nonrel_val(self, code1, code2):
+		res = ''
+
+		arr = self.get_nonrel_arr(code1, code2)
+		if len(arr) > 0:
+			res = arr[0]
+
+		return res
+
+	def get_nonrel_handlers(self):
+		session = Session()
+		data = session.query(NonRelationData).all()
+		session.close()
+
+		export = {}
+		for item in [x.item for x in data]:
+			data_list = tuple()
+			try:
+				data_list = json.loads(item['data_json'])
+				if type(data_list) is not list and type(data_list) is not tuple:
+					raise Exception('"data_json" must be a json-array')
+			except Exception as e:
+				print(e, file=sys.stderr)
+				data_list = tuple()
+			export[item['code']] = data_list
+		self.nonrel_list = export
+
+		res = {
+			'get_nonrel_arr': self.get_nonrel_arr,
+			'get_nonrel_val': self.get_nonrel_val
+		}
+
+		return res
 
 
 class JsonResponseMixin(RequestHandler):
