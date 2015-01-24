@@ -5,9 +5,14 @@ r4
 ---------
 
 - Added photos sorting in admin front-end catalog;
-- <strong>WARNING!</strong> Fixed E-Mail send notify by forms, added new field
-  (e-mail sender) to config.yaml.example
-  (don't forget add it to your local config.yaml).
+- Fixed send E-Mail notify by forms.<br>
+  <strong>WARNING!</strong> Added new field (e-mail sender)
+  to config.yaml.example
+  (don't forget add it to your local config.yaml);
+- Added non-relation data.
+  <strong>WARNING!</strong> Added new model (new tables in database),
+  you need to upgrade your database by this file:
+  [migration_r3_to_r4.sql](avto-lux/migrations/migration_r3_to_r4.sql).
 
 r3
 ---------
