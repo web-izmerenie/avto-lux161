@@ -65,6 +65,7 @@ class NonRelationDataProvider():
 
 		if code1 not in self.nonrel_list:
 			print('data code "%s" not found' % code1, file=sys.stderr)
+			return tuple(res)
 
 		level1 = self.nonrel_list[code1]
 
