@@ -8,11 +8,15 @@ r4
 - Fixed send E-Mail notify by forms.<br>
   <strong>WARNING!</strong> Added new field (e-mail sender)
   to config.yaml.example
-  (don't forget add it to your local config.yaml);
-- Added non-relation data.
+  (don't forget to add it to your local config.yaml);
+- Added non-relation data.<br>
   <strong>WARNING!</strong> Added new model (new tables in database),
   you need to upgrade your database by this file:
-  [migration_r3_to_r4.sql](avto-lux/migrations/migration_r3_to_r4.sql).
+  [migration_r3_to_r4.sql](avto-lux/migrations/migration_r3_to_r4.sql);
+- Counters now provided by non-relation data model.<br>
+  <strong>WARNING!</strong> You need to create non-relation data element
+  with code `counters` and create multiple textarea field with code
+  `bottom_counters` in admin panel and put your counters to this field.
 
 r3
 ---------
