@@ -18,7 +18,6 @@ from sqlalchemy.dialects.postgresql import JSON
 from app.models.dbconnect import Session
 import json
 import sys
-session = Session()
 
 
 class CatalogSectionModel(Base, PageMixin, IdMixin):
@@ -76,7 +75,9 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 				del vals[item]
 
 		# get section alias
+		session = Session()
 		s = session.query(CatalogSectionModel.alias).filter_by(id=vals['section_id']).one()
+		session.close()
 
 		# main image parse {{{
 

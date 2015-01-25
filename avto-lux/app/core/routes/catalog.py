@@ -3,7 +3,11 @@
 from .base import BaseHandler
 from .decorators import route_except_handler
 from app.models.dbconnect import Session
-from app.mixins.routes_mixin import (ErrorHandlerMixin, MenuProviderMixin)
+from app.mixins.routes_mixin import (
+	ErrorHandlerMixin,
+	MenuProviderMixin,
+	NonRelationDataProvider
+)
 
 from app.models.catalogmodels import(
 	CatalogSectionModel,
@@ -12,9 +16,10 @@ from app.models.catalogmodels import(
 from app.configparser import config
 
 
-
-
-class CatalogSectionRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
+class CatalogSectionRoute(
+	BaseHandler, MenuProviderMixin, NonRelationDataProvider,
+	ErrorHandlerMixin
+):
 	@route_except_handler
 	def get(self, alias):
 		session = Session()
@@ -23,6 +28,7 @@ class CatalogSectionRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 		page = session.query(CatalogSectionModel).filter_by(alias=alias).one()
 		items = session.query(CatalogItemModel).filter_by(section_id=page.id)\
 			.order_by('id asc').all()
+		session.close()
 		menu = self.getmenu(catalog_section_alias=alias)
 		data = page.to_frontend
 		data.update({
@@ -33,17 +39,21 @@ class CatalogSectionRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 			'menu': menu,
 			'is_debug': config('DEBUG')
 		})
-		session.close()
+		data.update(self.get_nonrel_handlers())
 		return self.render('client/catalog-sections.jade', **data)
 
 
-class CatalogItemRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
+class CatalogItemRoute(
+	BaseHandler, MenuProviderMixin, NonRelationDataProvider,
+	ErrorHandlerMixin
+):
 	@route_except_handler
 	def get(self, category, item):
 		session = Session()
 		if item.endswith(".html"):
 			item = item.replace('.html', '').replace('/', '')
 		page = session.query(CatalogItemModel).filter_by(alias=item).one()
+		session.close()
 		menu = self.getmenu(
 			catalog_section_alias=category,
 			catalog_item_alias=item)
@@ -56,5 +66,5 @@ class CatalogItemRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
 			'menu': menu,
 			'is_debug': config('DEBUG')
 		})
-		session.close()
+		data.update(self.get_nonrel_handlers())
 		return self.render('client/catalog-detail.jade', **data)

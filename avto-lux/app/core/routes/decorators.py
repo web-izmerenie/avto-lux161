@@ -9,7 +9,10 @@ from app.models.pagemodels import (
 	StaticPageModel
 )
 
-session = Session()
+from app.mixins.routes_mixin import (
+	NonRelationDataProvider
+)
+
 
 def route_except_handler(fn):
 	def wrap(*args, **kwargs):
@@ -19,7 +22,9 @@ def route_except_handler(fn):
 		except NoResultFound as e:
 			print(e, file=sys.stderr)
 			self.set_status(404)
+			session = Session()
 			page = session.query(StaticPageModel).filter_by(alias='/404.html').one()
+			session.close()
 			menu = self.getmenu()
 			data = page.to_frontend
 			data.update({
@@ -28,6 +33,7 @@ def route_except_handler(fn):
 				'menu': menu,
 				'is_debug': config('DEBUG')
 			})
+			data.update(self.get_nonrel_handlers())
 			return self.render('client/error-404.jade', **data)
 		except Exception as e:
 			print(e, file=sys.stderr)

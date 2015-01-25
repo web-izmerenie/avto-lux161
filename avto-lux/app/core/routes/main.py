@@ -36,8 +36,6 @@ from app.configparser import config
 
 from .decorators import route_except_handler
 
-session = Session()
-
 
 class MainRoute(
 	BaseHandler, MenuProviderMixin, NonRelationDataProvider,
@@ -45,7 +43,9 @@ class MainRoute(
 ):
 	@route_except_handler
 	def get(self):
+		session = Session()
 		page = session.query(StaticPageModel).filter_by(alias='/').one()
+		session.close()
 		menu = self.getmenu(page_alias='/')
 		data = page.to_frontend
 		data.update({
@@ -58,21 +58,26 @@ class MainRoute(
 		return self.render('client/content-page.jade', **data)
 
 
-class StaticPageRoute(BaseHandler, MenuProviderMixin, ErrorHandlerMixin):
+class StaticPageRoute(
+	BaseHandler, MenuProviderMixin, NonRelationDataProvider,
+	ErrorHandlerMixin
+):
 	@route_except_handler
 	def get(self, alias):
 		if not alias.endswith(".html"):
 			alias = '/' + alias + '.html'
+		session = Session()
 		page = session.query(StaticPageModel).filter_by(alias=alias).one()
+		session.close()
 		menu = self.getmenu(page_alias=alias)
 		data = page.to_frontend
-		data.update({ 'menu': menu })
 		data.update({
 			'is_catalog': False,
 			'is_catalog_item': False,
 			'menu': menu,
 			'is_debug': config('DEBUG')
 		})
+		data.update(self.get_nonrel_handlers())
 		return self.render('client/content-page.jade', **data)
 
 
@@ -170,8 +175,10 @@ class FormsHandler(JsonResponseMixin):
 			phone = d['phone'],
 			date = datetime.utcnow()
 		)
+		session = Session()
 		session.add(call)
 		session.commit()
+		session.close()
 
 		send_mail(
 			msg='<h1>Заказ звонка</h1>' +
@@ -183,7 +190,9 @@ class FormsHandler(JsonResponseMixin):
 
 	def save_order(self, d):
 		dt = d['date'].split('.')
+		session = Session()
 		item = session.query(CatalogItemModel).filter_by(id=d['id']).one()
+		session.close()
 		full_date = datetime.combine(
 				date(int(dt[2]), int(dt[1]), int(dt[0])),
 				time(int(d['hours']), int(d['minutes']))),
@@ -194,13 +203,15 @@ class FormsHandler(JsonResponseMixin):
 			item_id=item.id
 		)
 
+		session = Session()
 		session.add(order)
 		session.commit()
+		session.close()
 		send_mail(
-			msg='<h1>Заказ автомобиля "%s"</h1>' % item.title +
+			msg='<h1>Заказ "%s"</h1>' % item.title +
 				'<dl><dt>Имя:</dt><dd>%s</dd>' % d['name'] +
 				'<dt>Контакты:</dt><dd>%s</dd>' % d['callback'] +
 				'<dt>Дата заказа:</dt><dd>%s</dd></dl>' % (
 					full_date[0].strftime('%d.%m.%Y %H:%M')),
-			theme='АвтоЛюкс: заказ автомобиля "%s"' % item.title
+			theme='АвтоЛюкс: заказ "%s"' % item.title
 		)
