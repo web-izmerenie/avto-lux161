@@ -4,9 +4,11 @@ if has_footer_slogan
 			blockquote!= footer_slogan
 
 .contacts
-	a.phone(href="tel:+79889993989") +7 988 999 39 89
+	- var phone = get_nonrel_val('phones', 'footer')
+	a.phone(href=get_phone_link(phone))= phone
 	=' '
-	a.email(href="mailto:avto-lux161@yandex.ru") avto-lux161@yandex.ru
+	- var email = get_nonrel_val('email', 'footer')
+	a.email(href='mailto:'+email)= email
 .developer
 	img(alt='Логотип &laquo;Веб измерение&raquo;' src=static_url('images/web-izmerenie-logo.svg'))
 	| Сделано в студии

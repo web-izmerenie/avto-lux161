@@ -3,11 +3,7 @@
 from .base import BaseHandler
 from .decorators import route_except_handler
 from app.models.dbconnect import Session
-from app.mixins.routes_mixin import (
-	ErrorHandlerMixin,
-	MenuProviderMixin,
-	NonRelationDataProvider
-)
+from app.mixins.routes_mixin import ErrorHandlerMixin
 
 from app.models.catalogmodels import(
 	CatalogSectionModel,
@@ -16,10 +12,7 @@ from app.models.catalogmodels import(
 from app.configparser import config
 
 
-class CatalogSectionRoute(
-	BaseHandler, MenuProviderMixin, NonRelationDataProvider,
-	ErrorHandlerMixin
-):
+class CatalogSectionRoute(BaseHandler, ErrorHandlerMixin):
 	@route_except_handler
 	def get(self, alias):
 		session = Session()
@@ -40,13 +33,11 @@ class CatalogSectionRoute(
 			'is_debug': config('DEBUG')
 		})
 		data.update(self.get_nonrel_handlers())
+		data.update(self.get_helpers())
 		return self.render('client/catalog-sections.jade', **data)
 
 
-class CatalogItemRoute(
-	BaseHandler, MenuProviderMixin, NonRelationDataProvider,
-	ErrorHandlerMixin
-):
+class CatalogItemRoute(BaseHandler, ErrorHandlerMixin):
 	@route_except_handler
 	def get(self, category, item):
 		session = Session()
@@ -67,4 +58,5 @@ class CatalogItemRoute(
 			'is_debug': config('DEBUG')
 		})
 		data.update(self.get_nonrel_handlers())
+		data.update(self.get_helpers())
 		return self.render('client/catalog-detail.jade', **data)

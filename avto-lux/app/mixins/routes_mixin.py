@@ -8,6 +8,7 @@ from app.models.dbconnect import Session
 from app.models.catalogmodels import CatalogSectionModel
 from app.models.non_relation_data import NonRelationData
 import sys
+import re
 
 
 class MenuProviderMixin():
@@ -106,13 +107,21 @@ class NonRelationDataProvider():
 			export[item['code']] = data_list
 		self.nonrel_list = export
 
-		res = {
+		return {
 			'get_nonrel_arr': self.get_nonrel_arr,
 			'get_nonrel_val': self.get_nonrel_val
 		}
 
-		return res
+phone_link_reg = re.compile('[^+0-9]')
 
+class HelpersProviderMixin():
+	def get_phone_link(self, phone):
+		return 'tel:' + phone_link_reg.sub('', phone)
+
+	def get_helpers(self):
+		return {
+			'get_phone_link': self.get_phone_link
+		}
 
 class JsonResponseMixin(RequestHandler):
 	def json_response(self, data):

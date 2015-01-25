@@ -16,7 +16,13 @@ r4
 - Counters now provided by non-relation data model.<br>
   <strong>WARNING!</strong> You need to create non-relation data element
   with code `counters` and create multiple textarea field with code
-  `bottom_counters` in admin panel and put your counters to this field.
+  `bottom_counters` in admin panel and put your counters to this field;
+- <strong>WARNING!</strong> Phones in headers and footer, and footer
+  E-Mail now provided by non-relation data as codes:
+
+    - `phones` → `header`
+    - `phones` → `footer`
+    - `email` → `footer`
 
 r3
 ---------

@@ -5,13 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.models.dbconnect import Session
 from app.configparser import config
 
-from app.models.pagemodels import (
-	StaticPageModel
-)
-
-from app.mixins.routes_mixin import (
-	NonRelationDataProvider
-)
+from app.models.pagemodels import StaticPageModel
 
 
 def route_except_handler(fn):
@@ -34,6 +28,7 @@ def route_except_handler(fn):
 				'is_debug': config('DEBUG')
 			})
 			data.update(self.get_nonrel_handlers())
+			data.update(self.get_helpers())
 			return self.render('client/error-404.jade', **data)
 		except Exception as e:
 			print(e, file=sys.stderr)
