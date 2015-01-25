@@ -1,0 +1,2 @@
+ALTER TABLE avtolux_catalog RENAME delegate_seo_meta_descrtption TO delegate_seo_meta_description;
+ALTER TABLE avtolux_catalog RENAME inherit_seo_meta_descrtption TO delegate_seo_meta_description;

@@ -1,6 +1,16 @@
 Changelog
 =========
 
+r5
+---------
+
+- Added inharitance;
+- Fixed names of seo fields in catalog's and catalog element's models
+  <strong>WARNING!</strong> AChange database fields,
+  you need to upgrade your database by this file:
+  [migration_r4_to_r5.sql](avto-lux/migrations/migration_r4_to_r5.sql);
+- Added delete
+
 r4
 ---------
 

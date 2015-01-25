@@ -200,14 +200,31 @@ class AdminMainHandler(JsonResponseMixin):
 
 	@query_except_handler
 	def create(self, **kwargs):
+		session = Session()
 		section = kwargs['section']
 		del kwargs['section']
+		inherit_seo_fields = []
+		seo_fields = []
 
-		for item in (x for x
-			in kwargs.keys()
-				if x.startswith('is_')
-					or x.startswith('has_')):
-			kwargs[item] = True
+		for item in kwargs.keys():
+			if item.startswith('is_') or item.startswith('has_'):
+				kwargs[item] = True
+			elif item.startswith('delegate_') or item.startswith('inherit_'):
+				kwargs[item] = True
+				inherit_seo_fields.append(item.replace('delelegate_', '').replace('inherit_', ''))
+			elif item.startswith('seo_'):
+				seo_fields.append(item)
+
+		## Needs be tested
+		if len(inherit_seo_fields) > 0 and section == 'catalog_element':
+			parent = session.query(CatalogSectionModel).filter_by(id=kwargs['section_id']).one()
+
+			for el in seo_fields:
+				is_empty = kwargs[el].replace(' ', '') == ''
+				is_delegate = parent.__getattribute__('delegate_' + el) == True
+
+				if el in inherit_seo_fields or (is_empty and is_delegate):
+					kwargs[el] = parent.__getattribute__(el)
 
 		section_map = {
 			'pages': StaticPageModel,
@@ -216,7 +233,6 @@ class AdminMainHandler(JsonResponseMixin):
 			'catalog_element': CatalogItemModel,
 			'data': NonRelationData
 		}
-		session = Session()
 
 		page = section_map[section](**kwargs)
 		session.add(page)
@@ -240,8 +256,9 @@ class AdminMainHandler(JsonResponseMixin):
 
 		return self.json_response({'status': 'success'})
 
+
 	##TODO :: Clear shitcode
-	@query_except_handler
+	# @query_except_handler
 	def update_page(self, **kwargs):
 		section = kwargs['section']
 		del kwargs['section']
@@ -259,21 +276,58 @@ class AdminMainHandler(JsonResponseMixin):
 		fields = db_inspector.get_columns(
 			section_map[section].__tablename__
 			)
-
-		for item in (x for x
-			in fields
-				if x['name'].startswith('is_')
-					or x['name'].startswith('has_')
-						or x['name'].startswith('inherit_seo_')):
-			if item['name'] not in kwargs.keys():
-				kwargs.update({ item['name']: False })
-			else:
-				kwargs[item['name']] = True
+		inherit_seo_fields = []
+		seo_fields = []
 
 		session = Session()
 		data = session.query(
 			section_map[section]
 				).filter_by(id=id)
+
+
+		for f in fields:
+			item = f['name']
+			is_bool = item.startswith('is_') or item.startswith('has_')
+			is_inherit = item.startswith('delegate_') or item.startswith('inherit_')
+			if is_bool or is_inherit:
+				if item not in kwargs.keys():
+					print("NOT IN KEYS :", item)
+					kwargs.update({ item: False })
+				else:
+						kwargs[item] = True
+
+			if is_inherit:
+				print("Inherit", item)
+				inherit_seo_fields.append(item.replace('delelegate_', '').replace('inherit_', ''))
+			elif item.startswith('seo_'):
+				seo_fields.append(item)
+
+		##TODO :: remove copy/paste
+		if len(inherit_seo_fields) > 0 and section == 'catalog_element':
+			parent = session.query(CatalogSectionModel).filter_by(id=kwargs['section_id']).one()
+			for el in seo_fields:
+				is_empty = kwargs[el].replace(' ', '') == ''
+				is_delegate = parent.__getattribute__('delegate_' + el) == True
+
+				if el in inherit_seo_fields or (is_empty and is_delegate):
+					kwargs[el] = parent.__getattribute__(el)
+
+		elif section == 'catalog_section':
+			print(seo_fields)
+			children = session.query(CatalogItemModel).filter_by(section_id=id).all()
+			for elem in children:
+				for item in seo_fields:
+					is_delegate = kwargs['delegate_' + item] == True
+					print(item, is_delegate)
+					is_empty = elem.__getattribute__(item).replace(' ', '') == ''
+
+					if is_delegate and is_empty:
+						print("ELEM: %s" % item, elem.__getattribute__(item))
+						elem.__setattr__(item, kwargs[item])
+					else:
+						elem.__setattr__(item, '')
+				session.add(elem)
+
 
 		if section == 'redirect':
 			permanent = (

@@ -23,14 +23,17 @@ def collect_handlers(*args):
 		raise CollectHandlersException("Duplicate routes! {0}".format(duplicated))
 
 	redirect_routes = []
-	session = Session()
-	_rr = session.query(UrlMapping).all()
-	for redirect in _rr:
-		redirect_routes.append((redirect.old_url, RedirectHandler, {
-			'url': redirect.new_url,
-			'permanent': (lambda: True if int(redirect.status) == 302 else False)()
-		}))
-	session.close()
+	try:
+		session = Session()
+		_rr = session.query(UrlMapping).all()
+		for redirect in _rr:
+			redirect_routes.append((redirect.old_url, RedirectHandler, {
+				'url': redirect.new_url,
+				'permanent': (lambda: True if int(redirect.status) == 302 else False)()
+			}))
+		session.close()
+	except:
+		pass
 	return redirect_routes + routes
 
 

@@ -25,7 +25,7 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 
 	delegate_seo_meta_title = Column(Boolean)
 	delegate_seo_meta_keywords = Column(Boolean)
-	delegate_seo_meta_descrtption = Column(Boolean)
+	delegate_seo_meta_description = Column(Boolean)
 	delegate_seo_title = Column(Boolean)
 
 	items = relationship('CatalogItemModel')
@@ -58,7 +58,7 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 
 	inherit_seo_meta_title = Column(Boolean)
 	inherit_seo_meta_keywords = Column(Boolean)
-	inherit_seo_meta_descrtption = Column(Boolean)
+	inherit_seo_meta_description = Column(Boolean)
 	inherit_seo_title = Column(Boolean)
 
 	@property
