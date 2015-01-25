@@ -17,7 +17,7 @@ r4
   <strong>WARNING!</strong> You need to create non-relation data element
   with code `counters` and create multiple textarea field with code
   `bottom_counters` in admin panel and put your counters to this field;
-- <strong>WARNING!</strong> Phones in headers and footer, and footer
+- <strong>WARNING!</strong> Phones in header and footer, and footer
   E-Mail now provided by non-relation data as codes:
 
     - `phones` → `header`
