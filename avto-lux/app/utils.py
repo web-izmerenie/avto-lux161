@@ -1,17 +1,35 @@
 # -*- coding: utf-8 -*-
 
-import os, sys, json
+import os
+import sys
+import json
 import smtplib
 from app.configparser import config
-import decimal, datetime
+import datetime
 from app.models.dbconnect import Session
-from tornado.web import RedirectHandler
+from tornado.web import RequestHandler
 from app.models.pagemodels import UrlMapping
+from urllib.parse import quote
 
 
 class CollectHandlersException(Exception):
 	def __repr__(self, e, list):
 		return "{0}, {1}".format(e, list)
+
+
+class UnicodeRedirectHandler(RequestHandler):
+	def initialize(self, url, status=302):
+		self._url = url
+		self._status = status
+
+	def get(self):
+		if self._headers_written:
+			raise Exception("Cannot redirect after headers have been written")
+		assert isinstance(self._status, int) and 300 <= self._status <= 399
+
+		self.set_status(self._status)
+		self.set_header('Location', self._url)
+		self.finish()
 
 
 def collect_handlers(*args):
@@ -26,9 +44,10 @@ def collect_handlers(*args):
 	session = Session()
 	_rr = session.query(UrlMapping).all()
 	for redirect in _rr:
-		redirect_routes.append((redirect.old_url, RedirectHandler, {
+		old_url = quote(redirect.old_url, encoding='utf-8').lower()
+		redirect_routes.append((old_url, UnicodeRedirectHandler, {
 			'url': redirect.new_url,
-			'permanent': (lambda: True if int(redirect.status) == 302 else False)()
+			'status': int(redirect.status)
 		}))
 	session.close()
 	return redirect_routes + routes
