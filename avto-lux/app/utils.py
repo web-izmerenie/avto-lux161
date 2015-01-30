@@ -44,7 +44,7 @@ def collect_handlers(*args):
 	session = Session()
 	_rr = session.query(UrlMapping).all()
 	for redirect in _rr:
-		old_url = quote(redirect.old_url, encoding='utf-8').lower()
+		old_url = quote(redirect.old_url, encoding='utf-8')
 		redirect_routes.append((old_url, UnicodeRedirectHandler, {
 			'url': redirect.new_url,
 			'status': int(redirect.status)

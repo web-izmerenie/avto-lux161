@@ -1,6 +1,11 @@
 Changelog
 =========
 
+r5
+---------
+
+- Fixed redirects with unicode in URI.
+
 r4
 ---------
 
