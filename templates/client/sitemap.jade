@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+urlset(xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+	each url in urls
+		url
+			loc= 'http://avto-lux161.ru' + url['alias']
+			unless url['lastmod']
+				lastmod 2015-02-02
+			else
+				lastmod= url['lastmod']
+			changefreq weekly
+			priority 0.5

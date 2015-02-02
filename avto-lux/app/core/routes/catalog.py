@@ -20,7 +20,7 @@ class CatalogSectionRoute(BaseHandler, ErrorHandlerMixin):
 			alias = alias.replace('.html', '').replace('/', '')
 		page = session.query(CatalogSectionModel).filter_by(alias=alias).one()
 		items = session.query(CatalogItemModel).filter_by(section_id=page.id)\
-			.order_by('id asc').all()
+			.order_by(CatalogItemModel.id.asc()).all()
 		session.close()
 		menu = self.getmenu(catalog_section_alias=alias)
 		data = page.to_frontend

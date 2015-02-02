@@ -1,6 +1,11 @@
 Changelog
 =========
 
+r6
+---------
+
+- Added dynamic sitemap.xml.
+
 r5
 ---------
 

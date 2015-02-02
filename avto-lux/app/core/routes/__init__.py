@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['base', 'catalog', 'decorators', 'main', 'robots']
+__all__ = ['base', 'catalog', 'decorators', 'main', 'robots', 'sitemap']
 
 from pyjade.ext.tornado import patch_tornado
 patch_tornado()
@@ -15,6 +15,7 @@ from .main import (
 )
 from .catalog import (CatalogItemRoute, CatalogSectionRoute)
 from .robots import RobotsTxtRoute
+from .sitemap import SiteMapRoute
 
 routes = [
 	('/', MainRoute),
@@ -29,6 +30,7 @@ routes = [
 	('/catalog/(.*?)\.html', CatalogSectionRoute),
 
 	('/robots\.txt', RobotsTxtRoute),
+	('/sitemap.xml', SiteMapRoute),
 
 	('/(.*?)\.html', StaticPageRoute),
 	('/(.*?)', StaticPageRoute)

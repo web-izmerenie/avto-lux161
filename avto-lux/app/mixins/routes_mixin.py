@@ -27,7 +27,7 @@ class MenuProviderMixin():
 
 		static_pages = session.query(StaticPageModel)\
 			.filter_by(is_main_menu_item=True)\
-			.order_by("id asc").all()
+			.order_by(StaticPageModel.id.asc()).all()
 		for page in [x.item for x in static_pages]:
 			item = {
 				'active': False,
@@ -39,7 +39,8 @@ class MenuProviderMixin():
 					item['active'] = True
 			menu['main'].append(item)
 
-		sections = session.query(CatalogSectionModel).order_by("id asc").all()
+		sections = session.query(CatalogSectionModel)\
+			.order_by(CatalogSectionModel.id.asc()).all()
 		for section in [x.item for x in sections]:
 			item = {
 				'active': False,
