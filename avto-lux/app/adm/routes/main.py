@@ -3,6 +3,7 @@
 import os
 import hashlib
 import time
+import sys
 from app.configparser import config
 from app.utils import get_json_localization
 
@@ -22,16 +23,20 @@ def request_except_handler(fn):
 		self = args[0]
 		try:
 			return fn(*args, **kwargs)
-		except NoArgumentFound as n:
-			print(n)
+		except NoArgumentFound as e:
+			print('adm/request_except_handler(): NoArgumentFound:\n',\
+				e, file=sys.stderr)
 			return self.json_response({
 				'status': 'error',
-				'error_code': 'Too less arguments was send'})
+				'error_code': 'Too less arguments was send'
+			})
 		except Exception as e:
-			print(e)
+			print('adm/request_except_handler(): error:\n',\
+				e, file=sys.stderr)
 			return self.json_response({
 				'status': 'error',
-				'error_code': 'system_fail'})
+				'error_code': 'system_fail'
+			})
 	wrap.__name__ = fn.__name__
 	return wrap
 
@@ -69,10 +74,14 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 				login=self.get_argument('user')
 			).one()
 		except Exception as e:
-			print(e)
+			session.close()
+			print('adm/AuthHandler.post(): user not found:\n',\
+				e, file=sys.stderr)
 			return self.json_response({
 				'status': 'error',
-				'error_code': 'user_not_found'})
+				'error_code': 'user_not_found'
+			})
+		session.close()
 
 		compared = self.compare_password(
 			hpasswd=usr.password,
@@ -106,7 +115,14 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 		login = self.get_argument('login')
 		passwd = self.get_argument('password')
 		is_active = True
-		olds = [x[0] for x in session.query(User.login).all()]
+
+		try:
+			olds = [x[0] for x in session.query(User.login).all()]
+		except Exception as e:
+			session.close()
+			print('adm/CreateUser.post(): cannot get users logins:\n',\
+				e, file=sys.stderr)
+			raise e
 
 		if login == '':
 			return self.json_response({
@@ -123,15 +139,23 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 		except:
 			is_active = False
 
-		print(login, passwd)
 		usr = User(
 			login=login,
 			password=self.create_password(passwd),
 			last_login=datetime.datetime.utcnow(),
 			is_active=is_active
 		)
-		session.add(usr)
-		session.commit()
+
+		try:
+			session.add(usr)
+			session.commit()
+		except Exception as e:
+			session.close()
+			print('adm/CreateUser.post(): cannot add user:\n',\
+				e, file=sys.stderr)
+			raise e
+
+		session.close()
 		return self.json_response({'status': 'success'})
 
 
@@ -147,9 +171,24 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 			self.get_argument('is_active')
 		except:
 			is_active = False
-		usr = session.query(User).filter_by(id=id).one()
 
-		olds = [x[0] for x in session.query(User.login).all()]
+		try:
+			usr = session.query(User).filter_by(id=id).one()
+		except Exception as e:
+			session.close()
+			print('adm/UpdateUser.post(): cannot get user'+\
+				' by #%s id:\n' % str(id),\
+				e, file=sys.stderr)
+			raise e
+
+		try:
+			olds = [x[0] for x in session.query(User.login).all()]
+		except Exception as e:
+			session.close()
+			print('adm/UpdateUser.post(): cannot get users logins:\n',\
+				e, file=sys.stderr)
+			raise e
+
 		if login == '':
 			return self.json_response({
 				'status': 'error',
@@ -165,8 +204,17 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 		if passwrd != '':
 			kwargs.update({'password': self.create_password(passwrd)})
 
-		session.query(User).filter_by(id=id).update(kwargs)
-		session.commit()
+		try:
+			session.query(User).filter_by(id=id).update(kwargs)
+			session.commit()
+		except Exception as e:
+			session.close()
+			print('adm/UpdateUser.post(): cannot update '+\
+				'user #%s data:\n' % str(id),\
+				e, file=sys.stderr)
+			raise e
+
+		session.close()
 		return self.json_response({'status': 'success'})
 
 
@@ -179,12 +227,10 @@ class FileUpload(JsonResponseMixin):
 				'status': 'unauthorized'
 			})
 
-		print(self.request.headers)
 		file_path = config('UPLOAD_FILES_PATH')
 		hashes = []
 		for f in self.request.files.items():
 			_file = f[1][0]
-			print(_file['content_type'])
 
 			_filename = hashlib.sha512(
 				str(time.time()).encode('utf-8')).hexdigest()[0:35]
@@ -194,8 +240,6 @@ class FileUpload(JsonResponseMixin):
 			f.write(_file['body'])
 			f.close()
 			hashes.append({'name': fname})
-
-			print("File: %s was uploaded" % _file['filename'])
 
 		return self.json_response({
 			'status': 'success',
