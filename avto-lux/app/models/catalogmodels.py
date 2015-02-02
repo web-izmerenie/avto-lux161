@@ -76,7 +76,15 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 
 		# get section alias
 		session = Session()
-		s = session.query(CatalogSectionModel.alias).filter_by(id=vals['section_id']).one()
+		try:
+			s = session.query(CatalogSectionModel.alias)\
+				.filter_by(id=vals['section_id']).one()
+		except Exception as e:
+			session.close()
+			print('CatalogItemModel.to_frontend():'+\
+				' cannot find section by "section_id"'+\
+				' for element #%d:\n' % int(vals['id']), e, file=sys.stderr)
+			raise e
 		session.close()
 
 		# main image parse {{{
@@ -89,7 +97,8 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 				raise Exception('Must be an array')
 		except Exception as e:
 			main_image = None
-			print(e, file=sys.stderr)
+			print('CatalogItemModel.to_frontend(): get "main_image" error:\n',\
+				e, file=sys.stderr)
 
 		if main_image and len(main_image) > 0 and 'filename' in main_image[0]:
 			main_image = main_image[0]
@@ -111,7 +120,8 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 				raise Exception('Must be an array')
 		except Exception as e:
 			images = []
-			print(e, file=sys.stderr)
+			print('CatalogItemModel.to_frontend(): get "images" error:\n',\
+				e, file=sys.stderr)
 
 		for item in images:
 			if 'filename' not in item:

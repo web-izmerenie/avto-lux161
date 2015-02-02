@@ -8,6 +8,7 @@ from sqlalchemy import (
 	DateTime
 	)
 import json
+import sys
 from app.configparser import config
 from .dbconnect import Base, dbprefix, engine, Session
 from .pagemodels import IdMixin
@@ -31,17 +32,31 @@ class User(Base, IdMixin):
 		return vars(self).copy()
 
 
+_default_superuser_login = 'admin'
+_default_superuser_password = 'admin'
+
+
 def create_init_user():
+	session = Session()
 	try:
-		session = Session()
-		usr = session.query(User).filter_by(login='admin').one()
-		print("Superuser exists")
+		session.query(User).filter_by(login=_default_superuser_login).one()
+		print(\
+			Exception(\
+				'create_init_user(): Superuser "%s" '+\
+				'already exists' % _default_superuser_login), file=sys.stderr)
 		return False
-	except Exception as e:
+	except:
 		init_models()
-		newusr = User(
-			login='admin',
-			password=AuthMixin().create_password('admin'),
-			is_active=True)
+		try:
+			newusr = User(
+				login=_default_superuser_login,
+				password=AuthMixin().create_password(_default_superuser_password),
+				is_active=True)
+		except Exception as e:
+			session.close()
+			print('create_init_user(): cannot create superuser:\n',\
+				e, file=sys.stderr)
+			raise e
 		session.add(newusr)
 		session.commit()
+	session.close()

@@ -42,7 +42,13 @@ def collect_handlers(*args):
 
 	redirect_routes = []
 	session = Session()
-	_rr = session.query(UrlMapping).all()
+	try:
+		_rr = session.query(UrlMapping).all()
+	except Exception as e:
+		session.close()
+		print('collect_handlers(): cannot get data from UrlMapping model:\n',\
+			e, file=sys.stderr)
+		raise e
 	for redirect in _rr:
 		old_url = quote(redirect.old_url, encoding='utf-8')
 		redirect_routes.append((old_url, UnicodeRedirectHandler, {

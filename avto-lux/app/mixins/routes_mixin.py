@@ -25,9 +25,15 @@ class MenuProviderMixin():
 
 		session = Session()
 
-		static_pages = session.query(StaticPageModel)\
-			.filter_by(is_main_menu_item=True)\
-			.order_by(StaticPageModel.id.asc()).all()
+		try:
+			static_pages = session.query(StaticPageModel)\
+				.filter_by(is_main_menu_item=True)\
+				.order_by(StaticPageModel.id.asc()).all()
+		except Exception as e:
+			session.close()
+			print('MenuProviderMixin.getmenu(): cannot get static pages:\n',\
+				e, file=sys.stderr)
+			raise e
 		for page in [x.item for x in static_pages]:
 			item = {
 				'active': False,
@@ -39,8 +45,14 @@ class MenuProviderMixin():
 					item['active'] = True
 			menu['main'].append(item)
 
-		sections = session.query(CatalogSectionModel)\
-			.order_by(CatalogSectionModel.id.asc()).all()
+		try:
+			sections = session.query(CatalogSectionModel)\
+				.order_by(CatalogSectionModel.id.asc()).all()
+		except Exception as e:
+			session.close()
+			print('MenuProviderMixin.getmenu(): cannot get catalog sections:\n',\
+				e, file=sys.stderr)
+			raise e
 		for section in [x.item for x in sections]:
 			item = {
 				'active': False,
@@ -92,7 +104,14 @@ class NonRelationDataProvider():
 
 	def get_nonrel_handlers(self):
 		session = Session()
-		data = session.query(NonRelationData).all()
+		try:
+			data = session.query(NonRelationData).all()
+		except Exception as e:
+			session.close()
+			print('NonRelationDataProvider.get_nonrel_handlers():'+\
+				' cannot get non-relation data:\n',\
+				e, file=sys.stderr)
+			raise e
 		session.close()
 
 		export = {}
@@ -103,7 +122,8 @@ class NonRelationDataProvider():
 				if type(data_list) is not list and type(data_list) is not tuple:
 					raise Exception('"data_json" must be a json-array')
 			except Exception as e:
-				print(e, file=sys.stderr)
+				print('NonRelationDataProvider.get_nonrel_handlers():'+\
+				' cannot get "data_json":\n', e, file=sys.stderr)
 				data_list = tuple()
 			export[item['code']] = data_list
 		self.nonrel_list = export

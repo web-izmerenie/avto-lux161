@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
 from .base import BaseHandler
 from .decorators import route_except_handler
 from app.models.dbconnect import Session
@@ -18,9 +20,25 @@ class CatalogSectionRoute(BaseHandler, ErrorHandlerMixin):
 		session = Session()
 		if alias.endswith(".html"):
 			alias = alias.replace('.html', '').replace('/', '')
-		page = session.query(CatalogSectionModel).filter_by(alias=alias).one()
-		items = session.query(CatalogItemModel).filter_by(section_id=page.id)\
-			.order_by(CatalogItemModel.id.asc()).all()
+		try:
+			page = session.query(CatalogSectionModel)\
+				.filter_by(alias=alias).one()
+		except Exception as e:
+			session.close()
+			print('CatalogSectionRoute.get(): cannot get catalog section'+\
+				' by "%s" code:\n' % str(alias),\
+				e, file=sys.stderr)
+			raise e
+		try:
+			items = session.query(CatalogItemModel)\
+				.filter_by(section_id=page.id)\
+				.order_by(CatalogItemModel.id.asc()).all()
+		except Exception as e:
+			session.close()
+			print('CatalogSectionRoute.get(): cannot get catalog items'+\
+				' by section #%d:\n' % int(page.id),\
+				e, file=sys.stderr)
+			raise e
 		session.close()
 		menu = self.getmenu(catalog_section_alias=alias)
 		data = page.to_frontend
@@ -43,7 +61,14 @@ class CatalogItemRoute(BaseHandler, ErrorHandlerMixin):
 		session = Session()
 		if item.endswith(".html"):
 			item = item.replace('.html', '').replace('/', '')
-		page = session.query(CatalogItemModel).filter_by(alias=item).one()
+		try:
+			page = session.query(CatalogItemModel).filter_by(alias=item).one()
+		except Exception as e:
+			session.close()
+			print('CatalogItemRoute.get(): cannot get catalog item'+\
+				' by "%s" code:\n' % str(item),\
+				e, file=sys.stderr)
+			raise e
 		session.close()
 		menu = self.getmenu(
 			catalog_section_alias=category,

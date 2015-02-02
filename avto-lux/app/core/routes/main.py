@@ -39,7 +39,12 @@ class MainRoute(BaseHandler, ErrorHandlerMixin):
 	@route_except_handler
 	def get(self):
 		session = Session()
-		page = session.query(StaticPageModel).filter_by(alias='/').one()
+		try:
+			page = session.query(StaticPageModel).filter_by(alias='/').one()
+		except Exception as e:
+			session.close()
+			print('MainRoute.get(): cannot get main page:\n', e, file=sys.stderr)
+			raise e
 		session.close()
 		menu = self.getmenu(page_alias='/')
 		data = page.to_frontend
@@ -60,7 +65,13 @@ class StaticPageRoute(BaseHandler, ErrorHandlerMixin):
 		if not alias.endswith(".html"):
 			alias = '/' + alias + '.html'
 		session = Session()
-		page = session.query(StaticPageModel).filter_by(alias=alias).one()
+		try:
+			page = session.query(StaticPageModel).filter_by(alias=alias).one()
+		except Exception as e:
+			session.close()
+			print('StaticPageRoute.get(): cannot get static page'+\
+				' by "%s" alias:\n' % str(alias), e, file=sys.stderr)
+			raise e
 		session.close()
 		menu = self.getmenu(page_alias=alias)
 		data = page.to_frontend
@@ -116,7 +127,8 @@ class FormsHandler(JsonResponseMixin):
 			try:
 				fn(args)
 			except Exception as e:
-				print(e, file=sys.stderr)
+				print('FormsHandler.post(): post form data error:\n',\
+					e, file=sys.stderr)
 				self.set_status(500)
 				return self.json_response({'status': 'system_fail'})\
 					if is_ajax\
@@ -126,7 +138,7 @@ class FormsHandler(JsonResponseMixin):
 				return self.json_response({'status': 'success'})
 
 			kwrgs = self.set_kwargs(
-				success_msg_list=['lol', 'you', 'are', 'nigga'],
+				success_msg_list=['success'], # TODO :: messages!
 				title=p_title)
 			return self.render('client/content-page.jade', **kwargs)
 
@@ -170,8 +182,14 @@ class FormsHandler(JsonResponseMixin):
 			date = datetime.utcnow()
 		)
 		session = Session()
-		session.add(call)
-		session.commit()
+		try:
+			session.add(call)
+			session.commit()
+		except Exception as e:
+			session.close()
+			print('FormsHandler.save_call(): cannot save call to DB\n',\
+				e, file=sys.stderr)
+			raise e
 		session.close()
 
 		send_mail(
@@ -185,7 +203,13 @@ class FormsHandler(JsonResponseMixin):
 	def save_order(self, d):
 		dt = d['date'].split('.')
 		session = Session()
-		item = session.query(CatalogItemModel).filter_by(id=d['id']).one()
+		try:
+			item = session.query(CatalogItemModel).filter_by(id=d['id']).one()
+		except Exception as e:
+			session.close()
+			print('FormsHandler.save_order(): cannot get catalog item by id\n',\
+				e, file=sys.stderr)
+			raise e
 		session.close()
 		full_date = datetime.combine(
 				date(int(dt[2]), int(dt[1]), int(dt[0])),
@@ -198,8 +222,14 @@ class FormsHandler(JsonResponseMixin):
 		)
 
 		session = Session()
-		session.add(order)
-		session.commit()
+		try:
+			session.add(order)
+			session.commit()
+		except Exception as e:
+			session.close()
+			print('FormsHandler.save_order(): cannot save order to DB\n',\
+				e, file=sys.stderr)
+			raise e
 		session.close()
 		send_mail(
 			msg='<h1>Заказ "%s"</h1>' % item.title +

@@ -8,26 +8,32 @@ from app.configparser import config
 from app.models.dbconnect import Session
 from app.models.pagemodels import StaticPageModel
 from app.models.catalogmodels import (CatalogSectionModel, CatalogItemModel)
+from .decorators import route_except_handler
 
 
 class SiteMapRoute(BaseHandler):
+	@route_except_handler
 	def get(self):
 		data = {'is_debug': config('DEBUG')}
 		urls = []
 
 		session = Session()
 
-		pages = session.query(StaticPageModel)\
-			.filter_by(is_active=True)\
-			.order_by(StaticPageModel.id.asc()).all()
-
-		sections = session.query(CatalogSectionModel)\
-			.filter_by(is_active=True)\
-			.order_by(CatalogSectionModel.id.asc()).all()
-
-		items = session.query(CatalogItemModel)\
-			.filter_by(is_active=True)\
-			.order_by(CatalogItemModel.id.asc()).all()
+		try:
+			pages = session.query(StaticPageModel)\
+				.filter_by(is_active=True)\
+				.order_by(StaticPageModel.id.asc()).all()
+			sections = session.query(CatalogSectionModel)\
+				.filter_by(is_active=True)\
+				.order_by(CatalogSectionModel.id.asc()).all()
+			items = session.query(CatalogItemModel)\
+				.filter_by(is_active=True)\
+				.order_by(CatalogItemModel.id.asc()).all()
+		except Exception as e:
+			session.close()
+			print('SiteMapRoute.get(): cannot get data from DB:\n',\
+				e, file=sys.stderr)
+			raise e
 
 		session.close()
 
