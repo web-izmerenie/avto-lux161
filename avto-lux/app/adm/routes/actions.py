@@ -39,26 +39,26 @@ def query_except_handler(fn):
 			self.set_status(404)
 			return self.json_response({
 				'status': 'data_not_found'
-				})
+			})
 		except Exception as e:
 			if e.__class__.__name__ == 'IntegrityError':
-				print(e, file=sys.stderr)
+				print('adm/query_except_handler(): IntegrityError:\n', e, file=sys.stderr)
 				return self.json_response({
 					'status': 'error',
 					'error_code': 'unique_key_exist',
 					})
 			elif e.__class__.__name__ == 'DataError':
-				print(e, file=sys.stderr)
+				print('adm/query_except_handler(): DataError:\n', e, file=sys.stderr)
 				return self.json_response({
 					'status': 'error',
 					'error_code': 'incorrect_data',
 					})
-			print(e, file=sys.stderr)
+			print('adm/query_except_handler(): error:\n', e, file=sys.stderr)
 			self.set_status(500)
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'system_fail'
-				})
+			})
 	wrap.__name__ = fn.__name__
 	return wrap
 
@@ -107,30 +107,65 @@ class AdminMainHandler(JsonResponseMixin):
 	@query_except_handler
 	def get_pages_list(self):
 		session = Session()
-		data = session.query(StaticPageModel).all()
+
+		try:
+			data = session.query(StaticPageModel).all()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.get_pages_list(): '+\
+				'cannot get static pages:\n',\
+				e, file=sys.stderr)
+			raise e
+
+		session.close()
 		return self.json_response({
 			'status': 'success',
 			'data_list': [ x.static_list for x in data ]
-			})
+		})
 
 	## TODO : Optimize and using join ¯\(°_o)/¯
 	@query_except_handler
 	def get_catalog_sections(self):
 		session = Session()
-		cats = session.query(CatalogSectionModel.id).all()
+
+		try:
+			cats = session.query(CatalogSectionModel.id).all()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.get_catalog_sections(): '+\
+				'cannot get catalog sections:\n',\
+				e, file=sys.stderr)
+			raise e
+
 		counts = []
 		for i in cats:
-			count = session.query(
-				CatalogItemModel.id).filter_by(
-					section_id=i[0]
-				).all()
+			try:
+				count = session.query(
+					CatalogItemModel.id).filter_by(
+						section_id=i[0]
+					).all()
+			except Exception as e:
+				session.close()
+				print('adm/AdminMainHandler.get_catalog_sections(): '+\
+					'cannot get catalog items by section id #%s:\n' % str(i[0]),\
+					e, file=sys.stderr)
+				raise e
 			counts.append((len(count),))
 
-		data = session.query(
-			CatalogSectionModel.title,
-			CatalogSectionModel.id,
-			CatalogSectionModel.is_active
+		try:
+			data = session.query(
+				CatalogSectionModel.title,
+				CatalogSectionModel.id,
+				CatalogSectionModel.is_active
 			).all()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.get_catalog_sections(): '+\
+				'cannot get catalog sections:\n',\
+				e, file=sys.stderr)
+			raise e
+
+		session.close()
 		return self.json_response({
 			'status': 'success',
 			'data_list': [{
@@ -143,16 +178,33 @@ class AdminMainHandler(JsonResponseMixin):
 
 	@query_except_handler
 	def get_catalog_elements(self, id=None):
-		session=Session()
-		data = session.query(
-			CatalogItemModel.id,
-			CatalogItemModel.title,
-			CatalogItemModel.is_active
-			).filter_by(section_id=id).all()
+		session = Session()
 
-		title = session.query(
-			CatalogSectionModel.title
+		try:
+			data = session.query(
+				CatalogItemModel.id,
+				CatalogItemModel.title,
+				CatalogItemModel.is_active
+			).filter_by(section_id=id).all()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.get_catalog_elements(): '+\
+				'cannot get catalog items by section id #%s:\n' % str(id),\
+				e, file=sys.stderr)
+			raise e
+
+		try:
+			title = session.query(
+				CatalogSectionModel.title
 			).filter_by(id=id).one()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.get_catalog_elements(): '+\
+				'cannot get catalog section by id #%s:\n' % str(id),\
+				e, file=sys.stderr)
+			raise e
+
+		session.close()
 
 		return self.json_response({
 			'status': 'success',
@@ -160,24 +212,45 @@ class AdminMainHandler(JsonResponseMixin):
 			'data_list': [{
 				'title': x.title,
 				'id': x.id
-				} for x in data ]
-			})
+			} for x in data]
+		})
 
 	@query_except_handler
 	def get_redirect_list(self):
 		session = Session()
-		data = session.query(UrlMapping).all()
+
+		try:
+			data = session.query(UrlMapping).all()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.get_redirect_list(): '+\
+				'cannot get data from UrlMapping model:\n',\
+				e, file=sys.stderr)
+			raise e
+
 		session.close()
+
 		return self.json_response({
-			'status':'success',
+			'status': 'success',
 			'data_list': [x.item for x in data]
-			})
+		})
 
 
 	@query_except_handler
 	def get_accounts_list(self):
 		session = Session()
-		data = session.query(User).all()
+
+		try:
+			data = session.query(User).all()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.get_accounts_list(): '+\
+				'cannot get users:\n',\
+				e, file=sys.stderr)
+			raise e
+
+		session.close()
+
 		return self.json_response({
 			'status': 'success',
 			'data_list': [{
@@ -191,11 +264,22 @@ class AdminMainHandler(JsonResponseMixin):
 	@query_except_handler
 	def get_static_page(self, id=None):
 		session = Session()
-		data = session.query(StaticPageModel).filter_by(id=id).one()
+
+		try:
+			data = session.query(StaticPageModel).filter_by(id=id).one()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.get_static_page(): '+\
+				'cannot get static page by id #%s:\n' % str(id),\
+				e, file=sys.stderr)
+			raise e
+
+		session.close()
+
 		return self.json_response({
 			'status': 'success',
 			'data': data.item
-			})
+		})
 
 
 	@query_except_handler
@@ -216,10 +300,19 @@ class AdminMainHandler(JsonResponseMixin):
 			'catalog_element': CatalogItemModel,
 			'data': NonRelationData
 		}
+
 		session = Session()
 
 		page = section_map[section](**kwargs)
-		session.add(page)
+
+		try:
+			session.add(page)
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.create(): '+\
+				'cannot create page by "%s" section:\n' % str(section),\
+				e, file=sys.stderr)
+			raise e
 
 		if section == 'redirect':
 			permanent = (lambda: True if kwargs['status'] == '301' else False)()
@@ -235,7 +328,16 @@ class AdminMainHandler(JsonResponseMixin):
 						},
 					name=None)
 			]
-		session.commit()
+
+		try:
+			session.commit()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.create(): '+\
+				'cannot commit create page by "%s" section:\n' % str(section),\
+				e, file=sys.stderr)
+			raise e
+
 		session.close()
 
 		return self.json_response({'status': 'success'})
@@ -271,9 +373,17 @@ class AdminMainHandler(JsonResponseMixin):
 				kwargs[item['name']] = True
 
 		session = Session()
-		data = session.query(
-			section_map[section]
-				).filter_by(id=id)
+
+		try:
+			data = session.query(
+				section_map[section]
+			).filter_by(id=id)
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.update_page(): '+\
+				'cannot update page by "%s" section:\n' % str(section),\
+				e, file=sys.stderr)
+			raise e
 
 		if section == 'redirect':
 			permanent = (
@@ -296,12 +406,23 @@ class AdminMainHandler(JsonResponseMixin):
 				except KeyError:
 					continue
 		data.update(kwargs)
-		session.commit()
+
+		try:
+			session.commit()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.update_page(): '+\
+				'cannot commit update page by "%s" section:\n' % str(section),\
+				e, file=sys.stderr)
+			raise e
+
+		session.close()
+
 		return self.json_response({'status': 'success'})
 
 
 	@query_except_handler
-	def delete_smth(self, model=None, id=None):
+	def delete_smth(self, model=None, id=None): # smth - something
 		session = Session()
 		models = {
 			'pages': StaticPageModel,
@@ -310,16 +431,23 @@ class AdminMainHandler(JsonResponseMixin):
 			'catalog_element': CatalogItemModel,
 			'accounts': User
 		}
+
 		try:
 			session.query(
 				models[model]
 				).filter_by(id=id).delete(synchronize_session=True)
 			session.commit()
-		except:
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.delete_smth(): '+\
+				'cannot delete page by id #%s:\n' % str(id),\
+				e, file=sys.stderr)
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'system_fail'
-				})
+			})
+
+		session.close()
 
 		return self.json_response({'status': 'success'})
 
@@ -327,17 +455,27 @@ class AdminMainHandler(JsonResponseMixin):
 	@query_except_handler
 	def get_data_list(self):
 		session = Session()
-		data = session.query(NonRelationData).all()
+
+		try:
+			data = session.query(NonRelationData).all()
+		except Exception as e:
+			session.close()
+			print('adm/AdminMainHandler.get_data_list(): '+\
+				'cannot get non-relation data elements:\n',\
+				e, file=sys.stderr)
+			raise e
+
 		session.close()
 		return self.json_response({
 			'status': 'success',
 			'data_list': [x.item for x in data]
-			})
+		})
 
 
 	@query_except_handler
 	def get_fields(self, model=None, edit=False, id=None):
 		session = Session()
+
 		models = {
 			'pages': StaticPageModel,
 			'redirect': UrlMapping,
@@ -349,8 +487,9 @@ class AdminMainHandler(JsonResponseMixin):
 
 		fields = db_inspector.get_columns(
 			models[model].__tablename__
-			)
+		)
 
+		# TODO :: refactoring
 		types_map = {
 			'BOOLEAN': 'checkbox',
 			'TEXT': 'html',
@@ -382,16 +521,29 @@ class AdminMainHandler(JsonResponseMixin):
 
 		values = None
 		if edit and id is not None:
-			data = session.query(
-				models[model]).filter_by(id=id).one()
+			try:
+				data = session.query(
+					models[model]).filter_by(id=id).one()
+			except Exception as e:
+				session.close()
+				print('adm/AdminMainHandler.get_fields(): '+\
+					'cannot get fields by "%s" model and id #%s:\n' % (model, id),\
+					e, file=sys.stderr)
+				raise e
 			values = data.item
 
 			if model == 'catalog_element':
-				print("SID:: %s" % data.section_id)
 				values.update({'section_id': data.section_id})
 
 		if model == 'catalog_element':
-			sections = session.query(CatalogSectionModel).all()
+			try:
+				sections = session.query(CatalogSectionModel).all()
+			except Exception as e:
+				session.close()
+				print('adm/AdminMainHandler.get_fields(): '+\
+					'cannot get catalog sections list:\n',\
+					e, file=sys.stderr)
+				raise e
 
 			vidgets.append({
 				'name': 'section_id',
@@ -401,6 +553,8 @@ class AdminMainHandler(JsonResponseMixin):
 					'title': x.title,
 					'value': x.id} for x in sections]
 				})
+
+		session.close()
 
 		try:
 			del values['create_date']
@@ -414,4 +568,4 @@ class AdminMainHandler(JsonResponseMixin):
 			'status': 'success',
 			'fields_list': vidgets,
 			'values_list': values
-			})
+		})

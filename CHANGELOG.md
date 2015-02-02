@@ -4,7 +4,8 @@ Changelog
 r6
 ---------
 
-- Added dynamic sitemap.xml.
+- Added dynamic sitemap.xml;
+- Refactoring for zombie db sessions, catch exceptions and close sessions.
 
 r5
 ---------
