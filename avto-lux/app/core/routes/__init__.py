@@ -25,13 +25,11 @@ routes = [
 	('/api/forms/', FormsHandler),
 
 	('/catalog/(.*?)/(.*?)\.html', CatalogItemRoute),
-	('/catalog/(.*?)/(.*?)', CatalogItemRoute),
-	('/catalog/(.*?)', CatalogSectionRoute),
 	('/catalog/(.*?)\.html', CatalogSectionRoute),
 
 	('/robots\.txt', RobotsTxtRoute),
 	('/sitemap.xml', SiteMapRoute),
 
-	('/(.*?)\.html', StaticPageRoute),
-	('/(.*?)', StaticPageRoute)
+	('/(.*?)(\.html)', StaticPageRoute),
+	('/(.*?)()', StaticPageRoute)
 ]

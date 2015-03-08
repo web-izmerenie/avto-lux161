@@ -61,10 +61,9 @@ class MainRoute(BaseHandler, ErrorHandlerMixin):
 
 class StaticPageRoute(BaseHandler, ErrorHandlerMixin):
 	@route_except_handler
-	def get(self, alias):
-		if not alias.endswith(".html"):
-			alias = '/' + alias + '.html'
+	def get(self, alias, suffix):
 		session = Session()
+		alias = '/' + alias + suffix
 		try:
 			page = session.query(StaticPageModel).filter_by(alias=alias).one()
 		except Exception as e:
