@@ -31,6 +31,7 @@ How to deploy
   3. `PRODUCTION_SERVER` — if you going to start production server.<br>
     <b>WARNING!:</b> don't set instances more than <b>1</b>,
     cause it isn't supported yet, need some debug for errors;
+  4. `DEBUG` — set to <b>1</b> if you wan't more debug info.
 
 5. Copy `./files/uploaded/` dir from backup archive to `./files/uploaded/`.
 
