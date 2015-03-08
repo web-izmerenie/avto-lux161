@@ -73,3 +73,6 @@ class SiteMapRoute(BaseHandler):
 		data.update({'urls': tuple(urls)})
 		self.set_header('Content-Type', 'text/xml; charset="utf-8"')
 		return self.render('client/sitemap.jade', **data)
+
+	def head(self):
+		return self.get()

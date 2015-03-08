@@ -12,3 +12,6 @@ class RobotsTxtRoute(BaseHandler):
 		self.set_header('Content-Type', 'text/plain; charset="utf-8"')
 		data.update(self.get_nonrel_handlers())
 		return self.render('client/robots.jade', **data)
+
+	def head(self):
+		return self.get()

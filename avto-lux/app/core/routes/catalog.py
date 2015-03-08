@@ -54,6 +54,9 @@ class CatalogSectionRoute(BaseHandler, ErrorHandlerMixin):
 		data.update(self.get_helpers())
 		return self.render('client/catalog-sections.jade', **data)
 
+	def head(self, alias):
+		return self.get(alias)
+
 
 class CatalogItemRoute(BaseHandler, ErrorHandlerMixin):
 	@route_except_handler
@@ -85,3 +88,6 @@ class CatalogItemRoute(BaseHandler, ErrorHandlerMixin):
 		data.update(self.get_nonrel_handlers())
 		data.update(self.get_helpers())
 		return self.render('client/catalog-detail.jade', **data)
+
+	def head(self, category, item):
+		return self.get(category, item)

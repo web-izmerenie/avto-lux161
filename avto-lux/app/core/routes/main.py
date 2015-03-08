@@ -58,6 +58,9 @@ class MainRoute(BaseHandler, ErrorHandlerMixin):
 		data.update(self.get_helpers())
 		return self.render('client/content-page.jade', **data)
 
+	def head(self):
+		return self.get()
+
 
 class StaticPageRoute(BaseHandler, ErrorHandlerMixin):
 	@route_except_handler
@@ -83,6 +86,9 @@ class StaticPageRoute(BaseHandler, ErrorHandlerMixin):
 		data.update(self.get_nonrel_handlers())
 		data.update(self.get_helpers())
 		return self.render('client/content-page.jade', **data)
+
+	def head(self, alias, suffix):
+		return self.get(alias, suffix)
 
 
 class FormsHandler(JsonResponseMixin):
