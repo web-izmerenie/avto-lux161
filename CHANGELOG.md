@@ -1,6 +1,14 @@
 Changelog
 =========
 
+r7
+---------
+
+- HEAD requests handlers;
+- Fixed routes for '.html' pages suffix (404 status for addresses without '.html' suffix);
+- `robots.txt` editing from admin control panel;
+- Removed <meta name="author">.
+
 r6
 ---------
 
