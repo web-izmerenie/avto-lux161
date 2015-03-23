@@ -43,6 +43,9 @@
           "add": "Добавление страницы",
           "edit": "Редактирование страницы"
         },
+        "is_active": "Активна",
+        "is_active_yes": "Да",
+        "is_active_no": "Нет",
         "id": "ID",
         "name": "Название",
         "url": "URL",
@@ -88,6 +91,9 @@
         "refresh": "Обновить"
       },
       "catalog_element": {
+        "is_active": "Активен",
+        "is_active_yes": "Да",
+        "is_active_no": "Нет",
         "title": {
           "add": "Добавление элемента",
           "edit": "Редактирование элемента"
@@ -131,6 +137,9 @@
         }
       },
       "catalog_section": {
+        "is_active": "Активен",
+        "is_active_yes": "Да",
+        "is_active_no": "Нет",
         "title": {
           "add": "Добавление раздела",
           "edit": "Редактирование раздела"

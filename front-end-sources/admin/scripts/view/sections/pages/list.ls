@@ -18,6 +18,8 @@ class ItemView extends TableItemView
 class CompositeListView extends TableListView
 	template: 'pages/list'
 	child-view: ItemView
+	child-view-options: (model, index)~>
+		model.set \local , @model.get \local
 
 class PagesListView extends ListView
 	initialize: !->
@@ -33,12 +35,12 @@ class PagesListView extends ListView
 
 		new-data-list = []
 		for item in data-arr
-			new-data-list.push {
+			new-data-list.push do
+				is_active: item.is_active
 				id: item.id
-				ref: '#panel/pages/edit_' + item.id + '.html'
+				ref: "\#panel/pages/edit_#{item.id}.html"
 				name: item.title
 				url: item.alias
-			}
 
 		@table-list.reset new-data-list
 		cb! if cb?

@@ -169,6 +169,7 @@ class AdminMainHandler(JsonResponseMixin):
 		return self.json_response({
 			'status': 'success',
 			'data_list': [{
+				'is_active': x[1][2] and True or False,
 				'id': x[1][1],
 				'title': x[1][0],
 				'count': x[0][0]
@@ -210,6 +211,7 @@ class AdminMainHandler(JsonResponseMixin):
 			'status': 'success',
 			'section_title': title[0],
 			'data_list': [{
+				'is_active': x.is_active and True or False,
 				'title': x.title,
 				'id': x.id
 			} for x in data]

@@ -22,6 +22,8 @@ class ItemView extends TableItemView
 class CompositeListView extends TableListView
 	template: 'catalog/elements-list'
 	child-view: ItemView
+	child-view-options: (model, index)~>
+		model.set \local , @model.get \local
 
 class PageView extends M.LayoutView
 	model: new BasicModel!
@@ -70,15 +72,15 @@ class CatalogElementsListView extends ListView
 
 		new-data-list = []
 		for item in data-arr
-			ref = '#panel/catalog/section_'
-			ref += @get-option \section-id
-			ref += '/edit_' + item.id + '.html'
-			new-data-list.push {
+			new-data-list.push do
+				is_active: item.is_active
 				id: item.id
-				ref: ref
+				ref: "
+					\#panel/catalog/section_#{@get-option \section-id}
+					/edit_#{item.id}.html
+				"
 				name: item.title
 				count: item.count
-			}
 
 		@table-list.reset new-data-list
 		@header-view.model.set \section_name, json.section_title

@@ -18,6 +18,8 @@ class ItemView extends TableItemView
 class CompositeListView extends TableListView
 	template: 'catalog/sections-list'
 	child-view: ItemView
+	child-view-options: (model, index)~>
+		model.set \local , @model.get \local
 
 class CatalogSectionsListView extends ListView
 	initialize: !->
@@ -33,12 +35,12 @@ class CatalogSectionsListView extends ListView
 
 		new-data-list = []
 		for item in data-arr
-			new-data-list.push {
+			new-data-list.push do
+				is_active: item.is_active
 				id: item.id
-				ref: '#panel/catalog/section_' + item.id + '/'
+				ref: "\#panel/catalog/section_#{item.id}/"
 				name: item.title
 				count: item.count
-			}
 
 		@table-list.reset new-data-list
 		cb! if cb?

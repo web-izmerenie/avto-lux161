@@ -22,6 +22,7 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	@property
 	def static_list(self):
 		return {
+			'is_active': self.is_active and True or False,
 			'title': self.title,
 			'id': self.id,
 			'alias': self.alias
