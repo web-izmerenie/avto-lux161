@@ -27,7 +27,7 @@ class MenuProviderMixin():
 
 		try:
 			static_pages = session.query(StaticPageModel)\
-				.filter_by(is_main_menu_item=True)\
+				.filter_by(is_main_menu_item=True, is_active=True)\
 				.order_by(StaticPageModel.id.asc()).all()
 		except Exception as e:
 			session.close()
@@ -47,6 +47,7 @@ class MenuProviderMixin():
 
 		try:
 			sections = session.query(CatalogSectionModel)\
+				.filter_by(is_active=True)\
 				.order_by(CatalogSectionModel.id.asc()).all()
 		except Exception as e:
 			session.close()

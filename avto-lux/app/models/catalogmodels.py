@@ -38,7 +38,7 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 	def to_frontend(self):
 		vals = vars(self).copy()
 
-		deprecated = ['_sa_instance_state', 'id', 'create_date', 'files', 'last_change', 'alias']
+		deprecated = ['_sa_instance_state', 'create_date', 'files', 'last_change', 'alias']
 		for item in deprecated:
 			if item in vals:
 				del vals[item]

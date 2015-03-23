@@ -40,7 +40,10 @@ class MainRoute(BaseHandler, ErrorHandlerMixin):
 	def get(self):
 		session = Session()
 		try:
-			page = session.query(StaticPageModel).filter_by(alias='/').one()
+			page = session\
+				.query(StaticPageModel)\
+				.filter_by(alias='/', is_active=True)\
+				.one()
 		except Exception as e:
 			session.close()
 			print('MainRoute.get(): cannot get main page:\n', e, file=sys.stderr)
@@ -68,10 +71,13 @@ class StaticPageRoute(BaseHandler, ErrorHandlerMixin):
 		session = Session()
 		alias = '/' + alias + suffix
 		try:
-			page = session.query(StaticPageModel).filter_by(alias=alias).one()
+			page = session\
+				.query(StaticPageModel)\
+				.filter_by(alias=alias, is_active=True)\
+				.one()
 		except Exception as e:
 			session.close()
-			print('StaticPageRoute.get(): cannot get static page'+\
+			print('StaticPageRoute.get(): cannot get static page or page is not active'+\
 				' by "%s" alias:\n' % str(alias), e, file=sys.stderr)
 			raise e
 		session.close()
