@@ -12,7 +12,8 @@ block page-specific
 					each item in items
 						li
 							a(href=item['detail_link'])
-								if item['main_image']
-									img(alt='Фото ' + item['title'],
-										src=item['main_image']['filename'])
+								.picture
+									if item['main_image']
+										img(alt='Фото ' + item['title'],
+											src=item['main_image']['filename'])
 								span= item['title']

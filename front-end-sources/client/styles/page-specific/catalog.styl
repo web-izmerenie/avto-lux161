@@ -9,6 +9,7 @@
 
 .catalog-page
 	$w = 284px
+	$list-img-h = 152px
 	$h = 174px
 	$margin-X = 43px
 	$sections-p = 31px
@@ -66,10 +67,20 @@
 					&:hover > span
 						border-bottom-color $link-hover-text-color
 
-					img
+					.picture
 						display block
-						size $w auto
+						size $w $list-img-h
+						overflow hidden
+						position relative
 						border-radius 10px
+
+						img
+							display block
+							size auto
+							min-width 100%
+							min-height 100%
+							relative top 50%
+							transform translateY(-50%)
 
 	&.detail
 		margin $content-margin-Y ($margin-X - $detail-p) $content-margin-Y $margin-X
@@ -95,6 +106,7 @@
 					margin-bottom $first-block-bottom
 					margin-right 45px
 					border-radius 10px
+					size 468px auto
 
 				.description
 					display block
