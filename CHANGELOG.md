@@ -4,7 +4,7 @@ Changelog
 r9
 ---------
 
-- Added field "page_seo_text" for catalog section model
+- Added field "page_seo_text" for catalog section model.<br>
   <strong>WARNING!</strong> Required migration
   [migration_r8_to_r9.sql](avto-lux/migrations/migration_r8_to_r9.sql);
 - Some refactoring.
