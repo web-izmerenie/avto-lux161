@@ -25,14 +25,14 @@ class CatalogSectionsListView extends ListView
 	initialize: !->
 		ListView.prototype.initialize ...
 		@init-table-list CompositeListView
-
+	
 	on-show: !->
 		ListView.prototype.on-show ...
 		@update-list !~> @get-region \main .show @table-view
-
+	
 	update-list: (cb)!->
 		(data-arr)<~! @get-list { action: \get_catalog_sections }
-
+		
 		new-data-list = []
 		for item in data-arr
 			new-data-list.push do
@@ -41,7 +41,7 @@ class CatalogSectionsListView extends ListView
 				ref: "\#panel/catalog/section_#{item.id}/"
 				name: item.title
 				count: item.count
-
+		
 		@table-list.reset new-data-list
 		cb! if cb?
 

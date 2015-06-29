@@ -21,12 +21,12 @@ class UnicodeRedirectHandler(RequestHandler):
 	def initialize(self, url, status=302):
 		self._url = url
 		self._status = status
-
+	
 	def get(self):
 		if self._headers_written:
 			raise Exception("Cannot redirect after headers have been written")
 		assert isinstance(self._status, int) and 300 <= self._status <= 399
-
+		
 		self.set_status(self._status)
 		self.set_header('Location', self._url)
 		self.finish()
@@ -39,7 +39,7 @@ def collect_handlers(*args):
 	duplicated = {x for x in routes if routes.count(x) > 1}
 	if len(duplicated) > 0:
 		raise CollectHandlersException("Duplicate routes! {0}".format(duplicated))
-
+	
 	redirect_routes = []
 	session = Session()
 	try:
@@ -68,7 +68,7 @@ def get_json_localization(side):
 	pathc = config('LOCALIZATION')['SOURCES']
 	if side is None and not pathc[side]:
 		raise Exception("Incorrect localization source")
-
+	
 	f = open(os.path.join(os.getcwd(), pathc[side]), 'r')
 	jn = json.loads(''.join([line for line in f]))
 	f.close()
@@ -81,7 +81,7 @@ def send_mail(msg=None, theme=None):
 	to = mailc['MAIN_RECIPIENT']
 	user = mailc['USER']
 	pwd = mailc['PASS']
-
+	
 	smtpserver = smtplib.SMTP(
 		mailc['SMTP_PROVIDER']['HOST'], mailc['SMTP_PROVIDER']['PORT'])
 	smtpserver.ehlo()

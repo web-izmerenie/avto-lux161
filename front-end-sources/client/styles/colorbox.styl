@@ -23,7 +23,7 @@
 #cboxLoadingOverlay, #cboxLoadingGraphic
 	absolute left 0 top 0
 	size 100%
-
+	
 	&:before
 		$s = 100px
 		pseudo-block('Loading...')
@@ -40,7 +40,7 @@
 		font-metrics 12px 18px
 		font-weight bold
 		padding-top 40px
-
+		
 		html[lang=ru] &
 			content 'Загрузка...'
 
@@ -70,7 +70,7 @@
 #cboxPrevious, #cboxNext, #cboxClose
 	$s = 40px
 	$b = 4px
-
+	
 	size $s
 	background linear-gradient(top, white, #ccc)
 	border-radius ($s/2)
@@ -82,10 +82,10 @@
 	z-index 100
 	opacity 1
 	transition opacity 0.5s linear
-
+	
 	&:hover
 		opacity 1
-
+	
 	&:after
 		pseudo-block()
 		size $s
@@ -102,7 +102,7 @@ $cbox-list-but-X = -15px
 #cboxPrevious
 	absolute left $cbox-list-but-X top 50%
 	z-index 1
-
+	
 	&:after
 		bg-img('gallery/left-arrow.svg')
 		background-position 40% 50%
@@ -110,20 +110,20 @@ $cbox-list-but-X = -15px
 #cboxNext
 	absolute right $cbox-list-but-X top 50%
 	z-index 2
-
+	
 	&:after
 		bg-img('gallery/right-arrow.svg')
 		background-position 55% 50%
 
 #cboxClose
 	$s = 24px
-
+	
 	size $s
 	border-radius ($s/2)
 	opacity 1
 	absolute left 100% top 0
 	margin-left (-($s/2))
-
+	
 	&:after
 		size $s
 		border-radius ($s/2)

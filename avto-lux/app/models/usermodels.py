@@ -18,15 +18,15 @@ from app.mixins import AuthMixin
 
 class User(Base, IdMixin):
 	__tablename__ = dbprefix + 'users'
-
+	
 	login = Column(String(4096))
 	password = Column(String(5000))
 	last_login = Column(DateTime(timezone=False))
 	is_active = Column(Boolean)
-
+	
 	def __repr__(self):
 		return self.login
-
+	
 	@property
 	def item(self):
 		return vars(self).copy()

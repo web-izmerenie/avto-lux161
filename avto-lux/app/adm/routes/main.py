@@ -43,7 +43,7 @@ def request_except_handler(fn):
 
 class AdminMainRoute(JsonResponseMixin):
 	def get(self, *args):
-
+		
 		lang = config('LOCALIZATION')['LANG']
 		localization = get_json_localization('ADMIN')[lang]
 		kwrgs = {
@@ -58,7 +58,7 @@ class AdminMainRoute(JsonResponseMixin):
 					else 0)()
 		}
 		return self.render('admin/layout.jade', **kwrgs)
-
+	
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
 
@@ -82,11 +82,11 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 				'error_code': 'user_not_found'
 			})
 		session.close()
-
+		
 		compared = self.compare_password(
 			hpasswd=usr.password,
 			password=self.get_argument('pass'))
-
+		
 		if compared and usr.is_active:
 			self.set_secure_cookie('user', usr.login)
 			return self.json_response({'status': 'success'})
@@ -98,7 +98,7 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 		return self.json_response({
 			'status': 'error',
 			'error_code': 'incorrect_password'})
-
+	
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
 
@@ -115,7 +115,7 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 		login = self.get_argument('login')
 		passwd = self.get_argument('password')
 		is_active = True
-
+		
 		try:
 			olds = [x[0] for x in session.query(User.login).all()]
 		except Exception as e:
@@ -123,7 +123,7 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 			print('adm/CreateUser.post(): cannot get users logins:\n',\
 				e, file=sys.stderr)
 			raise e
-
+		
 		if login == '':
 			return self.json_response({
 				'status': 'error',
@@ -138,14 +138,14 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 			self.get_argument('is_active')
 		except:
 			is_active = False
-
+		
 		usr = User(
 			login=login,
 			password=self.create_password(passwd),
 			last_login=datetime.datetime.utcnow(),
 			is_active=is_active
 		)
-
+		
 		try:
 			session.add(usr)
 			session.commit()
@@ -154,7 +154,7 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 			print('adm/CreateUser.post(): cannot add user:\n',\
 				e, file=sys.stderr)
 			raise e
-
+		
 		session.close()
 		return self.json_response({'status': 'success'})
 
@@ -171,7 +171,7 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 			self.get_argument('is_active')
 		except:
 			is_active = False
-
+		
 		try:
 			usr = session.query(User).filter_by(id=id).one()
 		except Exception as e:
@@ -180,7 +180,7 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 				' by #%s id:\n' % str(id),\
 				e, file=sys.stderr)
 			raise e
-
+		
 		try:
 			olds = [x[0] for x in session.query(User.login).all()]
 		except Exception as e:
@@ -188,7 +188,7 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 			print('adm/UpdateUser.post(): cannot get users logins:\n',\
 				e, file=sys.stderr)
 			raise e
-
+		
 		if login == '':
 			return self.json_response({
 				'status': 'error',
@@ -199,11 +199,11 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 				'status': 'error',
 				'error_code': 'incorrect_data'
 			})
-
+		
 		kwargs.update({'login': login, 'is_active': is_active})
 		if passwrd != '':
 			kwargs.update({'password': self.create_password(passwrd)})
-
+		
 		try:
 			session.query(User).filter_by(id=id).update(kwargs)
 			session.commit()
@@ -213,7 +213,7 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 				'user #%s data:\n' % str(id),\
 				e, file=sys.stderr)
 			raise e
-
+		
 		session.close()
 		return self.json_response({'status': 'success'})
 
@@ -226,26 +226,26 @@ class FileUpload(JsonResponseMixin):
 			return self.json_response({
 				'status': 'unauthorized'
 			})
-
+		
 		file_path = config('UPLOAD_FILES_PATH')
 		hashes = []
 		for f in self.request.files.items():
 			_file = f[1][0]
-
+			
 			_filename = hashlib.sha512(
 				str(time.time()).encode('utf-8')).hexdigest()[0:35]
 			fname = _filename + '.' + _file['content_type'].split('/')[1]
-
+			
 			f = open(os.path.join(file_path, fname), 'wb')
 			f.write(_file['body'])
 			f.close()
 			hashes.append({'name': fname})
-
+		
 		return self.json_response({
 			'status': 'success',
 			'files': hashes
 		})
-
+	
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
 

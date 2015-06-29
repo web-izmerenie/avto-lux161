@@ -13,16 +13,16 @@
 	text-align center
 	relative auto
 	z-index 1
-
+	
 	&:before, &:after
 		pseudo-block()
 		size ($shadow-width/2) 100%
 		z-index -1
-
+	
 	&:before
 		absolute left 0 top 0
 		black-gradi-shadow(left)
-
+	
 	&:after
 		absolute right 0 top 0
 		black-gradi-shadow(right)
@@ -34,24 +34,24 @@ nav
 	max-width ($max-width - 250px)
 	margin 0 auto
 	z-index 5
-
+	
 	ul
 		reset-box-model()
 		display table-row
 		text-align center
 		z-index 5
-
+		
 		&:before, &:after
 			pseudo-block()
 			display table-cell
 			width 7%
 			overflow hidden
-
+		
 		& > li
 			$h = 58px
 			$border-color = #fad982
 			$active-bg-color = #b58837
-
+			
 			reset-box-model()
 			display table-cell
 			size auto $h
@@ -60,10 +60,10 @@ nav
 			padding 0 26px
 			padding-top 23px
 			white-space nowrap
-
+			
 			&:before
 				display none
-
+			
 			& > a, & > span
 				display inline-block
 				vertical-align top
@@ -75,36 +75,36 @@ nav
 				padding 0 17px
 				overflow hidden
 				padding-top 39px - 25px
-
+				
 				& > span
 					font-metrics 24px 26px
 					color $link-text-color2
-
+			
 			& > a
 				cursor pointer
-
+				
 				& > span
 					transition color $animation-speed $animation-curve,
 						border-bottom-color $animation-speed $animation-curve
 					border-bottom 1px solid $link-line-color2
-
+				
 				&:hover > span
 					color $link-hover-text-color2
 					border-bottom-color $link-hover-line-color2
-
+			
 			& > span, &.active > a
 				background $active-bg-color
-
+				
 				& > span
 					color $text-color
-
+			
 			&.active > a
 				& > span
 					border-bottom-color transparent
-
+				
 				&:hover > span
 					color $link-hover-line-color2
 					border-bottom-color $link-hover-line-color2
-
+			
 			& > span
 				cursor default

@@ -12,7 +12,7 @@ require! {
 class AppRouter extends M.AppRouter
 	app-routes:
 		'' : \main # login form
-
+		
 		'panel' : \panel
 		'panel/pages' : \pages-list
 		'panel/pages/add.html' : \add-page
@@ -32,9 +32,9 @@ class AppRouter extends M.AppRouter
 		'panel/accounts' : \accounts
 		'panel/accounts/add.html' : \account-add
 		'panel/accounts/edit_:id.html' : \account-edit
-
+		
 		'logout' : \logout
-
+		
 		'*defaults' : \unknown # route not found
 
 module.exports = AppRouter

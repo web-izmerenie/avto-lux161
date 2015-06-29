@@ -21,5 +21,5 @@ module.exports = (options)->
 			return if status is \abort
 			W.radio.commands .execute \police, \panic, err
 	} <<<< options
-
+	
 	$ .ajax options

@@ -25,14 +25,14 @@ class AccountsListView extends ListView
 	initialize: !->
 		ListView.prototype.initialize ...
 		@init-table-list CompositeListView
-
+	
 	on-show: !->
 		ListView.prototype.on-show ...
 		@update-list !~> @get-region \main .show @table-view
-
+	
 	update-list: (cb)!->
 		(data-arr)<~! @get-list { action: \get_accounts_list }
-
+		
 		new-data-list = []
 		for item in data-arr
 			new-data-list.push {
@@ -41,7 +41,7 @@ class AccountsListView extends ListView
 				login: item.login
 				is_active: item.is_active
 			}
-
+		
 		@table-list.reset new-data-list
 		cb! if cb?
 

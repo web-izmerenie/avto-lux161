@@ -11,12 +11,12 @@
 # 		img = Image.open(image['path'])
 # 		imgs = []
 # 		sizes = config('IMAGE_SIZES')
-
+#
 # 		for size in calculate_sizes(img.size):
-
+#
 # 			img = img.resize(size, resample=PIL.Image.BICUBIC)
 # 			img.save(image['path'])
-
+#
 # 			# imgs.append[]
 # 			yield imgs
 

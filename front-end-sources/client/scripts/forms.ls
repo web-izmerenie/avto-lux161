@@ -34,14 +34,14 @@ restore-form-bind = !->
 $forms.each !->
 	id = $ @ .attr \id
 	$closer = $ '<button/>' .add-class \closer .html \Закрыть
-
+	
 	$ "a[href=\##id]" .click ~>
 		return false if process
 		process := true
-
+		
 		$html .add-class \form-popup
 		$body .append $overlay
-
+		
 		$overlay
 			.animate opacity: 1, speed
 			.on \click ~>
@@ -49,15 +49,15 @@ $forms.each !->
 				false
 		$ @ .css \display, \block .animate opacity: 1, speed, !->
 			process := false
-
+		
 		false
-
+	
 	restore-form = ~> restore-form-bind .call @
-
+	
 	$closer .click ~>
 		return false if process
 		process := true
-
+		
 		$overlay
 			.animate opacity: 0, speed, !-> $ @ .remove!
 			.off \click
@@ -66,35 +66,35 @@ $forms.each !->
 			restore-form!
 			$html .remove-class \form-popup
 			process := false
-
+		
 		false
-
+	
 	$ @ .prepend $closer
-
+	
 	$ @ .find 'input[type=date]' .each !->
 		Modernizr = require \modernizr
 		unless Modernizr.inputtypes.date
 			require './datepicker-init'
 			$ @ .attr \type \text
 			$ @ .datepicker!
-
+	
 	reset-form = ~> reset-form-bind .call @
 	free = !~>
 		$ @ .remove-class \ajax-process
 		process := false
-
+	
 	<- $ @ .submit
 	return false if process
 	process := true
 	$ @ .add-class \ajax-process
-
+	
 	reset-form!
-
+	
 	data-to-send = $ @ .serialize-array!
 	data-to-send.push name: \ajax, value: \Y
-
+	
 	action = $ @ .find 'input[name=action]' .val!
-
+	
 	$ .ajax {
 		url: $ @ .attr \action
 		method: \POST
@@ -105,7 +105,7 @@ $forms.each !->
 				window.alert local.forms.err.server_data
 				free!
 				return
-
+			
 			switch json.status
 			| \success =>
 				$wrap = $ '<div/>' .add-class \success-msg .hide!
@@ -118,7 +118,7 @@ $forms.each !->
 				window.alert local.forms.err.server_data
 				free!
 				return
-
+			
 			free!
 		error: (xhr, status, err)!~>
 			if xhr.responseJSON and xhr.responseJSON.status
@@ -132,9 +132,9 @@ $forms.each !->
 						window.alert local.forms.err.server_data
 						free!
 						return
-
+					
 					f-arr = []
-
+					
 					for fname, err-type of xhr.responseJSON.error_fields
 						$field = $ @ .find "input[name=#fname]"
 						if $field.length <= 0
@@ -151,14 +151,14 @@ $forms.each !->
 							$field: $field
 							$err-msg: $err-msg
 						}
-
+					
 					for item in f-arr then let item
 						item.$field .on \focus ->
 							item.$err-msg .animate opacity: 0, speed, !->
 								$ @ .remove!
 								item.$field .off \focus
 							false
-
+					
 					free!
 					return
 				| \system_fail =>
@@ -169,12 +169,12 @@ $forms.each !->
 					window.alert local.forms.err.server_data
 					free!
 					return
-
+			
 			if err instanceof SyntaxError
 				window.alert local.forms.err.server_data
 			else
 				window.alert local.forms.err.ajax
 			free!
 	}
-
+	
 	false

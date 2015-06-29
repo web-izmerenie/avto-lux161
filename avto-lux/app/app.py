@@ -52,7 +52,7 @@ class _CustomRequestDispatcher(_RequestDispatcher):
 class Application(tornado.web.Application):
 	def __init__(self, handlers=None, **kwargs):
 		""" hack for dynamic robots.txt """
-
+		
 		tornado.web.Application.__init__(self, handlers, **kwargs)
 		new_handlers = []
 		for item in self.handlers[0][1]:
@@ -60,22 +60,22 @@ class Application(tornado.web.Application):
 			and item.handler_class is StaticFileHandler:
 				continue
 			new_handlers.append(item)
-
+		
 		new_tuple = []
 		for i in range(len(self.handlers[0])):
 			if i == 1:
 				new_tuple.append(new_handlers)
 				continue
 			new_tuple.append(self.handlers[0][i])
-
+		
 		self.handlers[0] = tuple(new_tuple)
-
+	
 	def start_request(self, connection):
 		""" cutsom dispatcher for fixing request uri
 		dirty hack (need to create issue about cyrillic redirects)
 		see also: utils.py -> collect_handlers and UnicodeRedirectHandler """
 		return _CustomRequestDispatcher(self, connection)
-
+	
 	def __call__(self, request):
 		raise Exception('use "start_request" instead of __call__')
 

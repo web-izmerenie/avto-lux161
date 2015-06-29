@@ -60,7 +60,7 @@ class MainRoute(BaseHandler, ErrorHandlerMixin):
 		data.update(self.get_nonrel_handlers())
 		data.update(self.get_helpers())
 		return self.render('client/content-page.jade', **data)
-
+	
 	def head(self):
 		return self.get()
 
@@ -92,7 +92,7 @@ class StaticPageRoute(BaseHandler, ErrorHandlerMixin):
 		data.update(self.get_nonrel_handlers())
 		data.update(self.get_helpers())
 		return self.render('client/content-page.jade', **data)
-
+	
 	def head(self, alias, suffix):
 		return self.get(alias, suffix)
 
@@ -110,29 +110,29 @@ class FormsHandler(JsonResponseMixin):
 				'fn': self.save_order,
 			}
 		}
-
+		
 		try:
 			is_ajax = self.get_argument('ajax')
 		except MissingArgumentError:
 			pass
-
+		
 		args = dict([ x.split('=') for x
 			in str(self.request.body).split('&')
 				if 'action' not in x ])
 		for key in args:
 			args[key] = self.get_argument(key)
-
+		
 		action = self.get_argument('action')
-
+		
 		if action not in actions.keys():
 			if is_ajax:
 				self.set_status(400)
 				return self.json_response({'status': 'unknown_form'})
 			return self.write("Lol, request isn't correct")
-
+		
 		p_title = localization['response_page'][action]
 		fn = actions[action]['fn']
-
+		
 		errors = self.validate_fields(args)
 		if len(errors) == 0:
 			try:
@@ -144,15 +144,15 @@ class FormsHandler(JsonResponseMixin):
 				return self.json_response({'status': 'system_fail'})\
 					if is_ajax\
 					else self.write('Internal server Error')
-
+			
 			if is_ajax:
 				return self.json_response({'status': 'success'})
-
+			
 			kwrgs = self.set_kwargs(
 				success_msg_list=['success'], # TODO :: messages!
 				title=p_title)
 			return self.render('client/content-page.jade', **kwargs)
-
+		
 		else:
 			if is_ajax:
 				self.set_status(400)
@@ -167,25 +167,25 @@ class FormsHandler(JsonResponseMixin):
 					error_msg_list=err_list,
 					title=p_title)
 				self.render('client/content-page.jade', **kwrgs)
-
-
+	
+	
 	def set_kwargs(self, success_msg_list=[], error_msg_list=[], title=''):
 		return {
 			'success_msg_list': success_msg_list,
 			'error_msg_list': error_msg_list
 		}
-
+	
 	def validate_fields(self, fields):
 		err_stack = []
 		all_required_fields = ['name', 'phone', 'callback']
-
+		
 		for key in fields:
 			if key in all_required_fields and fields[key] is '':
 				err_stack.append(key)
-
+		
 		return err_stack
-
-
+	
+	
 	def save_call(self, d):
 		call = CallModel(
 			name = d['name'],
@@ -202,15 +202,15 @@ class FormsHandler(JsonResponseMixin):
 				e, file=sys.stderr)
 			raise e
 		session.close()
-
+		
 		send_mail(
 			msg='<h1>Заказ звонка</h1>' +
 				'<dl><dt>Имя:</dt><dd>%s</dd>' % d['name'] +
 				'<dt>Телефон:</dt><dd>%s</dd></dl>' % d['phone'],
 			theme='АвтоЛюкс: заказ звонка'
 		)
-
-
+	
+	
 	def save_order(self, d):
 		dt = d['date'].split('.')
 		session = Session()
@@ -231,7 +231,7 @@ class FormsHandler(JsonResponseMixin):
 			date=full_date,
 			item_id=item.id
 		)
-
+		
 		session = Session()
 		try:
 			session.add(order)

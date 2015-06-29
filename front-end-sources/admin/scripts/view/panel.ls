@@ -16,10 +16,10 @@ class PanelView extends M.LayoutView
 	initialize: !->
 		@menu-list-view = new PanelMenuListView collection: panel-menu-list
 		@menu-list-view.render!
-
+	
 	on-show: !->
 		@get-region \menu .show @menu-list-view
-
+	
 	class-name: 'panel-view container'
 	template: \panel
 	model: new BasicModel!

@@ -50,10 +50,10 @@ if __name__ == '__main__':
 		# 	except Exception as e:
 		# 		raise Exception("Unknown option key")
 		# print(opts)
-
+	
 	except IndexError:
 		raise Exception("Missed required argument")
-
+	
 	actions = {
 		'run':{
 			'fn': server,
@@ -76,9 +76,9 @@ if __name__ == '__main__':
 			'options': []
 		}
 	}
-
+	
 	if action not in actions:
 		raise Exception("Invalid option")
-
+	
 	ac = actions[action]
 	ac['fn'](**ac['kwrgs'])

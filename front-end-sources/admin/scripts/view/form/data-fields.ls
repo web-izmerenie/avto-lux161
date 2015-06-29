@@ -9,10 +9,10 @@ require! {
 	\jquery : $
 	\jquery-ui
 	\jquery-ui.sortable
-
+	
 	\backbone : B
 	\marionette : M
-
+	
 	'../error-msg' : ErrorMessageView
 	'../ask-sure' : AskSureView
 }
@@ -21,16 +21,16 @@ sort-collection-cb = (e, ui)!->
 	models = @collection.models
 	model = ui.item.data \model
 	index = ui.item.index!
-
+	
 	new-order = []
 	for i from 0 til models.length
 		new-order.push models[i] if models[i] isnt model
-
+	
 	new-list = []
 	for i from 0 til models.length
 		new-list.push model if i is index
 		new-list.push new-order[i] if new-order[i]?
-
+	
 	@collection.set new-list
 	@collection.trigger \change
 
@@ -133,7 +133,7 @@ class AddFieldView extends M.ItemView
 			@ui.err.html err-view.$el
 			err-view.on-before-show!
 			return false
-
+		
 		model = @model.collection.find-where code: @ui.code.val!
 		if model?
 			err-view = new ErrorMessageView {
@@ -144,7 +144,7 @@ class AddFieldView extends M.ItemView
 			@ui.err.html err-view.$el
 			err-view.on-before-show!
 			return false
-
+		
 		@model.collection.push {
 			type: @ui.type.val!
 			multiple: @ui.multiple.is \:checked
@@ -153,7 +153,7 @@ class AddFieldView extends M.ItemView
 			values: [value: '']
 		}
 		@del!
-
+		
 		false
 	del: ->
 		@model.collection.remove @model
@@ -183,7 +183,7 @@ class TextareaItemFieldView extends FieldItemView
 class TextareaFieldView extends FieldView
 	child-view: TextareaItemFieldView
 # }}}
-
+	
 class ListView extends M.CollectionView
 	tag-name: \ul
 	class-name: \list-group
@@ -203,37 +203,37 @@ class DataFieldsItemView extends M.ItemView
 	tag-name: \div
 	class-name: \data-fields
 	template: 'form/data-fields'
-
+	
 	ui:
 		add: \.add-new-field
 		flist: \.data-fields-area
 		data: \input:hidden
-
+	
 	events:
 		'click @ui.add': \add-field
-
+	
 	\add-field : ->
 		unless @flist.find-where type: \add
 			@flist.push type: \add
 		false
-
+	
 	initialize: !->
 		values = (@model.get \values) or {}
 		values = {} unless typeof! values is \Object
-
+		
 		data = []
 		if values[@model.get \name]?
 		and typeof! values[@model.get \name] is \String
 		and values[@model.get \name] isnt ''
 			data = JSON.parse values[@model.get \name]
 			data = [] unless typeof! data is \Array
-
+		
 		@flist = new B.Collection data
 		@flist-view = new ListView {
 			collection: @flist
 			model: @model.clone!
 		}
-
+	
 	on-render: !->
 		@flist-view.render!
 		@ui.flist.append @flist-view.$el
@@ -248,7 +248,7 @@ class DataFieldsItemView extends M.ItemView
 				continue if item.type is \add
 				new-data.push new-item
 			data = new-data
-
+			
 			@ui.data.val JSON.stringify data
 
 module.exports = DataFieldsItemView

@@ -14,29 +14,29 @@
 	max-width $max-width
 	relative auto
 	overflow hidden
-
+	
 	html.aphorism &
 		height $footer2-height
 		margin-top -($footer2-height)
-
+	
 	$shadow-color = #594717
 	$shadow-color2 = lighten(lightness($shadow-color, 40), 10)
 	$shadow-color3 = saturate($bg-invert-color, 20%)
-
+	
 	&:before, &:after
 		pseudo-block()
 		size $shadow-width 100%
 		z-index 0
 		background red
-
+	
 	gradi($side)
 		background linear-gradient($side,
 			$shadow-color 0%, $shadow-color2 30%, $shadow-color3, $bg-invert-color)
-
+	
 	&:before
 		absolute left 0 top 0
 		gradi(left)
-
+	
 	&:after
 		absolute right 0 top 0
 		gradi(right)
@@ -44,7 +44,7 @@
 a
 	color $link-text-color2
 	border-bottom-color $link-line-color2
-
+	
 	&:hover
 		color $link-hover-text-color2
 		border-bottom-color $link-hover-line-color2
@@ -58,19 +58,19 @@ $side-blocks-offset = -450px
 	color $text-invert-color
 	z-index 20
 	height $footer-height
-
+	
 	html.aphorism &
 		margin-top $aphorism-block-height
 
 .contacts
 	absolute left $side-blocks-shift top 30px
 	margin-left $side-blocks-offset
-
+	
 	a.phone, a.phone:hover
 		color $text-invert-color
 		border-bottom 0
 		font-size 10px
-
+		
 		&:after
 			pseudo-block()
 			height (24px - 19px)
@@ -78,10 +78,10 @@ $side-blocks-offset = -450px
 .developer
 	absolute right $side-blocks-shift top 35px
 	margin-right $side-blocks-offset
-
+	
 	a:before
 		pseudo-block()
-
+	
 	img
 		$s = 35px
 		display block
@@ -95,31 +95,31 @@ html.aphorism & .aphorism-block
 	relative auto
 	z-index 10
 	text-align center
-
+	
 	gradi($side)
 		$c1 = alpha(black, 70%)
 		$c2 = alpha(black, 0%)
 		background linear-gradient($side, $c1, $c2)
-
+	
 	&:before, &:after
 		pseudo-block()
 		size ($shadow-width/1.8) $aphorism-block-height
-
+	
 	$a = 65%
-
+	
 	&:before
 		absolute left 0 top 0
 		black-gradi-shadow(left, $a)
-
+	
 	&:after
 		absolute right 0 top 0
 		black-gradi-shadow(right, $a)
-
+	
 	.aphorism-text
 		display table
 		size 800px $aphorism-block-height
 		margin 0 auto
-
+		
 		blockquote
 			display table-cell
 			vertical-align middle

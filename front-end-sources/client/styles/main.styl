@@ -36,15 +36,15 @@ body
 	margin 0 auto
 	min-height 100%
 	max-width $max-width
-
+	
 	header
 		@require 'header'
-
+	
 	&:after
 		pseudo-block()
 		height $footer-height
 		clear both
-
+		
 		html.aphorism &
 			height $footer2-height
 
@@ -64,7 +64,7 @@ a
 		border-bottom-color $animation-speed $animation-curve
 	text-decoration none
 	border-bottom 1px solid $link-line-color
-
+	
 	&:hover
 		color $link-hover-text-color
 		border-bottom-color $link-hover-line-color

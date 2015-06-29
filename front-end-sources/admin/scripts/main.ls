@@ -8,7 +8,7 @@
 require! {
 	\jquery : $
 	\backbone : B
-
+	
 	'./config.json'
 }
 B.$ = $

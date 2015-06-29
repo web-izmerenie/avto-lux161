@@ -9,17 +9,17 @@ html(lang="ru", class=html_classes, data-local-file=static_url('client-local.jso
 		meta(charset="utf-8")
 		meta(name="viewport", content="width=1000")
 		meta(name="yandex-verification" content="40738a04c4b1f19a")
-
+		
 		if seo_meta_title
 			title= seo_meta_title
 		else
 			title= title
-
+		
 		if seo_meta_description
 			meta(name="description", content=seo_meta_description)
 		if seo_meta_keywords
 			meta(name="keywords", content=seo_meta_keywords)
-
+		
 		link(href=static_url('images/favicon.ico'), rel="shortcut icon")
 		link(href=static_url('client-build.css'), type="text/css", rel="stylesheet")
 		script(src=static_url('client-build.js'), type="text/javascript")

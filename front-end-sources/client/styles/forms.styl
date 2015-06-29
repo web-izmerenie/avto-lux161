@@ -20,17 +20,17 @@ body > form
 	color $text-invert-color
 	border-radius 12px
 	transition height 0.5s $animation-curve
-
+	
 	$border-color = #d3d3d3
-
+	
 	h2
 		font-metrics 21px 23px
 		padding-bottom 20px
-
+	
 	.closer
 		$w = 16px
 		$h = 16px
-
+		
 		reset-box-model()
 		display block
 		absolute right 8px top 8px
@@ -40,13 +40,13 @@ body > form
 		font-metrics 0 0
 		overflow hidden
 		cursor pointer
-
+		
 		&:before
 			pseudo-block()
 			absolute top 0 right 0
 			bg('form-closer.svg', center center no-repeat)
 			size $w $h
-
+	
 	label.text > input, label.number > input
 		reset-box-model()
 		display block
@@ -58,17 +58,17 @@ body > form
 		font $font
 		font-metrics 15px 17px
 		color black
-
+	
 	label.text + label.text > input
 		margin-top 8px
-
+	
 	label.submit
 		$h = 35px
-
+		
 		display inline-block
 		relative auto
 		cursor pointer
-
+		
 		&:after
 			pseudo-block()
 			size 100% $h
@@ -77,7 +77,7 @@ body > form
 			z-index 250
 			opacity 0
 			transition opacity $animation-speed $animation-curve
-
+		
 		input[type=submit]
 			reset-box-model()
 			display inline-block
@@ -97,27 +97,27 @@ body > form
 			transition background-position $animation-speed $animation-curve,
 				color $animation-speed $animation-curve,
 				opacity $animation-speed $animation-curve
-
+			
 			&:hover
 				background-position 0 -100%
-
+	
 	&.ajax-process
 		label.submit:after
 			opacity 1
 		label.submit input[type=submit]
 			color alpha(white, 0%)
 			opacity 0.7
-
+	
 	input[placeholder]
 		text-overflow ellipsis
-
+	
 	label
 		display block
 		relative auto
-
+		
 		input
 			transition border-color 0.5s $animation-curve
-
+		
 		.err-msg
 			display block
 			background alpha(white, 60%)
@@ -130,26 +130,26 @@ body > form
 			white-space nowrap
 			z-index 210
 			opacity 0
-
+			
 			& + input
 				border-color red
-
+	
 	.success-msg
 		display block
 		font $font
-
+	
 	label.date
 		display block
 		margin-top 9px
 		relative auto
 		cursor pointer
-
+		
 		&:before
 			pseudo-block()
 			size 19px 22px
 			bg('calendar.svg', center center no-repeat)
 			absolute left 0 top 5px
-
+		
 		input
 			reset-box-model()
 			display block
@@ -161,11 +161,11 @@ body > form
 			width 100%
 			box-sizing border-box
 			cursor pointer
-
+	
 	.time
 		display block
 		margin-top 4px
-
+		
 		& > span
 			font $font
 			font-weight bold
@@ -173,22 +173,22 @@ body > form
 			margin-right 12px
 			padding-left 25px
 			relative auto
-
+			
 			&:before
 				pseudo-block()
 				size 19px 20px
 				bg('clock.svg', center center no-repeat)
 				absolute left 0 top -1px
-
+		
 		label.number
 			display inline-block
 			width 50px
 			vertical-align middle
 			relative auto
-
+			
 			& + label.number
 				margin-left 15px
-
+				
 				&:before
 					pseudo-block(':')
 					font $font

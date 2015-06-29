@@ -32,4 +32,3 @@ class AskSureView extends SmoothView
 		false
 
 module.exports = AskSureView
-

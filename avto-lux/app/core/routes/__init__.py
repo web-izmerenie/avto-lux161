@@ -23,13 +23,13 @@ routes = [
 		StaticFileHandler,
 		{"path": os.path.join(os.getcwd(), config('UPLOAD_FILES_PATH'))}),
 	('/api/forms/', FormsHandler),
-
+	
 	('/catalog/(.*?)/(.*?)\.html', CatalogItemRoute),
 	('/catalog/(.*?)\.html', CatalogSectionRoute),
-
+	
 	('/robots\.txt', RobotsTxtRoute),
 	('/sitemap.xml', SiteMapRoute),
-
+	
 	('/(.*?)(\.html)', StaticPageRoute),
 	('/(.*?)()', StaticPageRoute)
 ]

@@ -7,9 +7,9 @@
 
 require! {
 	\marionette : M
-
+	
 	'../../../model/basic' : BasicModel
-
+	
 	# views
 	'../../table-list' : TableListView
 	'../../table-item' : TableItemView
@@ -39,12 +39,12 @@ class HeaderView extends M.LayoutView
 class CatalogElementsListView extends ListView
 	initialize: !->
 		ListView.prototype.initialize ...
-
+		
 		section-id = @get-option \section-id
 		@init-table-list CompositeListView
-
+		
 		@table-view.model.set \section_id, section-id
-
+		
 		@page-view = (new PageView!).render!
 		@header-view = new HeaderView {
 			model: new BasicModel {
@@ -53,15 +53,15 @@ class CatalogElementsListView extends ListView
 			}
 		}
 		@header-view.render!
-
+	
 	on-show: !->
 		ListView.prototype.on-show ...
-
+		
 		@update-list !~>
 			@get-region \main .show @page-view
 			@page-view.get-region \header .show @header-view
 			@page-view.get-region \main .show @table-view
-
+	
 	update-list: (cb)!->
 		(data-arr, json)<~! @get-list {
 			action: \get_catalog_elements
@@ -69,7 +69,7 @@ class CatalogElementsListView extends ListView
 				id: @get-option \section-id
 			}
 		}
-
+		
 		new-data-list = []
 		for item in data-arr
 			new-data-list.push do
@@ -81,7 +81,7 @@ class CatalogElementsListView extends ListView
 				"
 				name: item.title
 				count: item.count
-
+		
 		@table-list.reset new-data-list
 		@header-view.model.set \section_name, json.section_title
 		@header-view.render!

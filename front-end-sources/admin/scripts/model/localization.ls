@@ -17,11 +17,11 @@ class LocalizationModel extends B.Model
 	lang: lang
 	initialize: (options={})!->
 		@.lang = options.lang if options.lang?
-
+		
 		if local[@.lang]?
 			@ .set local[@.lang]
 			return
-
+		
 		$ .ajax {
 			url: $ \html .attr \data-local-file
 			method: \GET
@@ -36,7 +36,7 @@ class LocalizationModel extends B.Model
 			error: (xhr, status, err)!->
 				throw err
 		}
-
+		
 		@ .set local[@.lang]
 
 module.exports = LocalizationModel

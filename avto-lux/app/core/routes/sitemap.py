@@ -16,9 +16,9 @@ class SiteMapRoute(BaseHandler):
 	def get(self):
 		data = {'is_debug': config('DEBUG')}
 		urls = []
-
+		
 		session = Session()
-
+		
 		try:
 			pages = session.query(StaticPageModel)\
 				.filter_by(is_active=True)\
@@ -34,9 +34,9 @@ class SiteMapRoute(BaseHandler):
 			print('SiteMapRoute.get(): cannot get data from DB:\n',\
 				e, file=sys.stderr)
 			raise e
-
+		
 		session.close()
-
+		
 		for page in [x.item for x in pages]:
 			if '404' in page['alias']:
 				continue
@@ -44,7 +44,7 @@ class SiteMapRoute(BaseHandler):
 				'alias': quote(page['alias'], encoding='utf-8'),
 				'lastmod': page['last_change']
 			})
-
+		
 		for section in [x.item for x in sections]:
 			url = '/catalog/{0}.html'.format(section['alias'])
 			url = quote(url, encoding='utf-8')
@@ -52,7 +52,7 @@ class SiteMapRoute(BaseHandler):
 				'alias': url,
 				'lastmod': section['last_change']
 			})
-
+		
 		for item in [x.item for x in items]:
 			section_alias = None
 			for section in [x.item for x in sections]:
@@ -69,10 +69,10 @@ class SiteMapRoute(BaseHandler):
 				'alias': url,
 				'lastmod': section['last_change']
 			})
-
+		
 		data.update({'urls': tuple(urls)})
 		self.set_header('Content-Type', 'text/xml; charset="utf-8"')
 		return self.render('client/sitemap.jade', **data)
-
+	
 	def head(self):
 		return self.get()

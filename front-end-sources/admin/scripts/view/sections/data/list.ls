@@ -7,7 +7,7 @@
 
 require! {
 	\backbone : B
-
+	
 	# views
 	'../../table-list' : TableListView
 	'../../table-item' : TableItemView
@@ -28,14 +28,14 @@ class DataListView extends ListView
 	initialize: !->
 		ListView.prototype.initialize ...
 		@init-table-list CompositeListView, null, Collection
-
+	
 	on-show: !->
 		ListView.prototype.on-show ...
 		@update-list !~> @get-region \main .show @table-view
-
+	
 	update-list: (cb)!->
 		(data-arr)<~! @get-list { action: \get_data_list }
-
+		
 		new-data-list = []
 		for item in data-arr
 			new-data-list.push {
@@ -45,9 +45,8 @@ class DataListView extends ListView
 				code: item.code
 				sort: item.sort
 			}
-
+		
 		@table-list.reset new-data-list
 		cb! if cb?
 
 module.exports = DataListView
-

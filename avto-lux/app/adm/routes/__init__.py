@@ -17,7 +17,7 @@ from .actions import AdminMainHandler
 
 routes = [
 	('/adm/', AdminMainRoute),
-
+	
 	('/adm/auth', AuthHandler),
 	('/adm/logout', LogoutHandler),
 	('/adm/data.json', AdminMainHandler),

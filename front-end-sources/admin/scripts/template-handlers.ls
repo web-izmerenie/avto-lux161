@@ -15,7 +15,7 @@ static-url = $ \html .attr \data-templates-path
 
 module.exports.load = (template-id)->
 	template = null
-
+	
 	$ .ajax {
 		url: static-url + template-id + '.jade'
 		method: \GET
@@ -27,7 +27,7 @@ module.exports.load = (template-id)->
 		error: (xhr, status, err)!->
 			throw err
 	}
-
+	
 	return template
 
 module.exports.compile = (raw-template)->

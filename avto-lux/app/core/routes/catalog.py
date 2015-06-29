@@ -55,7 +55,7 @@ class CatalogSectionRoute(BaseHandler, ErrorHandlerMixin):
 		data.update(self.get_nonrel_handlers())
 		data.update(self.get_helpers())
 		return self.render('client/catalog-sections.jade', **data)
-
+	
 	def head(self, alias):
 		return self.get(alias)
 
@@ -64,7 +64,7 @@ class CatalogItemRoute(BaseHandler, ErrorHandlerMixin):
 	@route_except_handler
 	def get(self, category, item):
 		session = Session()
-
+		
 		# check for active element section
 		try:
 			section = session.query(CatalogSectionModel)\
@@ -76,10 +76,10 @@ class CatalogItemRoute(BaseHandler, ErrorHandlerMixin):
 				' by "%s" code:\n' % str(category),\
 				e, file=sys.stderr)
 			raise e
-
+		
 		if item.endswith(".html"):
 			item = item.replace('.html', '').replace('/', '')
-
+		
 		# get item
 		try:
 			page = session\
@@ -92,10 +92,10 @@ class CatalogItemRoute(BaseHandler, ErrorHandlerMixin):
 				' by "%s" code:\n' % str(item),\
 				e, file=sys.stderr)
 			raise e
-
+		
 		session.close()
 		data = page.to_frontend
-
+		
 		# check for category
 		if data['section_id'] != section.to_frontend['id']:
 			e = NoResultFound()
@@ -103,7 +103,7 @@ class CatalogItemRoute(BaseHandler, ErrorHandlerMixin):
 				' by "%s" code:\n' % str(item),\
 				e, file=sys.stderr)
 			raise e
-
+		
 		menu = self.getmenu(
 			catalog_section_alias=category,
 			catalog_item_alias=item)
@@ -118,6 +118,6 @@ class CatalogItemRoute(BaseHandler, ErrorHandlerMixin):
 		data.update(self.get_nonrel_handlers())
 		data.update(self.get_helpers())
 		return self.render('client/catalog-detail.jade', **data)
-
+	
 	def head(self, category, item):
 		return self.get(category, item)

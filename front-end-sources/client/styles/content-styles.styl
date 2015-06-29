@@ -28,16 +28,16 @@ $marked-list-shift = 40px
 ul, ol
 	display block
 	margin-left $marked-list-shift
-
+	
 	& > li
 		repair-white-tag()
-
+		
 		display block
 		relative auto
-
+		
 		& + li
 			margin-top 23px
-
+		
 		&:before
 			$s = 10px
 			pseudo-block()
@@ -48,7 +48,7 @@ ul, ol
 
 ol
 	counter-reset: customlistcounter;
-
+	
 	& > li:before
 		content: counter(customlistcounter, decimal) '.';
 		counter-increment: customlistcounter;

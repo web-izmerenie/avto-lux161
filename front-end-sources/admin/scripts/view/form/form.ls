@@ -7,9 +7,9 @@
 
 require! {
 	\jquery : $
-
+	
 	\marionette : M
-
+	
 	'./files' : FilesItemView
 	'./data-fields' : DataFieldsItemView
 	'../../model/basic' : BasicModel
@@ -60,11 +60,11 @@ class FormView extends M.CompositeView
 		\cancel : \.cancel
 	events:
 		'click @ui.cancel': \cancel
-
+	
 	cancel: ->
 		@trigger \cancel:form
 		false
-
+	
 	initialize: !->
 		@model = new BasicModel {
 			page: @get-option \page
@@ -72,12 +72,12 @@ class FormView extends M.CompositeView
 			err_key: null
 			values: {}
 		}
-
+		
 		@on \form-msg, (err-key)!->
 			@model.set \err_key, err-key
 			$ 'html,body' .scroll-top 0
 			@render!
-
+	
 	on-render: !->
 		$form = @$el
 		$form.off \submit.store-values
@@ -86,12 +86,12 @@ class FormView extends M.CompositeView
 			for item in $form.serialize-array!
 				vals[item.name] = item.value
 			@model.set \values, vals
-
+	
 	child-view-options: (model, index)~>
 		model.set \local, @model.get \local
 		model.set \page @get-option \page
 		model.set \values @model.get \values
-
+	
 	get-child-view: (item)~>
 		switch item.get \type
 		| \checkbox => return CheckboxItemView
@@ -100,7 +100,7 @@ class FormView extends M.CompositeView
 		| \files => return FilesItemView
 		| \password => return PasswordItemView
 		| \data_fields => return DataFieldsItemView
-
+		
 		TextItemView
 
 module.exports = FormView

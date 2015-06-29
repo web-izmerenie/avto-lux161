@@ -9,47 +9,47 @@
 margin-mixin()
 	$par = 23px
 	$h1 = 16px
-
+	
 	// p
 	p+p, ul+p, ol+p, h2+p, h3+p, img+p
 		padding-top $par
 	// p for h1
 	h1+p, h1+main>p:first-child
 		padding-top $h1
-
+	
 	// h1
 	h1+h1, h1+main>h1:first-child, p+h1,
 	ul+h1, ol+h1, h2+h1, h3+h1, img+h1
 		padding-top $h1
-
+	
 	// h2
 	h2+h2, p+h2, ul+h2, ol+h2, h3+h2, img+h2
 		padding-top $par
 	// h2 for h1
 	h1+h2, h1+main>h2:first-child
 		padding-top $h1
-
+	
 	// h3
 	h3+h3, h2+h3, p+h3, ul+h3, ol+h3, img+h3
 		padding-top $par
 	// h3 for h1
 	h1+h3, h1+main>h3:first-child
 		padding-top $h1
-
+	
 	// ul
 	p+ul, ul+ul, ol+ul, li>ul:first-child, h2+ul, h3+ul, img+ul
 		padding-top $par
 	// ul for h1
 	h1+ul, h1+main>ul:first-child
 		padding-top $h1
-
+	
 	// ol
 	p+ol, ol+ol, ul+ol, li>ol:first-child, h2+ol, h3+ol, img+ol
 		padding-top $par
 	// ol for h1
 	h1+ol, h1+main>ol:first-child
 		padding-top $h1
-
+	
 	// img
 	p+img, ol+img, ul+img, li>img:first-child, h2+img, h3+img
 		margin-top $par

@@ -7,7 +7,7 @@
 
 require! {
 	\marionette : M
-
+	
 	'../model/basic' : BasicModel
 }
 
@@ -15,7 +15,7 @@ class TableListView extends M.CompositeView
 	class-name: 'panel panel-default'
 	model: new BasicModel!
 	child-view-container: \tbody
-
+	
 	ui:
 		\refresh : \.refresh
 	events:

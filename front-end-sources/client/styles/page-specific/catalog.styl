@@ -14,66 +14,66 @@
 	$margin-X = 43px
 	$sections-p = 31px
 	$detail-p = 15px
-
+	
 	display block
-
+	
 	main
 		display block
-
+	
 	&.sections
 		margin $content-margin-Y ($margin-X - $sections-p) $content-margin-Y $margin-X
-
+		
 		.content > h1
 			padding-right $sections-p
-
+		
 		main ul.catalog-sections
 			reset-box-model()
 			display block
 			size 100% auto
 			padding-top (28px - 6px)
-
+			
 			& > li
 				reset-box-model()
 				display inline-block
 				vertical-align top
-
+				
 				// -1px is fix for native android browser
 				margin-right ($sections-p - 1px)
-
+				
 				&:before
 					display none
-
+				
 				a
 					display block
 					size $w auto
 					border-bottom 0
 					text-align center
 					overflow hidden
-
+					
 					span
 						display inline
 						font $font
 						border-bottom 1px solid $link-text-color
 						transition border-bottom-color $animation-speed $animation-curve
-
+						
 						&:before
 							pseudo-block()
 							height 14px
-
+						
 						&:after
 							pseudo-block()
 							height 24px
-
+					
 					&:hover > span
 						border-bottom-color $link-hover-text-color
-
+					
 					.picture
 						display block
 						size $w $list-img-h
 						overflow hidden
 						position relative
 						border-radius 10px
-
+						
 						img
 							display block
 							size auto
@@ -81,25 +81,25 @@
 							min-height 100%
 							relative top 50%
 							transform translateY(-50%)
-
+	
 	&.detail
 		margin $content-margin-Y ($margin-X - $detail-p) $content-margin-Y $margin-X
-
+		
 		.content > h1
 			font-metrics 21px 23px
 			padding-right $detail-p
-
+		
 		main
 			.order
 				button-mixin(true)
 				margin-top 20px
-
+			
 			.catalog-detail-item
 				display block
 				margin-top 21px
-
+				
 				$first-block-bottom = (32px - $detail-p)
-
+				
 				img.big-pic
 					display block
 					float left
@@ -107,39 +107,39 @@
 					margin-right 45px
 					border-radius 10px
 					size 468px auto
-
+				
 				.description
 					display block
 					margin-bottom $first-block-bottom
 					padding-right $detail-p
 					font $font
 					margin-mixin()
-
+				
 				ul.photos
 					reset-box-model()
 					display block
-
+					
 					&:before
 						pseudo-block()
 						clear both
-
+					
 					& > li
 						reset-box-model()
 						display inline-block
 						size $w auto
 						margin $detail-p $detail-p 0 0
 						vertical-align top
-
+						
 						&:before
 							display none
-
+						
 						a
 							display block
 							size $w $h
 							overflow hidden
 							border-radius 10px
 							border-bottom 0
-
+							
 							img
 								display block
 								size auto

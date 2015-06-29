@@ -23,14 +23,14 @@ class RedirectListView extends ListView
 	initialize: !->
 		ListView.prototype.initialize ...
 		@init-table-list CompositeListView
-
+	
 	on-show: !->
 		ListView.prototype.on-show ...
 		@update-list !~> @get-region \main .show @table-view
-
+	
 	update-list: (cb)!->
 		(data-arr)<~! @get-list { action: \get_redirect_list }
-
+		
 		new-data-list = []
 		for item in data-arr
 			new-data-list.push {
@@ -40,9 +40,8 @@ class RedirectListView extends ListView
 				new_url: item.new_url
 				status: item.status
 			}
-
+		
 		@table-list.reset new-data-list
 		cb! if cb?
 
 module.exports = RedirectListView
-

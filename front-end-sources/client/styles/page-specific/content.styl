@@ -11,49 +11,49 @@
 	width 96%
 	max-width $max-content-page-width
 	margin $content-margin-Y auto
-
+	
 	&:after
 		pseudo-block()
 		clear both
-
+	
 	ul.cars
 		$col-size = 184px
-
+		
 		reset-box-model()
 		display table-cell
 		vertical-align top
 		width $col-size
 		text-align center
-
+		
 		& > li
 			reset-box-model()
 			display inline-block
 			width $col-size
-
+			
 			&:before
 				display none
-
+			
 			&:after
 				pseudo-block()
-
+			
 			img
 				reset-box-model()
 				display block
 				border-radius 8px
 				size $col-size auto
-
+			
 			& + li
 				margin-top 15px
-
+	
 	.content
 		display table-cell
 		vertical-align top
 		font $font
-
+		
 		& > h1, & > main
 			display block
 			max-width $max-content-block-width
 			margin 0 auto
 			padding 0 $content-margin-X
-
+	
 	margin-mixin()

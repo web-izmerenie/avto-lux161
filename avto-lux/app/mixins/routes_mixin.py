@@ -22,9 +22,9 @@ class MenuProviderMixin():
 			'main': [],
 			'catalog': []
 		}
-
+		
 		session = Session()
-
+		
 		try:
 			static_pages = session.query(StaticPageModel)\
 				.filter_by(is_main_menu_item=True, is_active=True)\
@@ -44,7 +44,7 @@ class MenuProviderMixin():
 				if page['alias'] == page_alias:
 					item['active'] = True
 			menu['main'].append(item)
-
+		
 		try:
 			sections = session.query(CatalogSectionModel)\
 				.filter_by(is_active=True)\
@@ -68,7 +68,7 @@ class MenuProviderMixin():
 					if catalog_item_alias is not None:
 						item['current'] = False
 			menu['catalog'].append(item)
-
+		
 		session.close()
 		return menu
 
@@ -77,13 +77,13 @@ class NonRelationDataProvider():
 	def get_nonrel_arr(self, code1, code2):
 		res = []
 		level1 = None
-
+		
 		if code1 not in self.nonrel_list:
 			print('data code "%s" not found' % code1, file=sys.stderr)
 			return tuple(res)
-
+		
 		level1 = self.nonrel_list[code1]
-
+		
 		for item in level1:
 			if 'code' not in item.keys():
 				continue
@@ -91,18 +91,18 @@ class NonRelationDataProvider():
 				values = item['values']
 				for val in values:
 					res.append(val['value'])
-
+		
 		return tuple(res)
-
+	
 	def get_nonrel_val(self, code1, code2):
 		res = ''
-
+		
 		arr = self.get_nonrel_arr(code1, code2)
 		if len(arr) > 0:
 			res = arr[0]
-
+		
 		return res
-
+	
 	def get_nonrel_handlers(self):
 		session = Session()
 		try:
@@ -114,7 +114,7 @@ class NonRelationDataProvider():
 				e, file=sys.stderr)
 			raise e
 		session.close()
-
+		
 		export = {}
 		for item in [x.item for x in data]:
 			data_list = tuple()
@@ -128,7 +128,7 @@ class NonRelationDataProvider():
 				data_list = tuple()
 			export[item['code']] = data_list
 		self.nonrel_list = export
-
+		
 		return {
 			'get_nonrel_arr': self.get_nonrel_arr,
 			'get_nonrel_val': self.get_nonrel_val
@@ -139,7 +139,7 @@ phone_link_reg = re.compile('[^+0-9]')
 class HelpersProviderMixin():
 	def get_phone_link(self, phone):
 		return 'tel:' + phone_link_reg.sub('', phone)
-
+	
 	def get_helpers(self):
 		return {
 			'get_phone_link': self.get_phone_link
@@ -158,7 +158,7 @@ class ErrorHandlerMixin(RequestHandler):
 		}
 		status = errors[error_class_name]
 		self.set_status(status)
-
+		
 		return self.write('500: Internal server error')
 
 
@@ -166,7 +166,7 @@ class JResponse(RequestHandler):
 	def __init__(self, status='success', status_code=200):
 		self.status = status
 		self.s_code = status_code
-
+	
 	def __call__(self, response_data):
 		if self.self.s_code is not 200:
 			self.set_status(self.self.s_code)

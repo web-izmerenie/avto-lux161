@@ -9,10 +9,10 @@ require! {
 	\backbone : B
 	\marionette : M
 	\backbone.wreqr : W
-
+	
 	'../config.json' : config
 	'../ajax-req'
-
+	
 	'../collection/panel-menu' : panel-menu-list
 	'../view/login-form' : LoginFormView
 	'../view/panel' : PanelView
@@ -73,50 +73,50 @@ auth-handler = (obj, store-ref=true)->
 		ref = delete obj.store-ref
 		B.history.navigate "##ref", { trigger: true, replace: true }
 		return false
-
+	
 	true
 
 panel-page-handler = (controller, view)->
 	return unless restore-last-page!
 	return unless auth-handler controller
-
+	
 	panel-view = (new PanelView!).render!
-
+	
 	controller.get-option \app .get-region \container .show panel-view
 	panel-view.get-option \work-area .show view
 
 class AppRouterController extends M.Controller
 	get-option: M.proxy-get-option
-
+	
 	\main : !->
 		return unless restore-last-page!
-
+		
 		if @get-option \app .is-auth
 			B.history .navigate '#panel', { trigger: true, replace: true }
 			return
-
+		
 		login-form-view = new LoginFormView app: @get-option \app
 		login-form-view .render!
-
+		
 		@get-option \app .get-region \container .show login-form-view
-
+	
 	\panel : !->
 		return unless restore-last-page!
 		return unless auth-handler @
-
+		
 		if B.history.fragment is \panel
 			# go to first menu item
 			first-ref = panel-menu-list.toJSON![0].ref
 			B.history .navigate first-ref, { trigger: true, replace: true }
 			return
-
+	
 	\pages-list : !->
 		panel-page-handler @, (new PagesListView!).render!
 	\add-page : !->
 		panel-page-handler @, (new AddPageView!).render!
 	\edit-page : (id)!->
 		panel-page-handler @, (new EditPageView id: id).render!
-
+	
 	\catalog-sections-list : !->
 		panel-page-handler @, (new CatalogSectionsListView!).render!
 	\catalog-section-add : (sid)!->
@@ -125,7 +125,7 @@ class AppRouterController extends M.Controller
 	\catalog-section-edit : (sid)!->
 		view = (new CatalogSectionEditView {\section-id : sid, id: sid}).render!
 		panel-page-handler @, view
-
+	
 	\catalog-elements-list : (section-id)!->
 		view = (new CatalogElementsListView \section-id : section-id).render!
 		panel-page-handler @, view
@@ -135,46 +135,46 @@ class AppRouterController extends M.Controller
 	\catalog-element-edit : (sid, eid)!->
 		view = (new CatalogElementEditView {\section-id : sid, id: eid}).render!
 		panel-page-handler @, view
-
+	
 	\redirect-list : !->
 		panel-page-handler @, (new RedirectListView!).render!
 	\add-redirect : !->
 		panel-page-handler @, (new AddRedirectView!).render!
 	\edit-redirect : (id)!->
 		panel-page-handler @, (new EditRedirectView id: id).render!
-
+	
 	\data-list : !->
 		panel-page-handler @, (new DataListView!).render!
 	\add-data : !->
 		panel-page-handler @, (new AddDataView!).render!
 	\edit-data : (id)!->
 		panel-page-handler @, (new EditDataView id: id).render!
-
+	
 	\accounts : !->
 		panel-page-handler @, (new AccountsListView!).render!
 	\account-add : !->
 		panel-page-handler @, (new AddAccountView!).render!
 	\account-edit : (id)!->
 		panel-page-handler @, (new EditAccountView id: id).render!
-
+	
 	\logout : !->
 		return unless restore-last-page!
 		return unless auth-handler @, false
-
+		
 		ajax-req {
 			url: config.logout_url
 			success: (json)!~>
 				unless json.status is \logout
 					W.radio.commands .execute \police, \panic,
 						new Error 'Logout error'
-
+				
 				@get-option \app .is-auth = false
 				B.history.navigate '#', { trigger: true, replace: true }
 		}
-
+	
 	\unknown : !->
 		return unless restore-last-page!
-
+		
 		W.radio.commands .execute \police, \panic,
 			new Error 'Route not found'
 
