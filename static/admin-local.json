@@ -167,6 +167,7 @@
           "seo_meta_description": "SEO: Описание",
           "delegate_seo_meta_keywords": "SEO: Делегировать ключевые слова",
           "seo_meta_keywords": "SEO: Ключевые слова",
+          "page_seo_text": "SEO-текст на странице категории",
           "has_footer_slogan": "Собственный слоган внизу страницы",
           "footer_slogan": "Афоризм внизу страницы"
         }

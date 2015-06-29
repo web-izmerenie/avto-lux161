@@ -1,6 +1,17 @@
 Changelog
 =========
 
+r9
+---------
+
+- Added field "page_seo_text" for catalog section model;
+- Some refactoring.
+
+r8
+---------
+
+No info...
+
 r7
 ---------
 
@@ -38,7 +49,7 @@ r4
   `bottom_counters` in admin panel and put your counters to this field;
 - <strong>WARNING!</strong> Phones in header and footer, and footer
   E-Mail now provided by non-relation data as codes:
-
+    
     - `phones` → `header`
     - `phones` → `footer`
     - `email` → `footer`

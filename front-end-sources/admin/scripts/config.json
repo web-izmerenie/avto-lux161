@@ -61,6 +61,7 @@
         "seo_meta_description",
         "delegate_seo_meta_keywords",
         "seo_meta_keywords",
+        "page_seo_text",
         "has_footer_slogan",
         "footer_slogan"
       ]
