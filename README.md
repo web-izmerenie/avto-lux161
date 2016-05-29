@@ -98,7 +98,7 @@ And then create new admin user:
 $ ./avto-lux/manage.py create-admin
 ```
 It will create accout with login `admin` and password `admin`.<br>
-<b>WARNING!</b> Do not foget to go to /adm/ route and change this login/password.
+<b>WARNING!</b> Do not foget to go to `/adm/` route and change this login/password.
 
 After that you can go to `/adm/#panel/pages` route and create main page
 (page with path `/`).
