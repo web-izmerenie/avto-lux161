@@ -50,7 +50,7 @@
   
 7. Fill database by database dump from backup archive:
   
-  If you have started without any backups [read this](#Deploy-with-clean-database)
+  If you have started without any backups [read this](#deploy-with-clean-database)
   and skip this item.
   
   ```bash
