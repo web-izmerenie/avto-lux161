@@ -41,6 +41,7 @@ def createadmin():
 
 
 if __name__ == '__main__':
+	
 	try:
 		action = sys.argv[1]
 		# opts = sys.argv[2:]
@@ -55,7 +56,7 @@ if __name__ == '__main__':
 		raise Exception("Missed required argument")
 	
 	actions = {
-		'run':{
+		'run': {
 			'fn': server,
 			'kwrgs': {},
 			'options': []

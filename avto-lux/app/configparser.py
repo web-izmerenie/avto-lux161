@@ -4,7 +4,9 @@ import yaml
 import os
 
 class Config:
+	
 	def __init__(self):
+		
 		conf_path = os.path.join(os.getcwd(), 'config.yaml')
 		if os.environ.get('CONFIG_PATH'):
 			conf_path = os.environ.get('CONFIG_PATH')

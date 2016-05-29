@@ -320,7 +320,7 @@ class AdminMainHandler(JsonResponseMixin):
 			permanent = (lambda: True if kwargs['status'] == '301' else False)()
 			from app.app import application
 			
-			application.handlers[0][1][:0] = [
+			application().handlers[0][1][:0] = [
 				URLSpec(
 					kwargs['old_url'] + '$',
 					RedirectHandler,
@@ -393,7 +393,7 @@ class AdminMainHandler(JsonResponseMixin):
 				)()
 			from app.app import application
 			counter = 0
-			hndlr = application.handlers[0][1]
+			hndlr = application().handlers[0][1]
 			for item in range(len(hndlr)):
 				try:
 					if(hndlr[item].__dict__['kwargs']['url'] == data.one().new_url):

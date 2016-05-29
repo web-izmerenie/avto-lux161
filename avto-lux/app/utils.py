@@ -12,6 +12,18 @@ from app.models.pagemodels import UrlMapping
 from urllib.parse import quote
 
 
+
+class LazyMemoizeWrapper:
+	def __init__(self, f):
+		self._getter = f
+	def __call__(self):
+		try:
+			return self._value
+		except AttributeError:
+			self._value = self._getter();
+			return self._value
+
+
 class CollectHandlersException(Exception):
 	def __repr__(self, e, list):
 		return "{0}, {1}".format(e, list)
@@ -89,9 +101,9 @@ def send_mail(msg=None, theme=None):
 	smtpserver.login(user, pwd)
 	body = ''.join(
 		"Content-Type: text/html; charset=utf-8\r\n" +
-		"From: %s\r\n" % from_addr +
-		"To: %s\r\n" % to +
-		"Subject: %s\r\n" % theme +
+		("From: %s\r\n" % from_addr) +
+		("To: %s\r\n" % to) +
+		("Subject: %s\r\n" % theme) +
 		"\r\n" +
 		msg +
 		"\r\n"
