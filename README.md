@@ -108,17 +108,18 @@ go to route `/adm/#panel/data/add.html` and create this fields
 (for `name` field in every level just use any useful human-name
 and use number value for `sort`, main key is `symbol key`):
   1. `phones`:
-    1.1. `header` text (multiple)
-    1.2. `footer` text (single)
+    1. `header` text (multiple)
+    2. `footer` text (single)
   2. `email`:
-    2.1. `footer` text (single)
+    1. `footer` text (single)
   3. `counters`:
-    3.1. `bottom_counters` multiline text (multiple)
-  4. `robots`
-    4.1. `robots` multiline text (single) with value:
-      ```robots
-      User-agent: *
-      Disallow: /adm/
-      Disallow: /static/admin-templates/
-      Disallow: /static/ckeditor/
-      ```
+    1. `bottom_counters` multiline text (multiple)
+  4. `robots`:
+    1. `robots` multiline text (single) with value:
+
+        ```robots
+        User-agent: *
+        Disallow: /adm/
+        Disallow: /static/admin-templates/
+        Disallow: /static/ckeditor/
+        ```
