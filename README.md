@@ -30,7 +30,17 @@
 5. Copy [config.yaml.example](./config.yaml.example) to `config.yaml` and
   set in `config.yaml`:
   
-  1. `DATABASE` — set correct access data to database;
+  1. `DATABASE` — set correct access data to database.
+    According to [this guide](#prepare-new-database):
+    ```yaml
+    DATABASE:
+      HOST: 'localhost'
+      PORT: ''
+      DBNAME: 'avtolux_dbname'
+      USER: 'avtolux_user'
+      PASS: 'avtolux_password'
+      TABLE_NAME_PREFIX: 'avtolux_'
+    ```
   2. `DEV_SERVER` — if you going to start development server;
   3. `PRODUCTION_SERVER` — if you going to start production server.<br>
     <b>WARNING!:</b> don't set instances more than <b>1</b>,
@@ -39,7 +49,8 @@
   
 6. Copy `./files/uploaded/` dir from backup archive to `./files/uploaded/`.
   
-  Just for example:
+  Just for example, doing it by extracting from backup
+  (you should be inside root of the project and backup should be placed there too):
   
   ```bash
   $ cd files
@@ -54,7 +65,7 @@
   and skip this item.
   
   ```bash
-  $ cat avtolux_db_dump_20150308041213.sql.gz | gunzip | psql --host localhost -U avtolux_user avtolux_dbname
+  $ cat avtolux_db_dump_20150308041213.sql.gz | gunzip | psql -h localhost -d avtolux_dbname -U avtolux_user
   ```
   
   Where `avtolux_db_dump_20150308041213.sql.gz` is database dump,
@@ -87,7 +98,8 @@
 
 ### Deploy with clean database
 
-If you start with new empty database, run this command before start server:
+May be you wan't to know how to create new database and new user
+to access this database? Then [read this first](#prepare-new-database).
 
 ```bash
 $ ./avto-lux/manage.py dbsync
@@ -98,7 +110,17 @@ And then create new admin user:
 $ ./avto-lux/manage.py create-admin
 ```
 It will create accout with login `admin` and password `admin`.<br>
-<b>WARNING!</b> Do not foget to go to `/adm/` route and change this login/password.
+<b>WARNING!</b> Do not foget to go later to `/adm/` route and change this login/password!
+
+Now you can start development:
+```bash
+$ ./run_development.sh
+```
+Or production (doesn't matter):
+```bash
+$ ./run_production.sh
+```
+Don't be afraid of 500 error, because we don't have main page yet.
 
 After that you can go to `/adm/#panel/pages` route and create main page
 (page with path `/`).
@@ -123,3 +145,51 @@ and use number value for `sort`, main key is `symbol key`):
         Disallow: /static/admin-templates/
         Disallow: /static/ckeditor/
         ```
+
+### Prepare new database
+
+Login as `postgres` user:
+```bash
+$ sudo su - postgres
+```
+Then open interactive PostgreSQL terminal:
+```bash
+$ psql
+```
+Inside that terminal create new user:
+named as `avtolux_user` with password `avtolux_password`:
+```sql
+create user avtolux_user with password 'avtolux_password' ;
+```
+After that create new database named as `avtolux_dbname`:
+```sql
+create database avtolux_dbname ;
+```
+And give user created before all privileges to this new database:
+```sql
+grant all on database avtolux_dbname to avtolux_user ;
+```
+You can check if it's done:
+```sql
+\l
+```
+Done!
+
+### How to make backup
+
+#### Database dump
+
+```bash
+$ pg_dump -h localhost -d avtolux_dbname -U avtolux_user | gzip > avtolux_db_dump_`date +'%Y%m%d%H%M%S'`.sql.gz
+```
+
+Where `avtolux_user` is user for database access
+and `avtolux_dbname` is a database name;
+
+#### Uploaded files backup
+
+Inside root of the project:
+
+```bash
+$ tar -czvf avtolux_files_backup_`date +'%Y%m%d%H%M%S'`.tar.gz files/uploaded/
+```
