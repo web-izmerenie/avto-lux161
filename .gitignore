@@ -20,7 +20,6 @@ log.txt
 # node
 node_modules
 bower_components
-front-end-gulp
 
 static/**/*build.css
 static/**/*build.js
