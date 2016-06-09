@@ -32,6 +32,7 @@
   
   1. `DATABASE` — set correct access data to database.
     According to [this guide](#prepare-new-database):
+    
     ```yaml
     DATABASE:
       HOST: 'localhost'
@@ -41,6 +42,7 @@
       PASS: 'avtolux_password'
       TABLE_NAME_PREFIX: 'avtolux_'
     ```
+    
   2. `DEV_SERVER` — if you going to start development server;
   3. `PRODUCTION_SERVER` — if you going to start production server.<br>
     <b>WARNING!:</b> don't set instances more than <b>1</b>,
