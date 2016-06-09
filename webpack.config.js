@@ -1,7 +1,8 @@
 'use strict';
 
-const webpack = require('webpack');
 const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const BASE_DIR = __dirname;
 
@@ -35,7 +36,7 @@ module.exports = {
 			{ test: /\.modernizrrc$/, loader: "modernizr" },
 			{
 				test: /\.styl$/,
-				loader: 'style-loader!css-loader!stylus-loader'
+				loader: ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader')
 			}
 		]
 	},
@@ -43,6 +44,7 @@ module.exports = {
 		use: [require('nib')(), require('bootstrap-styl')()]
 	},
 	plugins: [
+		new ExtractTextPlugin('[name].bundle.css'),
 		new webpack.optimize.CommonsChunkPlugin({
 			names: ['client-app', 'client-vendor'],
 			minChunks: Infinity

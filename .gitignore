@@ -21,7 +21,7 @@ log.txt
 node_modules
 
 # webpack bundles
-static/*.bundle.js*
+static/*.bundle.*
 
 static/tmp
 images_sizes.txt
