@@ -93,7 +93,7 @@
   ```bash
   $ npm run webpack
   ```
-  See for `scripts` key in `package.json`, also you can call <b>webpack</b>
+  See for `scripts` key in [`package.json`](./package.json), also you can call <b>webpack</b>
   with specific arguments through `--`, for example show <b>webpack</b> help:
   ```bash
   $ npm run webpack -- --help
