@@ -6,8 +6,8 @@
  */
 
 require! {
-	\jquery    : $
-	\jquery-ui : {}
+	\jquery               : $
+	\jquery-ui/datepicker : {}
 }
 
 $html = $ \html

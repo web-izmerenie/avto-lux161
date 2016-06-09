@@ -5,11 +5,11 @@
  */
 
 require! {
-	\jquery               : $
-	\modernizr$client     : Modernizr
-	\./datepicker-init.ls : {}
+	\jquery            : $
+	\modernizr$client  : Modernizr
+	\./datepicker-init : {}
 	
-	\./get-local.ls
+	\./get-local
 }
 
 speed = 500 # ms, animation

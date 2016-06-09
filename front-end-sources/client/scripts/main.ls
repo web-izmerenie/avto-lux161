@@ -5,8 +5,8 @@
  */
 
 require! {
-	\jquery              : $
-	\jquery-colorbox     : {}
+	\jquery                      : $
+	\jquery-colorbox             : {}
 	
 	\clientbase/styles/main.styl : {}
 }
@@ -24,4 +24,4 @@ $ \.catalog-page.detail .each (i)!->
 		loop: false
 
 # include sub-modules
-require './forms.ls'
+require \./forms

@@ -28,23 +28,7 @@
     "webpack": "node_modules/.bin/webpack"
   },
   "gulp": {
-    "distclean": [
-      "./front-end-gulp",
-      "./node_modules",
-      "./bower_components"
-    ],
     "styles": {
-      "client": {
-        "type": "stylus",
-        "path": "./front-end-sources/client/styles/",
-        "srcDir": "./front-end-sources/client/styles/",
-        "mainSrc": "main.styl",
-        "destDir": "./static/",
-        "buildFile": "client-build.css",
-        "shim": [
-          "./shim/nib"
-        ]
-      },
       "admin": {
         "type": "stylus",
         "path": "./front-end-sources/admin/styles/",
@@ -59,42 +43,6 @@
       }
     },
     "scripts": {
-      "client": {
-        "type": "browserify",
-        "path": "./front-end-sources/client/scripts/",
-        "srcDir": "./front-end-sources/client/scripts/",
-        "mainSrc": "main.ls",
-        "destDir": "./static/",
-        "buildFile": "client-build.js",
-        "transform": [
-          "liveify-stable"
-        ],
-        "extensions": [
-          ".ls"
-        ],
-        "jshintDisabled": true,
-        "shim": {
-          "jquery": {
-            "path": "./bower_components/jquery/dist/jquery.js",
-            "exports": "jQuery"
-          },
-          "jquery-colorbox": {
-            "path": "./bower_components/jquery-colorbox/jquery.colorbox.js",
-            "exports": ""
-          },
-          "jquery-ui.datepicker": {
-            "path": "./bower_components/jquery-ui/ui/datepicker.js",
-            "exports": "",
-            "depends": {
-              "jquery": "jQuery"
-            }
-          },
-          "modernizr": {
-            "path": "./bower_components/modernizr/modernizr.js",
-            "exports": "Modernizr"
-          }
-        }
-      },
       "admin": {
         "type": "browserify",
         "path": "./front-end-sources/admin/scripts/",

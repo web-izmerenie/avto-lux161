@@ -20,6 +20,7 @@ log.txt
 # node
 node_modules
 
+# webpack bundles
 static/*.bundle.js*
 
 static/tmp

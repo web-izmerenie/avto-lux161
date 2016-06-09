@@ -10,7 +10,7 @@ module.exports = {
 	watch: process.env.NODE_ENV === 'development',
 	entry: {
 		'client-app': path.join(BASE_DIR, 'front-end-sources', 'client', 'scripts', 'main.ls'),
-		// 'client-vendor': path.join(BASE_DIR, 'front-end-sources', 'client', 'scripts', 'vendor.ls'),
+		'client-vendor': path.join(BASE_DIR, 'front-end-sources', 'client', 'scripts', 'vendor.ls'),
 		// 'admin-app': path.join(BASE_DIR, 'front-end-sources', 'admin', 'scripts', 'main.ls'),
 		// 'admin-vendor': path.join(BASE_DIR, 'front-end-sources', 'admin', 'scripts', 'vendor.ls')
 	},
@@ -22,14 +22,9 @@ module.exports = {
 		alias: {
 			adminbase: path.resolve(BASE_DIR, 'front-end-sources', 'admin'),
 			clientbase: path.resolve(BASE_DIR, 'front-end-sources', 'client'),
-			// modernizr: 'modernizr/lib/build.js'
-			modernizr$client: path.resolve(BASE_DIR, 'front-end-sources', 'client', '.modernizrrc')
+			modernizr$client: path.resolve(BASE_DIR, 'front-end-sources', 'client', '.modernizrrc'),
 		},
-		extensions: [
-			'',
-			'*.js',
-			'*.ls'
-		]
+		extensions: ['', '.js', '.ls']
 	},
 	module: {
 		loaders: [
@@ -47,5 +42,22 @@ module.exports = {
 	stylus: {
 		use: [require('nib')(), require('bootstrap-styl')()]
 	},
-	plugins: []
+	plugins: [
+		new webpack.optimize.CommonsChunkPlugin({
+			names: ['client-app', 'client-vendor'],
+			minChunks: Infinity
+		})
+	]
 };
+
+if (process.env.NODE_ENV === 'production') {
+	module.exports.plugins.push(
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				warnings: false,
+				drop_console: false,
+				unsafe: true
+			}
+		})
+	);
+}
