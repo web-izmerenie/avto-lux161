@@ -1,22 +1,32 @@
 {
   "dependencies": {
-    "front-end-gulp-pattern": "^1",
-    "gulp-stylus": "^1.3.4",
-    "gulp-browserify": "~0.5",
-    "gulp-uglify": "^1.0.1",
-    "liveify-stable": "^1",
-    "LiveScript": "1.3.1",
-
-    "nib": "^1.0.4",
-    "bootstrap-styl": "^4",
-    "jade": "^1.8.2",
-
-    "bower": "^1"
+    "backbone": "1.3.3",
+    "backbone.marionette": "2.4.7",
+    "backbone.wreqr": "1.3.7",
+    "bootstrap-styl": "5.0.5",
+    "ckeditor": "4.5.9",
+    "css-loader": "0.23.1",
+    "exports-loader": "0.6.3",
+    "expose-loader": "0.7.1",
+    "imports-loader": "0.6.5",
+    "jade": "1.11.0",
+    "jquery": "2.2.4",
+    "jquery-colorbox": "1.6.4",
+    "jquery-ui": "1.10.5",
+    "json-loader": "0.5.4",
+    "livescript-loader": "0.1.5",
+    "modernizr": "3.3.1",
+    "modernizr-loader": "0.0.5",
+    "nib": "1.1.0",
+    "pug-loader": "1.0.2",
+    "style-loader": "0.13.1",
+    "stylus": "0.54.5",
+    "stylus-loader": "2.1.0",
+    "webpack": "^1.13.1"
   },
   "scripts": {
-    "postinstall": "./deploy.sh"
+    "webpack": "node_modules/.bin/webpack"
   },
-
   "gulp": {
     "distclean": [
       "./front-end-gulp",
@@ -56,8 +66,12 @@
         "mainSrc": "main.ls",
         "destDir": "./static/",
         "buildFile": "client-build.js",
-        "transform": ["liveify-stable"],
-        "extensions": [".ls"],
+        "transform": [
+          "liveify-stable"
+        ],
+        "extensions": [
+          ".ls"
+        ],
         "jshintDisabled": true,
         "shim": {
           "jquery": {
@@ -71,7 +85,9 @@
           "jquery-ui.datepicker": {
             "path": "./bower_components/jquery-ui/ui/datepicker.js",
             "exports": "",
-            "depends": { "jquery": "jQuery" }
+            "depends": {
+              "jquery": "jQuery"
+            }
           },
           "modernizr": {
             "path": "./bower_components/modernizr/modernizr.js",
@@ -86,8 +102,12 @@
         "mainSrc": "main.ls",
         "destDir": "./static/",
         "buildFile": "admin-build.js",
-        "transform": ["liveify-stable"],
-        "extensions": [".ls"],
+        "transform": [
+          "liveify-stable"
+        ],
+        "extensions": [
+          ".ls"
+        ],
         "jshintDisabled": true,
         "shim": {
           "jquery": {
@@ -121,7 +141,9 @@
           "jquery.ckeditor": {
             "path": "./bower_components/ckeditor/adapters/jquery.js",
             "exports": "",
-            "depends": { "jquery": "jQuery" }
+            "depends": {
+              "jquery": "jQuery"
+            }
           },
           "jquery.dragndrop-file-upload": {
             "path": "./jquery.dragndrop-file-upload/jquery.dragndrop-file-upload.min.js",
@@ -130,12 +152,16 @@
           "jquery-ui": {
             "path": "./bower_components/jquery-ui/jquery-ui.min.js",
             "exports": "",
-            "depends": { "jquery": "jQuery" }
+            "depends": {
+              "jquery": "jQuery"
+            }
           },
           "jquery-ui.sortable": {
             "path": "./bower_components/jquery-ui/ui/sortable.js",
             "exports": "",
-            "depends": { "jquery": "jQuery" }
+            "depends": {
+              "jquery": "jQuery"
+            }
           }
         }
       }

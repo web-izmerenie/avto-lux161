@@ -19,16 +19,24 @@ log.txt
 
 # node
 node_modules
+
+static/*.bundle.js*
+
+static/tmp
+images_sizes.txt
+
+# todo symbolic links via deploy task
+files/uploaded
+
+# DEPRECATED
+
+# bower no longer used, this dir can be removed
 bower_components
 
+# old builds, this files no more needed, can be removed
 static/**/*build.css
 static/**/*build.js
 static/client-build.css
 static/client-build.js
 static/admin-build.css
 static/admin-build.js
-static/tmp
-images_sizes.txt
-
-# todo symbolic links via deploy task
-files/uploaded

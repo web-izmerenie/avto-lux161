@@ -6,9 +6,9 @@
  */
 
 require! {
-	\backbone : B
-	\marionette : M
-	'./config.json' : config
+	\backbone            : B
+	\backbone.marionette : M
+	'./config.json'      : config
 }
 
 class App extends M.Application

@@ -6,15 +6,15 @@
  */
 
 require! {
-	\jquery : $
+	\jquery              : $
 	\jquery-ui
-	\jquery-ui.sortable
+	\jquery-ui/sortable.js
 	
-	\backbone : B
-	\marionette : M
+	\backbone            : B
+	\backbone.marionette : M
 	
-	'../error-msg' : ErrorMessageView
-	'../ask-sure' : AskSureView
+	'../error-msg.ls'    : ErrorMessageView
+	'../ask-sure.ls'     : AskSureView
 }
 
 sort-collection-cb = (e, ui)!->

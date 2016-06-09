@@ -5,8 +5,10 @@
  * @charset utf-8
  */
 
-require! \jquery : $
-require \jquery-ui.datepicker
+require! {
+	\jquery    : $
+	\jquery-ui : {}
+}
 
 $html = $ \html
 

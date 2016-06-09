@@ -6,34 +6,34 @@
  */
 
 require! {
-	\backbone : B
-	\marionette : M
-	\backbone.wreqr : W
+	\backbone                                   : B
+	\backbone.marionette                        : M
+	\backbone.wreqr                             : W
 	
-	'../config.json' : config
-	'../ajax-req'
+	'../config.json'                            : config
+	'../ajax-req.ls'
 	
-	'../collection/panel-menu' : panel-menu-list
-	'../view/login-form' : LoginFormView
-	'../view/panel' : PanelView
-	'../view/sections/pages/list' : PagesListView
-	'../view/sections/pages/add' : AddPageView
-	'../view/sections/pages/edit' : EditPageView
-	'../view/sections/catalog/sections-list' : CatalogSectionsListView
-	'../view/sections/catalog/section-add' : CatalogSectionAddView
-	'../view/sections/catalog/section-edit' : CatalogSectionEditView
-	'../view/sections/catalog/elements-list' : CatalogElementsListView
-	'../view/sections/catalog/element-add' : CatalogElementAddView
-	'../view/sections/catalog/element-edit' : CatalogElementEditView
-	'../view/sections/redirect/list' : RedirectListView
-	'../view/sections/redirect/add' : AddRedirectView
-	'../view/sections/redirect/edit' : EditRedirectView
-	'../view/sections/data/list' : DataListView
-	'../view/sections/data/add' : AddDataView
-	'../view/sections/data/edit' : EditDataView
-	'../view/sections/accounts/list' : AccountsListView
-	'../view/sections/accounts/add' : AddAccountView
-	'../view/sections/accounts/edit' : EditAccountView
+	'../collection/panel-menu.ls'               : panel-menu-list
+	'../view/login-form.ls'                     : LoginFormView
+	'../view/panel.ls'                          : PanelView
+	'../view/sections/pages/list.ls'            : PagesListView
+	'../view/sections/pages/add.ls'             : AddPageView
+	'../view/sections/pages/edit.ls'            : EditPageView
+	'../view/sections/catalog/sections-list.ls' : CatalogSectionsListView
+	'../view/sections/catalog/section-add.ls'   : CatalogSectionAddView
+	'../view/sections/catalog/section-edit.ls'  : CatalogSectionEditView
+	'../view/sections/catalog/elements-list.ls' : CatalogElementsListView
+	'../view/sections/catalog/element-add.ls'   : CatalogElementAddView
+	'../view/sections/catalog/element-edit.ls'  : CatalogElementEditView
+	'../view/sections/redirect/list.ls'         : RedirectListView
+	'../view/sections/redirect/add.ls'          : AddRedirectView
+	'../view/sections/redirect/edit.ls'         : EditRedirectView
+	'../view/sections/data/list.ls'             : DataListView
+	'../view/sections/data/add.ls'              : AddDataView
+	'../view/sections/data/edit.ls'             : EditDataView
+	'../view/sections/accounts/list.ls'         : AccountsListView
+	'../view/sections/accounts/add.ls'          : AddAccountView
+	'../view/sections/accounts/edit.ls'         : EditAccountView
 }
 
 police = W.radio .channel \police

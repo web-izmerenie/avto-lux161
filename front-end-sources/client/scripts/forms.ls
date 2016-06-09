@@ -4,7 +4,13 @@
  * @author Viacheslav Lotsmanov
  */
 
-require! \jquery : $
+require! {
+	\jquery               : $
+	\modernizr$client     : Modernizr
+	\./datepicker-init.ls : {}
+	
+	\./get-local.ls
+}
 
 speed = 500 # ms, animation
 
@@ -15,7 +21,7 @@ $forms = $ 'body > form'
 $overlay = $ '<div/>' .add-class \form-overlay
 process = false
 
-(local) <-! (require './get-local')
+local <-! get-local
 
 hide-form-selector = '>label, >input:not(.b), >.time'
 
@@ -35,7 +41,7 @@ $forms.each !->
 	id = $ @ .attr \id
 	$closer = $ '<button/>' .add-class \closer .html \Закрыть
 	
-	$ "a[href=\##id]" .click ~>
+	$ "a[href='\##id']" .click ~>
 		return false if process
 		process := true
 		
@@ -72,9 +78,7 @@ $forms.each !->
 	$ @ .prepend $closer
 	
 	$ @ .find 'input[type=date]' .each !->
-		Modernizr = require \modernizr
 		unless Modernizr.inputtypes.date
-			require './datepicker-init'
 			$ @ .attr \type \text
 			$ @ .datepicker!
 	
@@ -95,7 +99,7 @@ $forms.each !->
 	
 	action = $ @ .find 'input[name=action]' .val!
 	
-	$ .ajax {
+	$ .ajax do
 		url: $ @ .attr \action
 		method: \POST
 		data: data-to-send
@@ -175,6 +179,5 @@ $forms.each !->
 			else
 				window.alert local.forms.err.ajax
 			free!
-	}
 	
 	false

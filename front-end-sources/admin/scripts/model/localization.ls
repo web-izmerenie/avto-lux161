@@ -6,7 +6,7 @@
  */
 
 require! {
-	\jquery : $
+	\jquery   : $
 	\backbone : B
 }
 

@@ -15,7 +15,7 @@ module.exports = (cb)->
 	unless url?
 		throw new Error "Can't get 'data-local-file' attribute from <html> tag"
 	
-	$ .ajax {
+	$ .ajax do
 		url: url,
 		method: \GET,
 		data-type: \json,
@@ -25,4 +25,3 @@ module.exports = (cb)->
 				throw new Error "Can't get localization by this language: #lang"
 			
 			cb json[lang]
-	}

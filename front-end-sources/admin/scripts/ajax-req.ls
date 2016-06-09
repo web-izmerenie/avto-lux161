@@ -6,7 +6,7 @@
  */
 
 require! {
-	\jquery : $
+	\jquery         : $
 	\backbone.wreqr : W
 	'./config.json' : config
 }

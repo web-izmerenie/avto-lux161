@@ -6,7 +6,7 @@
  */
 
 require! {
-	\backbone : B
+	\backbone        : B
 	'./localization' : LocalizationModel
 }
 
