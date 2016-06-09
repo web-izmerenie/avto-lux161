@@ -78,12 +78,29 @@
   $ npm install
   ```
   
-  It automatically runs `./deploy.sh` after install
-  and installs some <b>bower</b> dependencies
-  and build front-end by `./front-end-gulp` tool;
+  And build optimized production front-end bundles:
+  ```bash
+  $ npm run bundle-production
+  ```
+  
+  Or build pretty development bundles and start watcher for development:
+  ```bash
+  $ npm run bundle-development
+  ```
+  
+  It uses [<b>webpack</b>](//webpack.github.io/) for bundling, you can run
+  just this project local <b>webpack</b> executable by this command:
+  ```bash
+  $ npm run webpack
+  ```
+  See for `scripts` key in `package.json`, also you can call <b>webpack</b>
+  with specific arguments through `--`, for example show <b>webpack</b> help:
+  ```bash
+  $ npm run webpack -- --help
+  ```
   
 9. Run web-server:
-
+  
   In debug mode:
   ```bash
   $ ./run_development.sh
