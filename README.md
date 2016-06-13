@@ -82,8 +82,7 @@
   
   And build optimized production front-end bundles:
   ```bash
-  $ npm run bundle-production-client
-  $ npm run bundle-production-admin
+  $ npm run bundle-production
   ```
   
   Or build pretty development bundles and start watcher for development:
