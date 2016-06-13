@@ -14,6 +14,7 @@
     "jquery": "2.2.4",
     "jquery-colorbox": "1.6.4",
     "jquery-ui": "1.10.5",
+    "jquery.dragndrop-file-upload": "https://github.com/unclechu/jquery.dragndrop-file-upload/tarball/v0.0.1",
     "json-loader": "0.5.4",
     "livescript-loader": "0.1.5",
     "modernizr": "3.3.1",
