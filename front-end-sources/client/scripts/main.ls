@@ -5,10 +5,10 @@
  */
 
 require! {
-	\jquery                      : $
-	\jquery-colorbox             : {}
+	\jquery                : $
+	\jquery-colorbox       : {}
 	
-	\clientbase/styles/main.styl : {}
+	\base/styles/main.styl : {}
 }
 
 <-! $ # dom ready

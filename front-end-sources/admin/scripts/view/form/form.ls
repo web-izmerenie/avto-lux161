@@ -7,7 +7,6 @@
 
 require! {
 	\jquery                   : $
-	\ckeditor                 : {}
 	\ckeditor/adapters/jquery : {}
 	
 	\backbone.marionette      : M

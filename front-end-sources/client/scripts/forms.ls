@@ -6,7 +6,7 @@
 
 require! {
 	\jquery            : $
-	\modernizr$client  : Modernizr
+	\modernizr         : Modernizr
 	\./datepicker-init : {}
 	
 	\./get-local

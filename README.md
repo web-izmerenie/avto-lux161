@@ -82,12 +82,14 @@
   
   And build optimized production front-end bundles:
   ```bash
-  $ npm run bundle-production
+  $ npm run bundle-production-client
+  $ npm run bundle-production-admin
   ```
   
   Or build pretty development bundles and start watcher for development:
   ```bash
-  $ npm run bundle-development
+  $ npm run bundle-development-client
+  $ npm run bundle-development-admin
   ```
   
   It uses [<b>webpack</b>](//webpack.github.io/) for bundling, you can run

@@ -24,11 +24,14 @@
     "style-loader": "0.13.1",
     "stylus": "0.54.5",
     "stylus-loader": "2.1.0",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "webpack-merge": "0.14.0"
   },
   "scripts": {
     "webpack": "node_modules/.bin/webpack",
-    "bundle-production": "env NODE_ENV=production webpack",
-    "bundle-development": "env NODE_ENV=development webpack"
+    "bundle-development-client": "env NODE_ENV=development webpack --config webpack.config.client.js",
+    "bundle-development-admin": "env NODE_ENV=development webpack --config webpack.config.admin.js",
+    "bundle-production-client": "env NODE_ENV=production webpack --config webpack.config.client.js",
+    "bundle-production-admin": "env NODE_ENV=production webpack --config webpack.config.admin.js"
   }
 }
