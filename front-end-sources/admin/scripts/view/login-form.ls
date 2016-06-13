@@ -6,14 +6,14 @@
  */
 
 require! {
-	\backbone : B
-	\marionette : M
-	\backbone.wreqr : W
-	'../model/basic' : BasicModel
+	\backbone               : B
+	\backbone.marionette    : M
+	\backbone.wreqr         : W
+	'../model/basic'        : BasicModel
 	'../model/localization' : LocalizationModel
-	'./smooth' : SmoothView
-	'./loader' : LoaderView
-	'./error-msg' : ErrorMessageView
+	'./smooth'              : SmoothView
+	'./loader'              : LoaderView
+	'./error-msg'           : ErrorMessageView
 	'../ajax-req'
 }
 

@@ -6,7 +6,7 @@
  */
 
 require! {
-	\marionette : M
+	\backbone.marionette : M
 }
 
 class SmoothView extends M.LayoutView

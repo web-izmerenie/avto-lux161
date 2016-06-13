@@ -6,7 +6,7 @@
  */
 
 require! {
-	'./smooth' : SmoothView
+	'./smooth'       : SmoothView
 	'../model/basic' : BasicModel
 }
 

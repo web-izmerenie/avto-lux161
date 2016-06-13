@@ -6,13 +6,15 @@
  */
 
 require! {
-	\jquery : $
+	\jquery                   : $
+	\ckeditor                 : {}
+	\ckeditor/adapters/jquery : {}
 	
-	\marionette : M
+	\backbone.marionette      : M
 	
-	'./files' : FilesItemView
-	'./data-fields' : DataFieldsItemView
-	'../../model/basic' : BasicModel
+	'./files'                 : FilesItemView
+	'./data-fields'           : DataFieldsItemView
+	'../../model/basic'       : BasicModel
 }
 
 class InputItemView extends M.ItemView
@@ -37,7 +39,6 @@ class HTMLInputItemView extends InputItemView
 		else
 			true
 	on-render: !->
-		require \jquery.ckeditor
 		set-timeout (!~> #hack
 			return unless @check-for-alive!
 			@ui.textarea.ckeditor!

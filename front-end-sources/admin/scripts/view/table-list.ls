@@ -6,9 +6,9 @@
  */
 
 require! {
-	\marionette : M
+	\backbone.marionette : M
 	
-	'../model/basic' : BasicModel
+	'../model/basic'     : BasicModel
 }
 
 class TableListView extends M.CompositeView

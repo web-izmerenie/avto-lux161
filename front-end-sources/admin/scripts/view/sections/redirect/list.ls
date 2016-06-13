@@ -9,7 +9,7 @@ require! {
 	# views
 	'../../table-list' : TableListView
 	'../../table-item' : TableItemView
-	'../../list' : ListView
+	'../../list'       : ListView
 }
 
 class ItemView extends TableItemView

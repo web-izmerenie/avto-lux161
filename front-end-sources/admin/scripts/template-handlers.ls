@@ -8,6 +8,7 @@
 require! {
 	\jquery              : $
 	\backbone.marionette : M
+	\jade/jade
 }
 
 static-url = $ \html .attr \data-templates-path
@@ -49,9 +50,13 @@ templates-bundle =
 	\menu-item                    : require \adminbase/templates/menu-item.jade
 	\panel                        : require \adminbase/templates/panel.jade
 
+compiled-templates = {}
+for k of templates-bundle
+	compiled-templates[k] = jade.compile templates-bundle[k]
+
 export load = (template-id)->
-	if templates-bundle.has-own-property template-id
-		then templates-bundle[template-id]
+	if compiled-templates.has-own-property template-id
+		then compiled-templates[template-id]
 		else throw new Error "Template '#{template-id}' isn't declared"
 
 export compile = (raw-template)-> raw-template

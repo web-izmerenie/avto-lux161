@@ -6,8 +6,8 @@
  */
 
 require! {
-	\backbone : B
-	\marionette : M
+	\backbone            : B
+	\backbone.marionette : M
 }
 
 class TableItemView extends M.ItemView

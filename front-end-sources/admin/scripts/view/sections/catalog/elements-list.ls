@@ -6,14 +6,14 @@
  */
 
 require! {
-	\marionette : M
+	\backbone.marionette   : M
 	
 	'../../../model/basic' : BasicModel
 	
 	# views
-	'../../table-list' : TableListView
-	'../../table-item' : TableItemView
-	'../../list' : ListView
+	'../../table-list'     : TableListView
+	'../../table-item'     : TableItemView
+	'../../list'           : ListView
 }
 
 class ItemView extends TableItemView

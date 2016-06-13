@@ -7,14 +7,13 @@
 
 require! {
 	\jquery              : $
-	\jquery-ui
-	\jquery-ui/sortable.js
+	\jquery-ui/sortable  : {}
 	
 	\backbone            : B
 	\backbone.marionette : M
 	
-	'../error-msg.ls'    : ErrorMessageView
-	'../ask-sure.ls'     : AskSureView
+	'../error-msg'       : ErrorMessageView
+	'../ask-sure'        : AskSureView
 }
 
 sort-collection-cb = (e, ui)!->

@@ -6,9 +6,11 @@
  */
 
 require! {
-	\backbone            : B
-	\backbone.marionette : M
-	'./config.json'      : config
+	\backbone                   : B
+	\backbone.marionette        : M
+	'./config.json'             : config
+	
+	\adminbase/styles/main.styl : {}
 }
 
 class App extends M.Application

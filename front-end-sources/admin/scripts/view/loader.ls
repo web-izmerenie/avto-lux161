@@ -7,7 +7,7 @@
 
 require! {
 	'../model/basic' : BasicModel
-	'./smooth' : SmoothView
+	'./smooth'       : SmoothView
 }
 
 class LoaderView extends SmoothView

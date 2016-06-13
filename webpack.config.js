@@ -1,4 +1,6 @@
 'use strict';
+/*jshint esversion: 6 */
+/*jshint node: true */
 
 const path = require('path');
 const webpack = require('webpack');
@@ -12,8 +14,8 @@ module.exports = {
 	entry: {
 		'client-app': path.join(BASE_DIR, 'front-end-sources', 'client', 'scripts', 'main.ls'),
 		'client-vendor': path.join(BASE_DIR, 'front-end-sources', 'client', 'scripts', 'vendor.ls'),
-		// 'admin-app': path.join(BASE_DIR, 'front-end-sources', 'admin', 'scripts', 'main.ls'),
-		// 'admin-vendor': path.join(BASE_DIR, 'front-end-sources', 'admin', 'scripts', 'vendor.ls')
+		'admin-app': path.join(BASE_DIR, 'front-end-sources', 'admin', 'scripts', 'main.ls'),
+		'admin-vendor': path.join(BASE_DIR, 'front-end-sources', 'admin', 'scripts', 'vendor.ls')
 	},
 	output: {
 		path: path.join(BASE_DIR, 'static'),
@@ -31,7 +33,7 @@ module.exports = {
 		loaders: [
 			{ test: /\.ls$/,   loader: 'livescript-loader' },
 			{ test: /\.json$/, loader: 'json-loader' },
-			{ test: /\.jade$/, loader: 'pug-loader' },
+			{ test: /\.jade$/, loader: 'raw-loader' },
 			{ test: require.resolve('jquery'), loader: 'expose?$!expose?jQuery' },
 			{ test: /\.modernizrrc$/, loader: "modernizr" },
 			{
@@ -47,6 +49,10 @@ module.exports = {
 		new ExtractTextPlugin('[name].bundle.css'),
 		new webpack.optimize.CommonsChunkPlugin({
 			names: ['client-app', 'client-vendor'],
+			minChunks: Infinity
+		}),
+		new webpack.optimize.CommonsChunkPlugin({
+			names: ['admin-app', 'admin-vendor'],
 			minChunks: Infinity
 		})
 	]

@@ -6,12 +6,11 @@
  */
 
 require! {
-	\jquery : $
-	\jquery-ui
-	\jquery-ui.sortable
+	\jquery              : $
+	\jquery-ui/sortable  : {}
 	
-	\marionette : M
-	\backbone.wreqr : W
+	\backbone.marionette : M
+	\backbone.wreqr      : W
 	
 	'../../ajax-req'
 	'../../config.json'
@@ -96,7 +95,7 @@ class FilesItemView extends M.ItemView
 			fd = new FormData!
 			for file,i in @ui.file[0].files
 				fd.append \file_ + i, file
-			@ajax = ajax-req {
+			@ajax = ajax-req do
 				url: config.upload_file_url
 				data: fd
 				processData: false
@@ -112,7 +111,6 @@ class FilesItemView extends M.ItemView
 					@ui.file.remove-attr \disabled
 					@ajax = null
 					W.radio.commands .execute \police, \request-free
-			}
 	on-destroy: !->
 		@ajax.abort! if @ajax?
 		@ui.file.off \change

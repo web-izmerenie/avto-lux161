@@ -22,7 +22,7 @@ class LocalizationModel extends B.Model
 			@ .set local[@.lang]
 			return
 		
-		$ .ajax {
+		$ .ajax do
 			url: $ \html .attr \data-local-file
 			method: \GET
 			cache: true # cache mark by back-end
@@ -35,7 +35,6 @@ class LocalizationModel extends B.Model
 				local[@.lang] := json[@.lang]
 			error: (xhr, status, err)!->
 				throw err
-		}
 		
 		@ .set local[@.lang]
 

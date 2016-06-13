@@ -6,18 +6,18 @@
  */
 
 require! {
-	\backbone : B
-	\marionette : M
-	\backbone.wreqr : W
+	\backbone            : B
+	\backbone.marionette : M
+	\backbone.wreqr      : W
 	'../ajax-req'
 	'../config.json'
 	
-	'../model/basic' : BasicModel
+	'../model/basic'     : BasicModel
 	
 	# views
-	'./smooth' : SmoothView
-	'./loader' : LoaderView
-	'./form/form' : FormView
+	'./smooth'           : SmoothView
+	'./loader'           : LoaderView
+	'./form/form'        : FormView
 }
 
 class FormEditView extends SmoothView

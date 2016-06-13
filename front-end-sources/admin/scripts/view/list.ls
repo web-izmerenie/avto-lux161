@@ -6,15 +6,15 @@
  */
 
 require! {
-	\backbone : B
-	\backbone.wreqr : W
+	\backbone        : B
+	\backbone.wreqr  : W
 	'../ajax-req'
 	
 	'../model/basic' : BasicModel
 	
 	# views
-	'./loader' : LoaderView
-	'./smooth' : SmoothView
+	'./loader'       : LoaderView
+	'./smooth'       : SmoothView
 }
 
 class TableListCollection extends B.Collection

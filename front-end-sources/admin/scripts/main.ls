@@ -18,13 +18,13 @@ B.$ = $
 $html = $ \html
 
 require! {
-	\backbone.marionette         : M
-	\backbone.wreqr              : W
-	'./template-handlers.ls'
-	'./app.ls'                   : App
-	'./view/fatal-error.ls'      : FatalErrorView
-	'./router.ls'                : AppRouter
-	'./controller/app-router.ls' : AppRouterController
+	\backbone.marionette      : M
+	\backbone.wreqr           : W
+	'./template-handlers'
+	'./app'                   : App
+	'./view/fatal-error'      : FatalErrorView
+	'./router'                : AppRouter
+	'./controller/app-router' : AppRouterController
 }
 
 M.TemplateCache.prototype.load-template = template-handlers.load

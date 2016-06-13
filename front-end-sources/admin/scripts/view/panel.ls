@@ -6,9 +6,9 @@
  */
 
 require! {
-	\marionette : M
-	'../model/basic' : BasicModel
-	'../view/panel-menu' : PanelMenuListView
+	\backbone.marionette       : M
+	'../model/basic'           : BasicModel
+	'../view/panel-menu'       : PanelMenuListView
 	'../collection/panel-menu' : panel-menu-list
 }
 

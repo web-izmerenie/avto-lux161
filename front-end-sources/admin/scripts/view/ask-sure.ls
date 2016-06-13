@@ -6,9 +6,9 @@
  */
 
 require! {
-	\marionette : M
-	'../model/basic' : BasicModel
-	'./smooth' : SmoothView
+	\backbone.marionette : M
+	'../model/basic'     : BasicModel
+	'./smooth'           : SmoothView
 }
 
 class AskSureView extends SmoothView
