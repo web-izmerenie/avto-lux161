@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['app', 'core', 'models', 'configparser']
+__all__ = ['app', 'core', 'models', 'configparser', 'utils']

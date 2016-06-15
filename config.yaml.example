@@ -21,6 +21,7 @@ TEMPLATES_PATH: './templates'
 STATIC_PATH: './static'
 
 UPLOAD_FILES_PATH: './files/uploaded'
+UPLOAD_FILES_GC_ENABLED: 1
 
 IMAGE_TMP_PATH: ''
 IMAGE_PERM_PATH: ''
