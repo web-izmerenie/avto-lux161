@@ -7,5 +7,6 @@ class LazyMemoizeWrapper:
 		try:
 			return self._value
 		except AttributeError:
-			self._value = self._getter();
+			self._value = self._getter()
+			del self._getter
 			return self._value
