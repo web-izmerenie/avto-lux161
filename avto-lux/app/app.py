@@ -3,12 +3,17 @@
 import sys
 import re
 import os.path
-import tornado.httpserver, tornado.ioloop, tornado.web
-from tornado.options import define, options
 import hashlib
+from threading import Timer
+import tornado
+import tornado.httpserver
+import tornado.ioloop
+import tornado.web
+from tornado.options import define, options
+from tornado.web import StaticFileHandler, _RequestDispatcher
+
 from .core.routes import routes as core_routes
 from .adm.routes import routes as admin_routes
-import tornado
 
 from .configparser import config
 from .models.init_models import init_models
@@ -16,9 +21,9 @@ from .utils import (
 	collect_handlers,
 	error_log,
 	get_json_localization,
-	LazyMemoizeWrapper
+	LazyMemoizeWrapper,
+	run_upload_files_gc
 )
-from tornado.web import StaticFileHandler, _RequestDispatcher
 
 
 
@@ -84,6 +89,15 @@ def _init_application():
 		cookie_secret=str(hashlib.sha512(os.urandom(300)).hexdigest())
 	)
 	
+	if config('UPLOAD_FILES_GC')['RUN_AT_APP_START']:
+		run_upload_files_gc()
+	if config('UPLOAD_FILES_GC')['RUN_EVERY'] > 0:
+		every_seconds = config('UPLOAD_FILES_GC')['RUN_EVERY']
+		def timeout():
+			run_upload_files_gc()
+			Timer(every_seconds, timeout).start()
+		Timer(every_seconds, timeout).start()
+	
 	if not config('DEBUG'):
 		settings['log_function'] = (lambda arg: None)
 	
@@ -94,5 +108,5 @@ application = LazyMemoizeWrapper(_init_application)
 def run_instance(port, host):
 	tornado.options.parse_command_line()
 	application().listen(port, address=host)
-	print("Server run on http://%s:%s" % (host, port))
+	print('Server run on http://%s:%s' % (host, port))
 	tornado.ioloop.IOLoop.instance().start()

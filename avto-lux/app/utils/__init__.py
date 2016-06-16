@@ -8,7 +8,8 @@ __all__ = [
 	'get_json_localization',
 	'send_mail',
 	'date',
-	'json'
+	'json',
+	'gc'
 ]
 
 from .lazy_memoize_wrapper import (LazyMemoizeWrapper)
@@ -19,3 +20,4 @@ from .get_json_localization import (get_json_localization)
 from .send_mail import (send_mail)
 from .date import (is_date)
 from .json import (to_json)
+from .gc import (run_upload_files_gc)
