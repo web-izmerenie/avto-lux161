@@ -42,8 +42,6 @@ def run_upload_files_gc():
 	session.close()
 	
 	
-	collected_str = ' nothing'
-	
 	uploaded_files = list(filter(
 		lambda x: path.isfile(path.join(config('UPLOAD_FILES_PATH'), x)),
 		listdir(config('UPLOAD_FILES_PATH'))
@@ -56,8 +54,11 @@ def run_upload_files_gc():
 	for garbage_file in collected_list:
 		remove(path.join(config('UPLOAD_FILES_PATH'), garbage_file))
 	
-	if len(collected_list) > 0:
-		collected_str = '\n    ' + '\n    '.join(collected_list)
+	
+	separator = '\n    '
+	collected_str = \
+		' nothing' if len(collected_list) < 1 \
+		else separator + separator.join(collected_list)
 	
 	
 	print(
