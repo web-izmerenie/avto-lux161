@@ -27,9 +27,11 @@ class CatalogSectionRoute(BaseHandler, ErrorHandlerMixin):
 				.one()
 		except Exception as e:
 			session.close()
-			print('CatalogSectionRoute.get(): cannot get catalog section or section is not active'+\
+			print(
+				'CatalogSectionRoute.get(): cannot get catalog section or section is not active'+\
 				' by "%s" code:\n' % str(alias),\
-				e, file=sys.stderr)
+				e, file=sys.stderr
+			)
 			raise e
 		try:
 			items = session.query(CatalogItemModel)\
@@ -37,9 +39,11 @@ class CatalogSectionRoute(BaseHandler, ErrorHandlerMixin):
 				.order_by(CatalogItemModel.id.asc()).all()
 		except Exception as e:
 			session.close()
-			print('CatalogSectionRoute.get(): cannot get catalog items'+\
+			print(
+				'CatalogSectionRoute.get(): cannot get catalog items'+\
 				' by section #%d:\n' % int(page.id),\
-				e, file=sys.stderr)
+				e, file=sys.stderr
+			)
 			raise e
 		session.close()
 		menu = self.getmenu(catalog_section_alias=alias)

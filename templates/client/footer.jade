@@ -8,7 +8,7 @@ if has_footer_slogan
 	a.phone(href=get_phone_link(phone))= phone
 	=' '
 	- var email = get_nonrel_val('email', 'footer')
-	a.email(href='mailto:'+email)= email
+	a.email(href='mailto:#{email}')= email
 .developer
 	img(alt='Логотип &laquo;Веб измерение&raquo;' src=static_url('images/web-izmerenie-logo.svg'))
 	| Сделано в студии

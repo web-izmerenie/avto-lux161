@@ -14,8 +14,8 @@ block page-specific
 							a(href=item['detail_link'])
 								.picture
 									if item['main_image']
-										img(alt='Фото ' + item['title'],
-											src=item['main_image']['filename'])
+										img(alt="Фото #{item['title']}",
+											src=item['main_image']['filepath'])
 								span= item['title']
 				if page_seo_text
 					.page-seo-text!= page_seo_text

@@ -12,11 +12,11 @@ block page-specific
 				.catalog-detail-item
 					if main_image
 						img.big-pic(
-							alt='Фото '+title,
-							src=main_image['filename'])
+							alt='Фото #{title}'
+							src=main_image['filepath'])
 					.description!= description_text
 					ul.photos
 						each item in images
 							li
-								a(href=item['filename'], title=title)
-									img(alt='Фото '+title, src=item['filename'])
+								a(href=item['filepath'], title=title)
+									img(alt='Фото #{title}', src=item['filepath'])

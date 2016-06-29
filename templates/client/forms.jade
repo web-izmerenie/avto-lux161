@@ -12,7 +12,7 @@ form#call-me-form(action="/api/forms/", method="post")
 
 if is_catalog_item
 	form#order-form(action="/api/forms/", method="post")
-		h2= 'Сделать заказ ' + title
+		h2= 'Сделать заказ #{title}'
 		input(type="hidden", name="action", value="order")
 		input(type="hidden", name="id", value=catalog_item_id)
 		label.text

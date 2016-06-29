@@ -5,7 +5,7 @@ block page-specific
 		ul.cars.left
 			each i in ['1','2','3','4','5','6']
 				li
-					img(alt="", src=static_url('images/content/cars-rows/left/' + i + '.jpg'))
+					img(alt="", src=static_url('images/content/cars-rows/left/#{i}.jpg'))
 		.content
 			if is_h1_show
 				if seo_title
@@ -27,4 +27,4 @@ block page-specific
 		ul.cars.right
 			each i in ['1','2','3','4','5','6']
 				li
-					img(alt="", src=static_url('images/content/cars-rows/right/' + i + '.jpg'))
+					img(alt="", src=static_url('images/content/cars-rows/right/#{i}.jpg'))

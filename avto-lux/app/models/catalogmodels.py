@@ -16,11 +16,13 @@ from .dbconnect import Base, dbprefix
 from .pagemodels import PageMixin, IdMixin
 from sqlalchemy.dialects.postgresql import JSON
 from app.models.dbconnect import Session
+from os import path
 import json
 import sys
+import warnings
 
 
-class CatalogSectionModel(Base, PageMixin, IdMixin):
+class CatalogSectionModel(Base, PageMixin):
 	__tablename__ = dbprefix + 'catalog'
 	
 	delegate_seo_meta_title = Column(Boolean)
@@ -40,7 +42,13 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 	def to_frontend(self):
 		vals = vars(self).copy()
 		
-		deprecated = ['_sa_instance_state', 'create_date', 'files', 'last_change', 'alias']
+		deprecated = [
+			'_sa_instance_state',
+			'create_date',
+			'files',
+			'last_change',
+			'alias'
+		]
 		for item in deprecated:
 			if item in vals:
 				del vals[item]
@@ -48,7 +56,7 @@ class CatalogSectionModel(Base, PageMixin, IdMixin):
 		return vals
 
 
-class CatalogItemModel(Base, PageMixin, IdMixin):
+class CatalogItemModel(Base, PageMixin):
 	__tablename__ = dbprefix + 'catalog_items'
 	
 	description_text = Column(Text)
@@ -63,46 +71,91 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 	inherit_seo_meta_descrtption = Column(Boolean)
 	inherit_seo_title = Column(Boolean)
 	
-	def _get_main_image(self, vals):
+	
+	def _get_main_image(self):
 		
 		main_image = None
 		
 		try:
-			main_image = json.loads(vals['main_image'])
-			if type(main_image) is not list:
-				raise Exception('Must be an array')
+			main_image = json.loads(self.main_image)
+			msg = "'main_image' must be a list with single element or just empty list"
+			assert type(main_image) is list, msg
+			assert 0 <= len(main_image) <= 1, msg
+			if len(main_image) > 0:
+				assert 'filename' in main_image[0], \
+					"'main_image' list item must contain 'filename' key"
+				assert main_image[0]['filename'] == path.basename(main_image[0]['filename']), \
+					"'images' list item 'filename' property is unsafe"
 		except Exception as e:
 			main_image = None
-			print('CatalogItemModel.to_frontend(): get "main_image" error:\n',\
-				e, file=sys.stderr)
+			warnings.warn(
+				"CatalogItemModel._get_main_image(): get 'main_image' error " + \
+				"(catalog item id: %d)\nException: %s" % (self.id, e)
+			)
 		
-		if main_image and len(main_image) > 0 and 'filename' in main_image[0]:
-			main_image = main_image[0]
-			main_image['filename'] = '/uploaded-files/%s' % main_image['filename']
+		if main_image is not None and len(main_image) == 0:
+			return None
 		else:
-			main_image = None
-		
-		return main_image
+			return main_image[0]
 	
-	def _get_images(self, vals):
+	@property
+	def frontend_main_image(self):
+		main_image = self._get_main_image()
+		if main_image is None:
+			return None
+		else:
+			main_image['filepath'] = '/uploaded-files/%s' % main_image['filename']
+			return main_image
+	
+	@property
+	def system_main_image(self):
+		main_image = self._get_main_image()
+		if main_image is None:
+			return None
+		else:
+			main_image['filepath'] = path.join(config('UPLOAD_FILES_PATH'), main_image['filename'])
+			return main_image
+	
+	
+	def _get_images(self):
 		
 		images = []
 		
 		try:
-			images = json.loads(vals['images'])
-			if type(images) is not list:
-				raise Exception('Must be an array')
+			images = json.loads(self.images)
+			assert type(images) is list, "'images' must be a list"
+			for item in images:
+				assert type(item) is dict, \
+					"'images' list item must be a dictionary"
+				assert 'filename' in item, \
+					"'images' list item must have 'filename' property"
+				assert type(item['filename']) is str, \
+					"'images' property of 'files' list item must be a string"
+				assert item['filename'] == path.basename(item['filename']), \
+					"'images' list item 'filename' property is unsafe"
 		except Exception as e:
 			images = []
-			print('CatalogItemModel.to_frontend(): get "images" error:\n',\
-				e, file=sys.stderr)
-		
-		for item in images:
-			if 'filename' not in item:
-				continue
-			item['filename'] = '/uploaded-files/%s' % item['filename']
+			warnings.warn(
+				"CatalogItemModel._get_images(): get 'images' error " + \
+				"(catalog item id: %d)\nException: %s" % (self.id, e)
+			)
 		
 		return images
+	
+	@property
+	def frontend_images(self):
+		return list(map(
+			lambda x: (x, x.update(filepath='/uploaded-files/%s' % x['filename']))[0],
+			self._get_images()
+		))
+	
+	@property
+	def system_images(self):
+		return list(map(
+			lambda x: (x, x.update(filepath=path.join(config('UPLOAD_FILES_PATH'), x['filename'])))[0],
+			self._get_images()
+		))
+	
 	
 	@property
 	def item(self):
@@ -112,7 +165,12 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 	def to_frontend(self):
 		vals = vars(self).copy()
 		
-		deprecated = ['_sa_instance_state', 'create_date', 'files', 'last_change']
+		deprecated = [
+			'_sa_instance_state',
+			'create_date',
+			'files',
+			'last_change'
+		]
 		for item in deprecated:
 			if item in vals:
 				del vals[item]
@@ -120,19 +178,22 @@ class CatalogItemModel(Base, PageMixin, IdMixin):
 		# get section alias
 		session = Session()
 		try:
-			s = session.query(CatalogSectionModel.alias)\
-				.filter_by(id=vals['section_id']).one()
+			section_alias = session.query(CatalogSectionModel.alias) \
+				.filter_by(id=vals['section_id']) \
+				.one()
 		except Exception as e:
-			session.close()
-			print('CatalogItemModel.to_frontend():'+\
-				' cannot find section by "section_id"'+\
-				' for element #%d:\n' % int(vals['id']), e, file=sys.stderr)
+			warnings.warn(
+				'CatalogItemModel.to_frontend():' + \
+				' cannot find section by "section_id"' + \
+				' (catalog item id: %d)\nException: %s' % (self.id, e)
+			)
 			raise e
-		session.close()
+		finally:
+			session.close()
 		
-		vals['main_image'] = self._get_main_image(vals)
-		vals['images']     = self._get_images(vals)
+		vals['main_image']  = self.frontend_main_image
+		vals['images']      = self.frontend_images
 		
-		vals['detail_link'] = '/catalog/{0}/{1}.html'.format(s[0], vals['alias'])
+		vals['detail_link'] = '/catalog/%s/%s.html' % (section_alias[0], vals['alias'])
 		
 		return vals

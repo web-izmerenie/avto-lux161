@@ -22,10 +22,10 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	@property
 	def static_list(self):
 		return {
-			'is_active': self.is_active and True or False,
-			'title': self.title,
-			'id': self.id,
-			'alias': self.alias
+			'is_active' : self.is_active and True or False,
+			'title'     : self.title,
+			'id'        : self.id,
+			'alias'     : self.alias
 		}
 	
 	@property
@@ -37,8 +37,13 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 		vals = vars(self).copy()
 		
 		deprecated = [
-			'_sa_instance_state', 'id', 'create_date', 'files', 'last_change',
-			'alias']
+			'_sa_instance_state',
+			'id',
+			'create_date',
+			'files',
+			'last_change',
+			'alias'
+		]
 		for item in deprecated:
 			if item in vals:
 				del vals[item]
