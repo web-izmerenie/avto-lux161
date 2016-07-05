@@ -2,6 +2,7 @@
 
 import json
 import sys
+import warnings
 import tornado.template
 from tornado.web import HTTPError, MissingArgumentError
 from .base import BaseHandler
@@ -45,10 +46,13 @@ class MainRoute(BaseHandler, ErrorHandlerMixin):
 				.filter_by(alias='/', is_active=True)\
 				.one()
 		except Exception as e:
-			session.close()
-			print('MainRoute.get(): cannot get main page:\n', e, file=sys.stderr)
+			warnings.warn(
+				'MainRoute.get(): cannot get main page from database' + \
+				'\nException: %s' % e
+			)
 			raise e
-		session.close()
+		finally:
+			session.close()
 		menu = self.getmenu(page_alias='/')
 		data = page.to_frontend
 		data.update({
@@ -76,11 +80,14 @@ class StaticPageRoute(BaseHandler, ErrorHandlerMixin):
 				.filter_by(alias=alias, is_active=True)\
 				.one()
 		except Exception as e:
-			session.close()
-			print('StaticPageRoute.get(): cannot get static page or page is not active'+\
-				' by "%s" alias:\n' % str(alias), e, file=sys.stderr)
+			warnings.warn(
+				"StaticPageRoute.get(): cannot get static page or " + \
+				"page is not active by '%s' alias" % str(alias) + \
+				'\nException: %s' % e
+			)
 			raise e
-		session.close()
+		finally:
+			session.close()
 		menu = self.getmenu(page_alias=alias)
 		data = page.to_frontend
 		data.update({
@@ -138,8 +145,10 @@ class FormsHandler(JsonResponseMixin):
 			try:
 				fn(args)
 			except Exception as e:
-				print('FormsHandler.post(): post form data error:\n',\
-					e, file=sys.stderr)
+				warnings.warn(
+					"FormsHandler.post(): post form data error" + \
+					'\nException: %s' % e
+				)
 				self.set_status(500)
 				return self.json_response({'status': 'system_fail'})\
 					if is_ajax\
@@ -183,6 +192,15 @@ class FormsHandler(JsonResponseMixin):
 			if key in all_required_fields and fields[key] is '':
 				err_stack.append(key)
 		
+		if self.get_argument('action') == 'order':
+			dt = fields['date'].split('.') if fields['date'].strip() != '' else None
+			if dt is not None and len(dt) != 3:
+				warnings.warn(
+					'FormsHandler.validate_fields(): date digits count ' + \
+					'should equal 3 (d.m.Y), hacking attempt?'
+				)
+				raise Exception('Incorrect date from client-side')
+		
 		return err_stack
 	
 	
@@ -197,11 +215,13 @@ class FormsHandler(JsonResponseMixin):
 			session.add(call)
 			session.commit()
 		except Exception as e:
-			session.close()
-			print('FormsHandler.save_call(): cannot save call to DB\n',\
-				e, file=sys.stderr)
+			warnings.warn(
+				'FormsHandler.save_call(): cannot save call to DB' + \
+				'\nException: %s' % e
+			)
 			raise e
-		session.close()
+		finally:
+			session.close()
 		
 		send_mail(
 			msg='<h1>Заказ звонка</h1>' +
@@ -212,19 +232,26 @@ class FormsHandler(JsonResponseMixin):
 	
 	
 	def save_order(self, d):
-		dt = d['date'].split('.')
+		
+		dt = d['date'].split('.') if d['date'].strip() != '' else None
+		hours = d['hours'] if d['hours'].strip() != '' else None
+		minutes = d['minutes'] if d['minutes'].strip() != '' else None
+		
 		session = Session()
 		try:
 			item = session.query(CatalogItemModel).filter_by(id=d['id']).one()
 		except Exception as e:
-			session.close()
-			print('FormsHandler.save_order(): cannot get catalog item by id\n',\
-				e, file=sys.stderr)
+			warnings.warn(
+				'FormsHandler.save_order(): cannot get catalog item by id' + \
+				'\nException: %s' % e
+			)
 			raise e
-		session.close()
+		finally:
+			session.close()
 		full_date = datetime.combine(
-				date(int(dt[2]), int(dt[1]), int(dt[0])),
-				time(int(d['hours']), int(d['minutes']))),
+			date(int(dt[2]), int(dt[1]), int(dt[0])),
+			time(int(hours), int(minutes))
+		) if dt is not None and hours is not None and minutes is not None else None
 		order = OrderModel(
 			name=d['name'],
 			callback=d['callback'],
@@ -237,16 +264,21 @@ class FormsHandler(JsonResponseMixin):
 			session.add(order)
 			session.commit()
 		except Exception as e:
-			session.close()
-			print('FormsHandler.save_order(): cannot save order to DB\n',\
-				e, file=sys.stderr)
+			warnings.warn(
+				'FormsHandler.save_order(): cannot save order to DB' + \
+				'\nException: %s' % e
+			)
 			raise e
-		session.close()
+		finally:
+			session.close()
 		send_mail(
 			msg='<h1>Заказ "%s"</h1>' % item.title +
 				'<dl><dt>Имя:</dt><dd>%s</dd>' % d['name'] +
 				'<dt>Контакты:</dt><dd>%s</dd>' % d['callback'] +
 				'<dt>Дата заказа:</dt><dd>%s</dd></dl>' % (
-					full_date[0].strftime('%d.%m.%Y %H:%M')),
+					full_date.strftime('%d.%m.%Y %H:%M')
+						if full_date is not None
+						else 'Не указана'
+				),
 			theme='АвтоЛюкс: заказ "%s"' % item.title
 		)
