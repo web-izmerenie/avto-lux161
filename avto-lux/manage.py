@@ -7,6 +7,7 @@ from app.configparser import config
 from app.app import run_instance
 from app.models.init_models import init_models
 from app.models.usermodels import create_init_user
+from app.models.migrate import migrate
 import multiprocessing
 
 
@@ -73,6 +74,11 @@ if __name__ == '__main__':
 		},
 		'create-admin': {
 			'fn': createadmin,
+			'kwrgs': {},
+			'options': []
+		},
+		'dbmigrate': {
+			'fn': migrate,
 			'kwrgs': {},
 			'options': []
 		}

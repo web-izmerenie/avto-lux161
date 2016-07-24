@@ -116,6 +116,17 @@
 
 ## Useful information
 
+### Pull last revision
+
+After pull fresh revision from git don't forget to run:
+
+```bash
+$ ./migrate.sh
+```
+
+It automatically checks what migrations needed and then apply them, or it
+will do nothing if all migrations already applied.
+
 ### Deploy with clean database
 
 May be you wan't to know how to create new database and new user

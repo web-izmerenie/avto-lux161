@@ -7,7 +7,7 @@ from sqlalchemy import (
 	Boolean,
 	DateTime,
 	Text,
-	ForeignKey,
+	ForeignKey
 )
 from app.configparser import config
 from sqlalchemy.dialects.postgresql import *

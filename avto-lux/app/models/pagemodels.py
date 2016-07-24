@@ -5,8 +5,10 @@ from sqlalchemy import (
 	String,
 	Integer,
 	Boolean,
-	Text
+	Text,
+	ForeignKey
 )
+from sqlalchemy.orm import relationship
 from .dbconnect import Base, dbprefix
 from .mixins import PageMixin, IdMixin
 
@@ -18,6 +20,11 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	is_h1_show = Column(Boolean, default=False)
 	is_main_page = Column(Boolean, default=False)
 	is_main_menu_item = Column(Boolean, default=False)
+	
+	# for custom user sorting
+	# FIXME name 'sys' is not defined?
+	# next_elem = relationship('StaticPageModel')
+	# next_elem = Column(Integer, ForeignKey(dbprefix + 'pages.id'))
 	
 	@property
 	def static_list(self):

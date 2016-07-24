@@ -1,6 +1,18 @@
 Changelog
 =========
 
+r10
+---------
+
+- Fixed deploying with empty database;
+- Fixed optional date and time in order form;
+- Refactored and simplified front-end deploying (migrated to webpack);
+- Refactoring of back-end;
+- Improved documentation;
+- GC;
+- Database now have revision mark;
+- Some another stuff.
+
 r9
 ---------
 

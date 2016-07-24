@@ -8,5 +8,6 @@ __all__ = [
 	'non_relation_data',
 	'pagemodels',
 	'usermodels',
-	'utilmodels'
+	'utilmodels',
+	'migrate'
 ]
