@@ -22,9 +22,8 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	is_main_menu_item = Column(Boolean, default=False)
 	
 	# for custom user sorting
-	# FIXME name 'sys' is not defined?
-	# next_elem = relationship('StaticPageModel')
-	# next_elem = Column(Integer, ForeignKey(dbprefix + 'pages.id'))
+	next_elem = relationship('StaticPageModel')
+	next_elem = Column(Integer, ForeignKey(dbprefix + 'pages.id'))
 	
 	@property
 	def static_list(self):
