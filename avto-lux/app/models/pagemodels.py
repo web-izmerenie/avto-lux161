@@ -9,6 +9,8 @@ from sqlalchemy import (
 	ForeignKey
 )
 from sqlalchemy.sql import text
+from collections import Iterable
+from copy import deepcopy
 
 from .dbconnect import Base, dbprefix
 from .mixins import PageMixin, IdMixin
@@ -57,34 +59,70 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 		vals.update({'success_msg_list': '', 'error_msg_list': ''})
 		return vals
 	
-	@classmethod
-	def get_ordered_list_query(cls, **filters):
-		return text('''
-			WITH ordering AS (
-				SELECT *, ROW_NUMBER() OVER (ORDER BY id ASC) AS pos FROM {0}
+	@staticmethod
+	class _GetOrderedListQueryChain:
+		
+		def __init__(
+			self,
+			table_name,
+			table_columns,
+			filters={}
+		):
+			self._table_name = table_name
+			self._table_columns = table_columns
+			self._filters = filters
+		
+		@classmethod
+		def copy(cls, self):
+			return cls(
+				table_name=str(self._table_name),
+				table_columns=[str(x) for x in self._table_columns],
+				filters=deepcopy(self._filters)
 			)
-			SELECT {1}
-			FROM {0}
-			INNER JOIN ordering AS cur ON ({0}.id = cur.id)
-			LEFT JOIN ordering AS next ON (next.prev_elem = {0}.id)
-			{2}
-			ORDER BY (
-				CASE WHEN cur.prev_elem IS NULL THEN 0 ELSE next.pos END
-			) ASC
-		'''.format(
-			
-			cls.__table__.name,
-			
-			', '.join([
-				'cur.{0} AS {0}'.format(x)
-				for x in cls.__table__.columns.keys()
-			]),
-			
-			'' if len(filters) == 0 else 'WHERE ' + ' AND '.join([
-				'cur.%s = %s' % (key, val)
-				for key, val in filters.items()
-			])
-		))
+
+		def filter(self, replace_filters=False, **filters):
+			cloned = self.copy(self)
+			filters = deepcopy(filters)
+			if replace_filters:
+				cloned._filters = filters
+			else:
+				cloned._filters.update(filters)
+			return cloned
+
+		def done(self):
+			return text('''
+				WITH ordering AS (
+					SELECT *, ROW_NUMBER() OVER (ORDER BY id ASC) AS pos FROM {0}
+				)
+				SELECT {1}
+				FROM {0}
+				INNER JOIN ordering AS cur ON ({0}.id = cur.id)
+				LEFT JOIN ordering AS next ON (next.prev_elem = {0}.id)
+				{2}
+				ORDER BY (
+					CASE WHEN cur.prev_elem IS NULL THEN 0 ELSE next.pos END
+				) ASC
+			'''.format(
+				
+				self._table_name,
+				
+				', '.join([
+					'cur.{0} AS {0}'.format(x)
+					for x in self._table_columns
+				]),
+				
+				'' if len(self._filters) == 0 else 'WHERE ' + ' AND '.join([
+					'cur.%s = %s' % (key, val)
+					for key, val in self._filters.items()
+				])
+			))
+	
+	@classmethod
+	def get_ordered_list_query(cls):
+		return cls._GetOrderedListQueryChain(
+			table_name=cls.__table__.name,
+			table_columns=cls.__table__.columns.keys()
+		)
 
 
 class UrlMapping(Base, IdMixin):

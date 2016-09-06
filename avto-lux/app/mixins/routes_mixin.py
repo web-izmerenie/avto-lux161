@@ -28,10 +28,10 @@ class MenuProviderMixin():
 		
 		try:
 			result = session.execute(
-				StaticPageModel.get_ordered_list_query(
-					is_main_menu_item=True,
-					is_active=True
-				)
+				StaticPageModel
+					.get_ordered_list_query()
+					.filter(is_main_menu_item=True, is_active=True)
+					.done()
 			)
 			static_pages = session.query(StaticPageModel).instances(result)
 		except Exception as e:
