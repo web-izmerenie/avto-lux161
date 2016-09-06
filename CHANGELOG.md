@@ -9,8 +9,9 @@ r10
 - Refactored and simplified front-end deploying (migrated to webpack);
 - Refactoring of back-end;
 - Improved documentation;
-- GC;
+- GC (for dead static files);
 - Database now have revision mark;
+- Updated SQLAlchemy version to stable major release;
 - Some another stuff.
 
 r9

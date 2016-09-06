@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 class LazyMemoizeWrapper:
+	
 	def __init__(self, f):
 		self._getter = f
+	
 	def __call__(self):
 		try:
 			return self._value

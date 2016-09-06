@@ -8,7 +8,8 @@ from sqlalchemy import (
 	Text,
 	ForeignKey
 )
-from sqlalchemy.orm import relationship
+from sqlalchemy.sql import text
+
 from .dbconnect import Base, dbprefix
 from .mixins import PageMixin, IdMixin
 
@@ -21,9 +22,8 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	is_main_page = Column(Boolean, default=False)
 	is_main_menu_item = Column(Boolean, default=False)
 	
-	# for custom user sorting
-	next_elem = relationship('StaticPageModel')
-	next_elem = Column(Integer, ForeignKey(dbprefix + 'pages.id'))
+	# for custom ordering
+	prev_elem = Column(Integer, ForeignKey(dbprefix + 'pages.id'))
 	
 	@property
 	def static_list(self):
@@ -56,6 +56,35 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 		
 		vals.update({'success_msg_list': '', 'error_msg_list': ''})
 		return vals
+	
+	@classmethod
+	def get_ordered_list_query(cls, **filters):
+		return text('''
+			WITH ordering AS (
+				SELECT *, ROW_NUMBER() OVER (ORDER BY id ASC) AS pos FROM {0}
+			)
+			SELECT {1}
+			FROM {0}
+			INNER JOIN ordering AS cur ON ({0}.id = cur.id)
+			LEFT JOIN ordering AS next ON (next.prev_elem = {0}.id)
+			{2}
+			ORDER BY (
+				CASE WHEN cur.prev_elem IS NULL THEN 0 ELSE next.pos END
+			) ASC
+		'''.format(
+			
+			cls.__table__.name,
+			
+			', '.join([
+				'cur.{0} AS {0}'.format(x)
+				for x in cls.__table__.columns.keys()
+			]),
+			
+			'' if len(filters) == 0 else 'WHERE ' + ' AND '.join([
+				'cur.%s = %s' % (key, val)
+				for key, val in filters.items()
+			])
+		))
 
 
 class UrlMapping(Base, IdMixin):

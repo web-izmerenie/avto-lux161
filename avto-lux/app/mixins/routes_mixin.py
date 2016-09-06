@@ -2,13 +2,14 @@
 
 from tornado.web import RequestHandler
 import json
+import sys
+import re
+
 from app.utils import is_date
 from app.models.pagemodels import StaticPageModel
 from app.models.dbconnect import Session
 from app.models.catalogmodels import CatalogSectionModel
 from app.models.non_relation_data import NonRelationData
-import sys
-import re
 
 
 class MenuProviderMixin():
@@ -26,13 +27,19 @@ class MenuProviderMixin():
 		session = Session()
 		
 		try:
-			static_pages = session.query(StaticPageModel)\
-				.filter_by(is_main_menu_item=True, is_active=True)\
-				.order_by(StaticPageModel.id.asc()).all()
+			result = session.execute(
+				StaticPageModel.get_ordered_list_query(
+					is_main_menu_item=True,
+					is_active=True
+				)
+			)
+			static_pages = session.query(StaticPageModel).instances(result)
 		except Exception as e:
 			session.close()
-			print('MenuProviderMixin.getmenu(): cannot get static pages:\n',\
-				e, file=sys.stderr)
+			print(
+				'MenuProviderMixin.getmenu(): cannot get static pages:\n',
+				e, file=sys.stderr
+			)
 			raise e
 		for page in [x.item for x in static_pages]:
 			item = {
@@ -46,19 +53,22 @@ class MenuProviderMixin():
 			menu['main'].append(item)
 		
 		try:
-			sections = session.query(CatalogSectionModel)\
-				.filter_by(is_active=True)\
-				.order_by(CatalogSectionModel.id.asc()).all()
+			sections = session.query(CatalogSectionModel) \
+				.filter_by(is_active=True) \
+				.order_by(CatalogSectionModel.id.asc()) \
+				.all()
 		except Exception as e:
 			session.close()
-			print('MenuProviderMixin.getmenu(): cannot get catalog sections:\n',\
-				e, file=sys.stderr)
+			print(
+				'MenuProviderMixin.getmenu(): cannot get catalog sections:\n',
+				e, file=sys.stderr
+			)
 			raise e
 		for section in [x.item for x in sections]:
 			item = {
 				'active': False,
 				'current': False,
-				'link': '/catalog/' + section['alias'] + '.html',
+				'link': '/catalog/%s.html' % section['alias'],
 				'title': section['title']
 			}
 			if catalog_section_alias is not None:
@@ -109,9 +119,11 @@ class NonRelationDataProvider():
 			data = session.query(NonRelationData).all()
 		except Exception as e:
 			session.close()
-			print('NonRelationDataProvider.get_nonrel_handlers():'+\
-				' cannot get non-relation data:\n',\
-				e, file=sys.stderr)
+			print(
+				'NonRelationDataProvider.get_nonrel_handlers():' + \
+				' cannot get non-relation data:\n',
+				e, file=sys.stderr
+			)
 			raise e
 		session.close()
 		
@@ -123,8 +135,11 @@ class NonRelationDataProvider():
 				if type(data_list) is not list and type(data_list) is not tuple:
 					raise Exception('"data_json" must be a json-array')
 			except Exception as e:
-				print('NonRelationDataProvider.get_nonrel_handlers():'+\
-				' cannot get "data_json":\n', e, file=sys.stderr)
+				print(
+					'NonRelationDataProvider.get_nonrel_handlers():' + \
+					' cannot get "data_json":\n',
+					e, file=sys.stderr
+				)
 				data_list = tuple()
 			export[item['code']] = data_list
 		self.nonrel_list = export
