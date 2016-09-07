@@ -30,7 +30,7 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	@property
 	def static_list(self):
 		return {
-			'is_active' : self.is_active and True or False,
+			'is_active' : bool(self.is_active),
 			'title'     : self.title,
 			'id'        : self.id,
 			'alias'     : self.alias
@@ -79,7 +79,7 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 				table_columns=[str(x) for x in self._table_columns],
 				filters=deepcopy(self._filters)
 			)
-
+		
 		def filter(self, replace_filters=False, **filters):
 			cloned = self.copy(self)
 			filters = deepcopy(filters)
@@ -88,7 +88,7 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 			else:
 				cloned._filters.update(filters)
 			return cloned
-
+		
 		def done(self):
 			return text('''
 				WITH ordering AS (

@@ -6,6 +6,8 @@
  */
 
 require! {
+	\backbone          : B
+	
 	# views
 	'../../table-list' : TableListView
 	'../../table-item' : TableItemView
@@ -24,7 +26,7 @@ class CompositeListView extends TableListView
 class PagesListView extends ListView
 	initialize: !->
 		ListView.prototype.initialize ...
-		@init-table-list CompositeListView
+		@init-table-list CompositeListView, null, B.Collection
 	
 	on-show: !->
 		ListView.prototype.on-show ...
