@@ -3,6 +3,7 @@ if is_active
 	td= local.get('sections').pages.is_active_yes
 else
 	td= local.get('sections').pages.is_active_no
+td= sort
 td
 	a(href=ref)= name
 td= url

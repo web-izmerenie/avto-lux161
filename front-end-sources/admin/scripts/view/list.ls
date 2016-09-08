@@ -6,40 +6,43 @@
  */
 
 require! {
-	\backbone        : B
-	\backbone.wreqr  : W
-	'../ajax-req'
+	\backbone       : B
+	\backbone.wreqr : W
 	
-	'../model/basic' : BasicModel
+	# helpers
+	\../ajax-req
+	
+	# models
+	\../model/basic : BasicModel
 	
 	# views
-	'./loader'       : LoaderView
-	'./smooth'       : SmoothView
+	\./loader       : LoaderView
+	\./smooth       : SmoothView
 }
 
+
 class TableListCollection extends B.Collection
-	comparator: (v) -> if v.id then v.id else 0
+	comparator: \id
+
 
 class ListView extends SmoothView
 	initialize: !->
-		SmoothView.prototype.initialize ...
-		
-		@loader-view = (new LoaderView!).render!
+		super ...
+		@loader-view = new LoaderView! .render!
 	
 	on-show: !->
 		@get-region \main .show @loader-view
 	
-	init-table-list: (View, options, CollectionClass=TableListCollection)!->
-		@table-list = new CollectionClass []
-		options = collection: @table-list <<<< (options or {})
-		@table-view = new View options
+	init-table-list: (View, options={}, CollectionClass=TableListCollection)!->
+		@table-list = new CollectionClass [], options
+		@table-view = new View collection: @table-list
 		@table-view.render!
-		
 		@table-view.on \refresh:list, !~> @update-list!
 	
 	# cb: data-arr
+	# TODO remove after refactoring
 	get-list: (ajax-data, cb)!->
-		@ajax = ajax-req {
+		@ajax = ajax-req do
 			data: ajax-data
 			success: (json)!~>
 				if json.status is not \success or not json.data_list?
@@ -49,7 +52,6 @@ class ListView extends SmoothView
 				
 				r = null ; (try r = @get-region \main) ; return unless r?
 				cb json.data_list, json
-		}
 	
 	regions:
 		\main : \.main
@@ -60,5 +62,6 @@ class ListView extends SmoothView
 	
 	on-destroy: !->
 		@ajax.abort! if @ajax?
+
 
 module.exports = ListView

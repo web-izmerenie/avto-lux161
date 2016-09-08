@@ -16,10 +16,10 @@ local = {}
 class LocalizationModel extends B.Model
 	lang: lang
 	initialize: (options={})!->
-		@.lang = options.lang if options.lang?
+		@lang = options.lang if options.lang?
 		
 		if local[@.lang]?
-			@ .set local[@.lang]
+			@set local[@.lang]
 			return
 		
 		$ .ajax do
@@ -36,6 +36,6 @@ class LocalizationModel extends B.Model
 			error: (xhr, status, err)!->
 				throw err
 		
-		@ .set local[@.lang]
+		@set local[@.lang]
 
 module.exports = LocalizationModel

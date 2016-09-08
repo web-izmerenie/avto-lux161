@@ -13,7 +13,9 @@ require! {
 	\base/styles/main.styl : {}
 }
 
+
 class App extends M.Application
+	
 	get-option: M.proxy-get-option
 	
 	container: \body
@@ -23,9 +25,10 @@ class App extends M.Application
 		@add-regions container: @get-option \container
 	
 	start: (options)!->
-		B.history .start root: config.root_url
+		B.history.start root: config.root_url
 	
 	on-destroy: !->
-		B.history .stop!
+		B.history.stop!
+
 
 module.exports = App

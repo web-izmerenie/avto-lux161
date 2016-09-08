@@ -6,10 +6,10 @@
  */
 
 require! {
-	\jquery : $
+	\jquery   : $
 	\backbone : B
 	
-	'./config.json'
+	\./config.json
 }
 B.$ = $
 
@@ -18,13 +18,14 @@ B.$ = $
 $html = $ \html
 
 require! {
-	\backbone.marionette      : M
-	\backbone.wreqr           : W
-	'./template-handlers'
-	'./app'                   : App
-	'./view/fatal-error'      : FatalErrorView
-	'./router'                : AppRouter
-	'./controller/app-router' : AppRouterController
+	\backbone.marionette     : M
+	\backbone.wreqr          : W
+	
+	\./template-handlers
+	\./app                   : App
+	\./view/fatal-error      : FatalErrorView
+	\./router                : AppRouter
+	\./controller/app-router : AppRouterController
 }
 
 M.TemplateCache.prototype.load-template = template-handlers.load
@@ -38,13 +39,23 @@ app = new App do
 router-controller = new AppRouterController app: app
 router = new AppRouter controller: router-controller
 
-police = W.radio .channel \police
+police = W.radio.channel \police
 
-police.commands .set-handler \panic, (err)!->
-	app .get-region \container .show new FatalErrorView exception: err
-	app .destroy!
-	router-controller .destroy!
+police.commands.set-handler \panic, (err)!->
+	app.get-region \container .show new FatalErrorView exception: err
+	app.destroy!
+	router-controller.destroy!
 	router := void
 	throw err
+
+B.ajax = (opts)-> B.$.ajax do
+	{} <<< opts <<< do
+		cache     : false
+		type      : \POST
+		method    : \POST
+		data-type : \json
+		error: (xhr, status, err)!->
+			return if status is \abort
+			W.radio.commands.execute \police, \panic, err
 
 app .start!

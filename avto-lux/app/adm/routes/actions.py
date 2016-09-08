@@ -120,11 +120,16 @@ class AdminMainHandler(JsonResponseMixin):
 			)
 			raise e
 		
+		pages_list = [x.static_list for x in data]
+		for idx, page in enumerate(pages_list):
+			page['sort'] = idx + 1
+		
 		session.close()
 		return self.json_response({
 			'status': 'success',
-			'data_list': [ x.static_list for x in data ]
+			'data_list': pages_list
 		})
+	
 	
 	## TODO : Optimize and using join ¯\(°_o)/¯
 	@query_except_handler

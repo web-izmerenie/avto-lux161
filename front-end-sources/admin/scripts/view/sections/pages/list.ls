@@ -6,45 +6,50 @@
  */
 
 require! {
-	\backbone          : B
+	\backbone                                   : B
+	
+	# models
+	\../../../collection/ordering-elements-list : OrderingElementsListCollection
+	\../../../model/static-page-list-item       : StaticPageListItemModel
 	
 	# views
-	'../../table-list' : TableListView
-	'../../table-item' : TableItemView
-	'../../list'       : ListView
+	\../../table-list                           : TableListView
+	\../../table-item                           : TableItemView
+	\../../list                                 : ListView
 }
+
 
 class ItemView extends TableItemView
 	template: 'pages/list-item'
 
+
 class CompositeListView extends TableListView
 	template: 'pages/list'
 	child-view: ItemView
-	child-view-options: (model, index)~>
-		model.set \local , @model.get \local
+
 
 class PagesListView extends ListView
+	
 	initialize: !->
-		ListView.prototype.initialize ...
-		@init-table-list CompositeListView, null, B.Collection
+		super ...
+		
+		options =
+			model: StaticPageListItemModel
+			action: \get_pages_list
+		
+		@init-table-list \
+			CompositeListView,
+			options,
+			OrderingElementsListCollection
+		
+		@listen-to @table-list, 'sync reset', @show-table-view
 	
 	on-show: !->
-		ListView.prototype.on-show ...
-		@update-list !~> @get-region \main .show @table-view
+		super ...
+		@table-list.fetch!
 	
-	update-list: (cb)!->
-		(data-arr)<~! @get-list { action: \get_pages_list }
-		
-		new-data-list = []
-		for item in data-arr
-			new-data-list.push do
-				is_active: item.is_active
-				id: item.id
-				ref: "\#panel/pages/edit_#{item.id}.html"
-				name: item.title
-				url: item.alias
-		
-		@table-list.reset new-data-list
-		cb! if cb?
+	show-table-view: !->
+		@get-region \main .show @table-view
+
 
 module.exports = PagesListView

@@ -8,9 +8,11 @@
 require! {
 	\jquery         : $
 	\backbone.wreqr : W
+	
 	'./config.json' : config
 }
 
+# TODO remove this module after refactoring
 module.exports = (options)->
 	options = {
 		url: config.ajax_data_url

@@ -12,6 +12,7 @@ require! {
 
 class BasicModel extends B.Model
 	initialize: !->
-		@ .set \local, new LocalizationModel!
+		super ...
+		@set \local, new LocalizationModel!
 
 module.exports = BasicModel

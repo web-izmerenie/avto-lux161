@@ -12,6 +12,7 @@ r10
 - GC (for dead static files);
 - Database now have revision mark;
 - Updated SQLAlchemy version to stable major release;
+- Ordering list of elements in admin panel by clicking on column;
 - Some another stuff.
 
 r9
