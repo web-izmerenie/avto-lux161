@@ -6,8 +6,8 @@
  */
 
 require! {
-	\backbone       : B
-	\backbone.wreqr : W
+	\backbone       : { Collection }
+	\backbone.wreqr : { radio }
 	
 	# helpers
 	\../ajax-req
@@ -21,11 +21,12 @@ require! {
 }
 
 
-class TableListCollection extends B.Collection
+class TableListCollection extends Collection
 	comparator: \id
 
 
 class ListView extends SmoothView
+	
 	initialize: !->
 		super ...
 		@loader-view = new LoaderView! .render!
@@ -37,7 +38,7 @@ class ListView extends SmoothView
 		@table-list = new CollectionClass [], options
 		@table-view = new View collection: @table-list
 		@table-view.render!
-		@table-view.on \refresh:list, !~> @update-list!
+		@listen-to @table-view, \refresh:list, @update-list
 	
 	# cb: data-arr
 	# TODO remove after refactoring
@@ -46,7 +47,7 @@ class ListView extends SmoothView
 			data: ajax-data
 			success: (json)!~>
 				if json.status is not \success or not json.data_list?
-					W.radio.commands .execute \police, \panic,
+					radio.commands.execute \police, \panic,
 						new Error 'Incorrect server data'
 					return
 				
@@ -54,9 +55,9 @@ class ListView extends SmoothView
 				cb json.data_list, json
 	
 	regions:
-		\main : \.main
+		main: \.main
 	
-	class-name: 'v-stretchy'
+	class-name: \v-stretchy
 	template: \main
 	model: new BasicModel!
 	

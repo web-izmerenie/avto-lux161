@@ -6,22 +6,27 @@
  */
 
 require! {
-	\backbone.marionette : M
+	\backbone.marionette : { CompositeView }
 	
 	'../model/basic'     : BasicModel
 }
 
-class TableListView extends M.CompositeView
+
+class TableListView extends CompositeView
+	
 	class-name: 'panel panel-default'
-	model: new BasicModel!
 	child-view-container: \tbody
+	
+	model: new BasicModel!
 	
 	ui:
 		\refresh : \.refresh
 	events:
 		'click @ui.refresh': \refresh-list
-	\refresh-list : ->
+	
+	\refresh-list : (e)!->
+		e.prevent-default!
 		@trigger \refresh:list
-		false
+
 
 module.exports = TableListView

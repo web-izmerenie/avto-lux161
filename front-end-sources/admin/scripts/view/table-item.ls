@@ -6,22 +6,25 @@
  */
 
 require! {
-	\backbone            : B
-	\backbone.marionette : M
+	\backbone            : { history }
+	\backbone.marionette : { ItemView }
 }
 
-class TableItemView extends M.ItemView
+
+class TableItemView extends ItemView
+	
 	tag-name: \tr
 	ui:
 		link: \a
+	events:
+		click: \on-row-click
+	
+	\on-row-click : (e)!->
+		e.prevent-default!
+		history.navigate (@ui.link.attr \href), trigger: true
+	
 	on-render: !->
 		@$el.css \cursor, \pointer
-		@$el.on \click (e)~>
-			return false unless @$el? and @$el[0]?
-			B.history.navigate (@ui.link.attr \href), trigger: true
-			false
-	on-destroy: !->
-		return false unless @$el? and @$el[0]?
-		@$el.off \click
+
 
 module.exports = TableItemView

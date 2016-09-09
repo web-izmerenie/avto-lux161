@@ -20,11 +20,11 @@ require! {
 
 
 class ItemView extends TableItemView
-	template: 'pages/list-item'
+	template: \pages/list-item
 
 
 class CompositeListView extends TableListView
-	template: 'pages/list'
+	template: \pages/list
 	child-view: ItemView
 
 
@@ -46,6 +46,9 @@ class PagesListView extends ListView
 	
 	on-show: !->
 		super ...
+		@table-list.fetch!
+	
+	update-list: !->
 		@table-list.fetch!
 	
 	show-table-view: !->

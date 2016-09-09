@@ -6,14 +6,16 @@
  */
 
 require! {
-	'../../form-edit' : FormEditView
+	\../../form-edit : FormEditView
 }
+
 
 class AddPageView extends FormEditView
 	initialize: !->
 		@options.type = \add
-		@options[\list-page] = '#panel/pages'
+		@options.\list-page = \#panel/pages
 		@options.section = \pages
-		FormEditView.prototype.initialize ...
+		super ...
+
 
 module.exports = AddPageView
