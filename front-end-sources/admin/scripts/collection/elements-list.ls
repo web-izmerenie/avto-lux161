@@ -22,7 +22,7 @@ class ElementsListCollection extends Collection
 	
 	initialize: (models=null, options={})!->
 		super ...
-		@options = {} <<< (_.result @, \options) <<< options;
+		@options = {} <<< (_.result @, \options) <<< options
 	
 	url: ajax_data_url
 	action: null # must be overwritten by child class or by option

@@ -6,27 +6,40 @@
  */
 
 require! {
-	\backbone.wreqr : { radio }
+	\backbone.wreqr    : { radio }
 	
-	\./basic        : BasicModel
-	\./localization : LocalizationModel
+	\./basic           : BasicModel
+	\./localization    : LocalizationModel
+	\./type-validation : TypeValidationModelMixin
 }
 
 
-class StaticPageListItemModel extends BasicModel
+panic-attack = (err)!->
+	radio.commands.execute \police, \panic, err
+	throw err
+
+
+class StaticPageListItemModel
+extends BasicModel
+implements TypeValidationModelMixin
 	
-	defaults:
-		local     : null # instance of LocalizationModel
+	attributes-typings:
+		local     : (instanceof LocalizationModel)
 		
-		is_active : null # boolean
-		id        : null # number
-		sort      : null # number
-		ref       : null # string
-		name      : null # string
-		url       : null # string
+		is_active : \Boolean
+		id        : \Number
+		sort      : \Number
+		ref       : \String
+		name      : \String
+		url       : \String
+	
+	check-if-is-valid: !->
+		panic-attack new Error @validation-error unless @is-valid!
 	
 	initialize: !->
 		super local: new LocalizationModel!
+		@check-if-is-valid!
+		@on \change, @check-if-is-valid
 	
 	parse: (response)->
 		try
@@ -39,8 +52,7 @@ class StaticPageListItemModel extends BasicModel
 				url: response.alias
 			}
 		catch
-			radio.commands.execute \police, \panic, e
-			throw e
+			panic-attack e
 
 
 module.exports = StaticPageListItemModel
