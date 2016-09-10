@@ -13,9 +13,14 @@
 table.table
 	thead
 		tr
-			th= local.get('sections').pages.id
-			th= local.get('sections').pages.is_active
-			th= local.get('sections').pages.sort
-			th= local.get('sections').pages.name
-			th= local.get('sections').pages.url
+			th(class="js-ordering-column ordering-column" data-field="id")
+				span= local.get('sections').pages.id
+			th(class="js-ordering-column ordering-column" data-field="is_active")
+				span= local.get('sections').pages.is_active
+			th(class="js-ordering-column ordering-column" data-field="sort")
+				span= local.get('sections').pages.sort
+			th(class="js-ordering-column ordering-column" data-field="name")
+				span= local.get('sections').pages.name
+			th(class="js-ordering-column ordering-column" data-field="url")
+				span= local.get('sections').pages.url
 	tbody

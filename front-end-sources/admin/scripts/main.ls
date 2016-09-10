@@ -49,13 +49,14 @@ police.commands.set-handler \panic, (err)!->
 	throw err
 
 B.ajax = (opts)-> B.$.ajax do
-	{} <<< opts <<< do
-		cache     : false
+	{} <<< opts <<< {
+		-cache
 		type      : \POST
 		method    : \POST
 		data-type : \json
 		error: (xhr, status, err)!->
 			return if status is \abort
 			W.radio.commands.execute \police, \panic, err
+	}
 
 app .start!

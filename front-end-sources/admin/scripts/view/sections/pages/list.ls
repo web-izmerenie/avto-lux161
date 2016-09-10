@@ -13,7 +13,7 @@ require! {
 	\../../../model/static-page-list-item       : StaticPageListItemModel
 	
 	# views
-	\../../table-list                           : TableListView
+	\../../ordering-table-list                  : OrderingTableListView
 	\../../table-item                           : TableItemView
 	\../../list                                 : ListView
 }
@@ -23,7 +23,7 @@ class ItemView extends TableItemView
 	template: \pages/list-item
 
 
-class CompositeListView extends TableListView
+class CompositeListView extends OrderingTableListView
 	template: \pages/list
 	child-view: ItemView
 
