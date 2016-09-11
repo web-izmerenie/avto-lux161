@@ -6,8 +6,9 @@
  */
 
 require! {
-	\backbone : { Collection }
+	\./basic : BasicCollection
 }
+
 
 data =
 	* ref: \#panel/pages    , title: 'Статические страницы'
@@ -17,4 +18,5 @@ data =
 	* ref: \#panel/accounts , title: \Аккаунты
 	* ref: \#logout         , title: \Выход
 
-module.exports = new Collection data
+
+module.exports = new BasicCollection data

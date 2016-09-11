@@ -8,7 +8,7 @@
 require! {
 	\backbone.marionette : { CompositeView }
 	
-	'../model/basic'     : BasicModel
+	\../model/basic      : BasicModel
 }
 
 
@@ -22,7 +22,7 @@ class TableListView extends CompositeView
 	ui:
 		\refresh : \.refresh
 	events:
-		'click @ui.refresh': \refresh-list
+		'click @ui.refresh' : \refresh-list
 	
 	\refresh-list : (e)!->
 		e.prevent-default!

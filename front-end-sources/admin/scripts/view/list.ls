@@ -61,8 +61,7 @@ class ListView extends SmoothView
 	template: \main
 	model: new BasicModel!
 	
-	on-destroy: !->
-		@ajax.abort! if @ajax?
+	on-destroy: !-> @ajax.abort! if @ajax?
 
 
 module.exports = ListView

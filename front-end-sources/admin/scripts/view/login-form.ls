@@ -6,30 +6,32 @@
  */
 
 require! {
-	\backbone               : B
-	\backbone.marionette    : M
-	\backbone.wreqr         : W
-	'../model/basic'        : BasicModel
-	'../model/localization' : LocalizationModel
-	'./smooth'              : SmoothView
-	'./loader'              : LoaderView
-	'./error-msg'           : ErrorMessageView
-	'../ajax-req'
+	\backbone              : { history }
+	\backbone.marionette   : { proxy-get-option }
+	\backbone.wreqr        : { radio }
+	
+	\../model/basic        : BasicModel
+	\../model/localization : LocalizationModel
+	\./smooth              : SmoothView
+	\./loader              : LoaderView
+	\./error-msg           : ErrorMessageView
+	\../ajax-req
 }
+
 
 # TODO remove this
 localization-model = new LocalizationModel!
 
+
 class LoginFormView extends SmoothView
-	\auth-url : '/adm/auth' # TODO try get with prefix from B
-	get-option: M.proxy-get-option
 	
-	initialize: !->
-		SmoothView.prototype.initialize ...
+	\auth-url : \/adm/auth # TODO try get with prefix from Backbone.history
 	
-	process: false
-	set-processing: (b)!-> @.process = b
-	is-processing: -> @.process
+	get-option: proxy-get-option
+	
+	process: no # default value
+	set-processing: !-> @process = it
+	is-processing: -> @process
 	
 	class-name: 'login-form container'
 	template: \login-form
@@ -41,41 +43,43 @@ class LoginFormView extends SmoothView
 		user: 'input[name=user]'
 		pass: 'input[name=pass]'
 	events:
-		'submit @ui.form': \form-handler
+		'submit @ui.form' : \form-handler
 	
-	on-json-error : (json)!->
+	on-json-error: (json)!->
 		if not json.error_code?
-		or not (json.error_code |> (in <[ user_not_found incorrect_password ]>))
-			W.radio.commands .execute \police, \panic,
-				new Error 'Unknown "error_code"'
+		or json.error_code not in <[ user_not_found incorrect_password ]>
+			new Error 'Unknown "error_code"'
+			|> radio.commands.execute \police, \panic, _
 		
-		err-view = new ErrorMessageView {
-			message: localization-model .get \forms .err[json.error_code]
-		}
-		@ .get-region \message .show err-view
-	
-	on-json-success : (json)!->
-		@ .get-option \app .is-auth = true
-		B.history .navigate '#panel', { trigger: true, replace: true }
-	
-	\form-handler : ->
-		return false if @.is-processing!
-		@ .set-processing true
+		err-view = new ErrorMessageView do
+			message: localization-model.get \forms .err[json.error_code]
 		
-		ajax-req {
-			url: @ .get-option \auth-url
+		@get-region \message .show err-view
+	
+	on-json-success: (json)!->
+		@get-option \app .is-auth = true
+		history.navigate \#panel, { +trigger, +replace }
+	
+	\form-handler : (e)!->
+		
+		e.prevent-default!
+		if @is-processing!
+			then return
+			else @set-processing true
+		
+		ajax-req do
+			url: @get-option \auth-url
 			data:
-				user: @.ui.user .val!
-				pass: @.ui.pass .val!
+				user: @ui.user.val!
+				pass: @ui.pass.val!
 			success: (json)!~>
 				switch json.status
-				| \success => @ .trigger-method \jsonSuccess, json
-				| \error => @ .trigger-method \jsonError, json
-				| _ => W.radio.commands .execute \police, \panic,
+				| \success => @trigger-method \jsonSuccess, json
+				| \error => @trigger-method \jsonError, json
+				| _ =>
 					new Error 'Unknown response JSON status'
-				@ .set-processing false
-		}
-		
-		false
+					|> radio.commands.execute \police, \panic, _
+				@set-processing false
+
 
 module.exports = LoginFormView

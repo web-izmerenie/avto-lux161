@@ -7,7 +7,7 @@
 
 require! {
 	\jquery              : $
-	\backbone.marionette : M
+	\backbone.marionette : { TemplateCache }
 	\jade/jade
 }
 
@@ -50,9 +50,7 @@ templates-bundle =
 	\menu-item                    : require \base/templates/menu-item.jade
 	\panel                        : require \base/templates/panel.jade
 
-compiled-templates = {}
-for k of templates-bundle
-	compiled-templates[k] = jade.compile templates-bundle[k]
+compiled-templates = {[k, jade.compile v] for k, v of templates-bundle}
 
 export load = (template-id)->
 	if compiled-templates.has-own-property template-id
@@ -60,4 +58,4 @@ export load = (template-id)->
 		else throw new Error "Template '#{template-id}' isn't declared"
 
 export compile = (raw-template)-> raw-template
-export render = (template, data)-> (M.TemplateCache .get template) data
+export render = (template, data)-> TemplateCache .get template <| data

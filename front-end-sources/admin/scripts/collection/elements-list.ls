@@ -8,21 +8,15 @@
 
 require! {
 	\underscore          : _
-	\backbone            : { Collection }
 	\backbone.marionette : { proxy-get-option }
 	\backbone.wreqr      : { radio }
 	
 	\../config.json      : { ajax_data_url }
+	\./basic             : BasicCollection
 }
 
 
-class ElementsListCollection extends Collection
-	
-	get-option: proxy-get-option
-	
-	initialize: (models=null, options={})!->
-		super ...
-		@options = {} <<< (_.result @, \options) <<< options
+class ElementsListCollection extends BasicCollection
 	
 	url: ajax_data_url
 	action: null # must be overwritten by child class or by option

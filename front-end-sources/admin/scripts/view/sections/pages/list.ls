@@ -14,12 +14,12 @@ require! {
 	
 	# views
 	\../../ordering-table-list                  : OrderingTableListView
-	\../../table-item                           : TableItemView
+	\../../ordering-table-item                  : OrderingTableItemView
 	\../../list                                 : ListView
 }
 
 
-class ItemView extends TableItemView
+class ItemView extends OrderingTableItemView
 	template: \pages/list-item
 
 
@@ -34,7 +34,9 @@ class PagesListView extends ListView
 		super ...
 		
 		options =
-			model: StaticPageListItemModel
+			model: (attrs=null, options={})->
+				options = {} <<< options <<< {action: \reorder_page}
+				new StaticPageListItemModel attrs, options
 			action: \get_pages_list
 		
 		@init-table-list \

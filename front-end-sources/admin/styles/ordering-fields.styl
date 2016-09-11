@@ -4,6 +4,7 @@
  * @author Viacheslav Lotsmanov
  */
 
+
 th.ordering-column span
 th.ordering-column.ordering-column--asc span:after
 th.ordering-column.ordering-column--desc span:after
@@ -14,3 +15,12 @@ th.ordering-column.ordering-column--asc span:after
 
 th.ordering-column.ordering-column--desc span:after
 	content '\25BC'
+
+
+tr.ordering-drag-over th
+tr.ordering-drag-over td
+	border-top 2px solid gray !important
+
+tr.ordering-drag-over:first-child th
+tr.ordering-drag-over:first-child td
+	border-top 3px solid gray !important

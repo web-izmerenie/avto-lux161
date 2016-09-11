@@ -7,13 +7,16 @@
 
 require! {
 	\jquery   : $
-	\backbone : B
+	\backbone : { Model }
 }
+
 
 lang = $ \html .attr \lang
 local = {}
 
-class LocalizationModel extends B.Model
+
+# TODO refactoring
+class LocalizationModel extends Model
 	lang: lang
 	initialize: (options={})!->
 		@lang = options.lang if options.lang?
@@ -37,5 +40,6 @@ class LocalizationModel extends B.Model
 				throw err
 		
 		@set local[@.lang]
+
 
 module.exports = LocalizationModel

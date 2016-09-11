@@ -6,13 +6,15 @@
  */
 
 require! {
-	\backbone.marionette : M
+	\backbone.marionette : { LayoutView }
 }
 
-class SmoothView extends M.LayoutView
+
+class SmoothView extends LayoutView
 	initialize: !->
-		@.$el .css \opacity, 0
+		@$el.css \opacity, 0
 	on-before-show: !->
-		@.$el .animate opacity: 1
+		@$el.animate opacity: 1
+
 
 module.exports = SmoothView

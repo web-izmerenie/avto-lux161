@@ -6,11 +6,11 @@
  */
 
 require! {
-	\backbone.wreqr    : { radio }
+	\backbone.wreqr           : { radio }
 	
-	\./basic           : BasicModel
-	\./localization    : LocalizationModel
-	\./type-validation : TypeValidationModelMixin
+	\./localization           : LocalizationModel
+	\./type-validation        : TypeValidationModelMixin
+	\./ordering-elements-item : OrderingElementsItemModel
 }
 
 
@@ -20,7 +20,7 @@ panic-attack = (err)!->
 
 
 class StaticPageListItemModel
-extends BasicModel
+extends OrderingElementsItemModel
 implements TypeValidationModelMixin
 	
 	attributes-typings:
@@ -33,13 +33,16 @@ implements TypeValidationModelMixin
 		name      : \String
 		url       : \String
 	
+	\check-if-is-valid : !-> @check-if-is-valid ...
 	check-if-is-valid: !->
 		panic-attack new Error @validation-error unless @is-valid!
 	
 	initialize: !->
-		super local: new LocalizationModel!
+		super ...
 		@check-if-is-valid!
-		@on \change, @check-if-is-valid
+	
+	events:
+		\change : \check-if-is-valid
 	
 	parse: (response)->
 		try

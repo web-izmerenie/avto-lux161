@@ -6,17 +6,17 @@
  */
 
 require! {
-	\backbone              : B
-	\backbone.marionette   : M
-	'./config.json'        : config
+	\backbone              : { history }
+	\backbone.marionette   : { Application, proxy-get-option }
+	\./config.json         : { root_url }
 	
 	\base/styles/main.styl : {}
 }
 
 
-class App extends M.Application
+class App extends Application
 	
-	get-option: M.proxy-get-option
+	get-option: proxy-get-option
 	
 	container: \body
 	is-auth: false
@@ -25,10 +25,10 @@ class App extends M.Application
 		@add-regions container: @get-option \container
 	
 	start: (options)!->
-		B.history.start root: config.root_url
+		history.start root: root_url
 	
 	on-destroy: !->
-		B.history.stop!
+		history.stop!
 
 
 module.exports = App

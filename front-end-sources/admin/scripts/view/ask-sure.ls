@@ -6,29 +6,30 @@
  */
 
 require! {
-	\backbone.marionette : M
-	'../model/basic'     : BasicModel
-	'./smooth'           : SmoothView
+	\../model/basic : BasicModel
+	\./smooth       : SmoothView
 }
+
 
 class AskSureView extends SmoothView
 	initialize: (options)!->
-		SmoothView.prototype.initialize ...
-		@model = new BasicModel message: options.message or null
+		super ...
+		@model = new BasicModel message: (options.message or null)
 		unless (@model.get \message)?
-			@model.set \message, (@model.get \local .get \sure .msg)
+			@model.set \message, _ <| @model.get \local .get \sure .msg
 	template: \ask-sure
 	ui:
-		yes: \.btn.yes
-		no: \.btn.no
+		yes : \.btn.yes
+		no  : \.btn.no
 	events:
-		'click @ui.yes': \yes
-		'click @ui.no': \no
-	yes: ->
+		'click @ui.yes' : \yes
+		'click @ui.no'  : \no
+	yes: (e)!->
+		e.prevent-default! if e?prevent-default?
 		@trigger \yes
-		false
-	no: ->
+	no: (e)!->
+		e.prevent-default! if e?prevent-default?
 		@destroy!
-		false
+
 
 module.exports = AskSureView

@@ -1,5 +1,5 @@
 /**
- * Panel Menu collection
+ * Ordering elements list collection
  *
  * @author Viacheslav Lotsmanov
  * @author Andrew Fatkulin

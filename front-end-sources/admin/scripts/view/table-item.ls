@@ -21,7 +21,7 @@ class TableItemView extends ItemView
 	
 	\on-row-click : (e)!->
 		e.prevent-default!
-		history.navigate (@ui.link.attr \href), trigger: true
+		history.navigate _, { +trigger } <| @ui.link.attr \href
 	
 	on-render: !->
 		@$el.css \cursor, \pointer

@@ -1,4 +1,4 @@
-th(scope="row")= id
+th(scope="row" class="js-model-id" data-model-id=id)= id
 if is_active
 	td= local.get('sections').pages.is_active_yes
 else
