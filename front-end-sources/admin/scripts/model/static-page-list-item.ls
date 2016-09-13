@@ -23,6 +23,8 @@ class StaticPageListItemModel
 extends OrderingElementsItemModel
 implements TypeValidationModelMixin
 	
+	action: \reorder_page
+	
 	attributes-typings:
 		local     : (instanceof LocalizationModel)
 		
@@ -40,9 +42,7 @@ implements TypeValidationModelMixin
 	initialize: !->
 		super ...
 		@check-if-is-valid!
-	
-	events:
-		\change : \check-if-is-valid
+		@on \change, \check-if-is-valid
 	
 	parse: (response)->
 		try

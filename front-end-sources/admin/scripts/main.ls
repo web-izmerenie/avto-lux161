@@ -11,6 +11,7 @@ require! {
 	
 	\./config.json : {}
 }
+
 B.$ = $
 
 <-! $ # dom ready
@@ -49,16 +50,17 @@ police.commands.set-handler \panic, (err)!->
 	throw err
 
 B.ajax = (opts)->
-	opts = {} <<< opts
-	delete! opts.process-data # prevent mess with native json
-	B.$.ajax opts <<< {
+	B.$.ajax {} <<< opts <<< {
 		-cache
-		type      : \POST
-		method    : \POST
-		data-type : \json
+		type         : \POST
+		method       : \POST
+		data-type    : \json
+		content-type : 'application/x-www-form-urlencoded; charset=UTF-8'
+		parse        : on
+		process-data : on
 		error: (xhr, status, err)!->
 			return if status is \abort
 			radio.commands.execute \police, \panic, err
 	}
 
-app .start!
+app.start!

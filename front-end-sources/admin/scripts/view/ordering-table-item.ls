@@ -19,7 +19,7 @@ class OrderingTableItemView extends TableItemView
 		\view:ordering-drag-off : \on-ordering-drag-off
 	
 	\on-ordering-drag-off : !->
-		@$el .css \opacity, ''
+		@$el.css \opacity, ''
 
 
 module.exports = OrderingTableItemView

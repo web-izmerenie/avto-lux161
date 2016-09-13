@@ -28,9 +28,9 @@ class OrderingTableListView extends TableListView
 	} <<< super::events
 	
 	collection-events:
-		\sort  : \actualize-order-column
-		\sync  : \actualize-order-column
-		\reset : \actualize-order-column
+		sort  : \actualize-order-column
+		sync  : \actualize-order-column
+		reset : \actualize-order-column
 	
 	on-render: !->
 		for item in @ui.\ordering-column

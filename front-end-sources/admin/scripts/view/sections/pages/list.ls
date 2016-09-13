@@ -34,9 +34,7 @@ class PagesListView extends ListView
 		super ...
 		
 		options =
-			model: (attrs=null, options={})->
-				options = {} <<< options <<< {action: \reorder_page}
-				new StaticPageListItemModel attrs, options
+			model: StaticPageListItemModel
 			action: \get_pages_list
 		
 		@init-table-list \

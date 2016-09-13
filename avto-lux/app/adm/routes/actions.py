@@ -63,6 +63,7 @@ def query_except_handler(fn):
 
 
 class AdminMainHandler(JsonResponseMixin):
+	
 	def post(self):
 		if not self.get_current_user():
 			self.set_status(403)
@@ -83,9 +84,11 @@ class AdminMainHandler(JsonResponseMixin):
 			'get_accounts_list': self.get_accounts_list,
 			'get_data_list': self.get_data_list,
 			'get_fields': self.get_fields,
-			'add': self.create,
-			'update': self.update_page,
-			'delete': self.delete_smth
+			'add': self.create, # for add new element/section forms
+			'update': self.update_page, # for editing elements/sections forms
+			'delete': self.delete_smth, # for deleting elements/sections
+			
+			'reorder_page': self.reorder_page # custom reordering for static pages
 		}
 		
 		if action not in actions.keys():
@@ -616,3 +619,34 @@ class AdminMainHandler(JsonResponseMixin):
 			'fields_list': vidgets,
 			'values_list': values
 		})
+	
+	
+	@query_except_handler
+	def reorder_page(self, page_id, at_id):
+		
+		if page_id == at_id:
+			self.json_response({'status': 'success'})
+			return
+		
+		session = Session()
+		
+		try:
+			session.execute(
+				StaticPageModel
+					.get_reorder_page_query()
+					.page(page_id)
+					.place_before(at_id)
+					.done()
+			)
+			session.commit()
+		except Exception as e:
+			print(
+				'adm/AdminMainHandler.reorder_page(): ' +
+				'cannot reorder "%d" at "%d":\n' % (page_id, at_id),
+				e, file=sys.stderr
+			)
+			raise e
+		finally:
+			session.close()
+		
+		self.json_response({'status': 'success'})

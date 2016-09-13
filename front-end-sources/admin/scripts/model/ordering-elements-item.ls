@@ -26,7 +26,9 @@ class OrderingElementsItemModel extends BasicModel
 	put-at: (at-model)!-> @sync \update, @, do
 		data:
 			action: @get-option \action
-			at-id: at-model.id
+			args: JSON.stringify do
+				at_id: at-model.id
+				page_id: @id
 		success: (response)!~>
 			if response.status isnt \success
 				panic-attack new Error "reordering error#{
