@@ -7,3 +7,7 @@ td= sort
 td
 	a(href=ref)= name
 td= url
+if is_main_menu_item
+	td= local.get('sections').pages.is_main_menu_item_yes
+else
+	td= local.get('sections').pages.is_main_menu_item_no

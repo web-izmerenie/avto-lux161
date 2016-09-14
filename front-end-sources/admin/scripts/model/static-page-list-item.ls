@@ -26,14 +26,15 @@ implements TypeValidationModelMixin
 	action: \reorder_page
 	
 	attributes-typings:
-		local     : (instanceof LocalizationModel)
+		local             : (instanceof LocalizationModel)
 		
-		is_active : \Boolean
-		id        : \Number
-		sort      : \Number
-		ref       : \String
-		name      : \String
-		url       : \String
+		is_active         : \Boolean
+		id                : \Number
+		sort              : \Number
+		ref               : \String
+		name              : \String
+		url               : \String
+		is_main_menu_item : \Boolean
 	
 	\check-if-is-valid : !-> @check-if-is-valid ...
 	check-if-is-valid: !->
@@ -53,6 +54,7 @@ implements TypeValidationModelMixin
 				ref: "\#panel/pages/edit_#{response.id}.html"
 				name: response.title
 				url: response.alias
+				response.is_main_menu_item ? false
 			}
 		catch
 			panic-attack e

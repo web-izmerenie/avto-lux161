@@ -8,11 +8,13 @@ r10
 - Fixed optional date and time in order form;
 - Refactored and simplified front-end deploying (migrated to webpack);
 - Refactoring of back-end;
+- Refactoring of admin panel front-end;
 - Improved documentation;
 - GC (for dead static files);
 - Database now have revision mark;
 - Updated SQLAlchemy version to stable major release;
 - Ordering list of elements in admin panel by clicking on column;
+- Manual drag'n'drop reordering of elements (pages, sections, etc);
 - Some another stuff.
 
 r9

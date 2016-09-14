@@ -31,10 +31,11 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	@property
 	def static_list(self):
 		return {
-			'is_active' : bool(self.is_active),
-			'title'     : self.title,
-			'id'        : self.id,
-			'alias'     : self.alias
+			'is_active'         : bool(self.is_active),
+			'title'             : self.title,
+			'id'                : self.id,
+			'alias'             : self.alias,
+			'is_main_menu_item' : self.is_main_menu_item
 		}
 	
 	@property
