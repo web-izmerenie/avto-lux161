@@ -223,7 +223,7 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	def extract_prev_elem(cls, instance_generator):
 		try:
 			x = next(instance_generator)
-			assert isinstance(x, StaticPageModel), 'Incorrect instance of model'
+			assert isinstance(x, cls), 'Incorrect instance of model'
 			return x.id
 		except StopIteration:
 			return None
