@@ -27,7 +27,7 @@ class Collection extends B.Collection
 class DataListView extends ListView
 	initialize: !->
 		ListView.prototype.initialize ...
-		@init-table-list CompositeListView, null, Collection
+		@init-table-list CompositeListView, null, { Collection }
 	
 	on-show: !->
 		ListView.prototype.on-show ...

@@ -37,10 +37,12 @@ class PagesListView extends ListView
 			model: StaticPageListItemModel
 			action: \get_pages_list
 		
-		@init-table-list \
-			CompositeListView,
-			options,
-			OrderingElementsListCollection
+		@init-table-list do
+			CompositeListView
+			null
+			do
+				Collection: OrderingElementsListCollection
+				collection-options: options
 		
 		@listen-to @table-list, 'sync reset', @show-table-view
 	

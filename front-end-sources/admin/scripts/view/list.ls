@@ -34,9 +34,12 @@ class ListView extends SmoothView
 	on-show: !->
 		@get-region \main .show @loader-view
 	
-	init-table-list: (View, options={}, CollectionClass=TableListCollection)!->
-		@table-list = new CollectionClass [], options
-		@table-view = new View collection: @table-list
+	init-table-list: (View, options = {}, {
+		Collection = TableListCollection
+		collection-options = {}
+	} = {})!->
+		@table-list = new Collection [], collection-options
+		@table-view = new View {} <<< options <<< { collection: @table-list }
 		@table-view.render!
 		@listen-to @table-view, \refresh:list, @update-list
 	
