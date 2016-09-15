@@ -70,19 +70,23 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 			self,
 			table_name,
 			table_columns,
-			filters={}
+			filters={},
+			only=None # None|'first'|'last'
 		):
 			self._table_name = table_name
 			self._table_columns = table_columns
 			self._filters = filters
+			self._only = only
 		
 		@classmethod
-		def copy(cls, self):
-			return cls(
-				table_name=str(self._table_name),
-				table_columns=[str(x) for x in self._table_columns],
-				filters=deepcopy(self._filters)
-			)
+		def copy(cls, self, **kwargs):
+			init_kwargs = {
+				'table_name': str(self._table_name),
+				'table_columns': [str(x) for x in self._table_columns],
+				'filters': deepcopy(self._filters)
+			}
+			init_kwargs.update(kwargs)
+			return cls(**init_kwargs)
 		
 		def filter(self, replace_filters=False, **filters):
 			cloned = self.copy(self)
@@ -93,15 +97,30 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 				cloned._filters.update(filters)
 			return cloned
 		
+		def only_first(self):
+			return self.copy(self, only='first')
+		
+		def only_last(self):
+			return self.copy(self, only='last')
+		
+		_only_order_map = {
+			'first': 'ORDER BY n ASC',
+			'last': 'ORDER BY n DESC'
+		}
+		
 		def done(self):
+			assert self._only in [None, 'first', 'last'], \
+				'Incorrect "only" property'
 			return text('''
-				WITH RECURSIVE recursetree AS (
-					SELECT {fields} FROM {table_name} WHERE prev_elem IS NULL
+				WITH RECURSIVE recursetree (n) AS (
+					SELECT 0, {fields} FROM {table_name} WHERE prev_elem IS NULL
 					UNION ALL
-					SELECT {t_fields} FROM {table_name} t
+					SELECT n+1, {t_fields} FROM {table_name} t
 					INNER JOIN recursetree rt ON rt.id = t.prev_elem
 				)
 				SELECT {fields} FROM recursetree
+				{order}
+				{limit}
 				{filters}
 			'''.format(
 				
@@ -119,7 +138,10 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 							if type(val) is str else val
 					))
 					for key, val in self._filters.items()
-				])
+				]),
+				
+				order='' if self._only is None else self._only_order_map[self._only],
+				limit='' if self._only is None else 'LIMIT 1'
 			))
 	
 	@classmethod
@@ -155,10 +177,10 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 			return self.copy(self, before_id=before_id)
 		
 		def done(self):
-			if self._page_id is None or self._before_id is None:
-				raise Exception('Not enough data to reorder static page')
-			if self._page_id == self._before_id:
-				raise Exception('Page id and new place id cannot be the same')
+			assert self._page_id is not None and self._before_id is not None, \
+				'Not enough data to reorder static page'
+			assert self._page_id != self._before_id, \
+				'Page id and new place id cannot be the same'
 			return text('''
 				
 				WITH old_prev_of_target AS (
@@ -196,6 +218,15 @@ class StaticPageModel(Base, PageMixin, IdMixin):
 	@classmethod
 	def get_reorder_page_query(cls):
 		return cls._GetReorderPageQueryChain(cls.__table__.name)
+	
+	@classmethod
+	def extract_prev_elem(cls, instance_generator):
+		try:
+			x = next(instance_generator)
+			assert isinstance(x, StaticPageModel), 'Incorrect instance of model'
+			return x.id
+		except StopIteration:
+			return None
 
 
 class UrlMapping(Base, IdMixin):

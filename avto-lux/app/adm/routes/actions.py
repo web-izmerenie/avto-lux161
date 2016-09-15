@@ -65,6 +65,7 @@ def query_except_handler(fn):
 class AdminMainHandler(JsonResponseMixin):
 	
 	def post(self):
+		
 		if not self.get_current_user():
 			self.set_status(403)
 			return self.json_response({ 'status': 'unauthorized' })
@@ -83,6 +84,7 @@ class AdminMainHandler(JsonResponseMixin):
 			'get_redirect_list': self.get_redirect_list,
 			'get_accounts_list': self.get_accounts_list,
 			'get_data_list': self.get_data_list,
+			
 			'get_fields': self.get_fields,
 			'add': self.create, # for add new element/section forms
 			'update': self.update_page, # for editing elements/sections forms
@@ -107,6 +109,7 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	@query_except_handler
 	def get_pages_list(self):
+		
 		session = Session()
 		
 		try:
@@ -115,19 +118,19 @@ class AdminMainHandler(JsonResponseMixin):
 			)
 			data = session.query(StaticPageModel).instances(result)
 		except Exception as e:
-			session.close()
 			print(
 				'adm/AdminMainHandler.get_pages_list(): ' +
 				'cannot get static pages:\n',
 				e, file=sys.stderr
 			)
 			raise e
+		finally:
+			session.close()
 		
 		pages_list = [x.static_list for x in data]
 		for idx, page in enumerate(pages_list):
 			page['sort'] = idx + 1
 		
-		session.close()
 		return self.json_response({
 			'status': 'success',
 			'data_list': pages_list
@@ -137,6 +140,7 @@ class AdminMainHandler(JsonResponseMixin):
 	## TODO : Optimize and using join ¯\(°_o)/¯
 	@query_except_handler
 	def get_catalog_sections(self):
+		
 		session = Session()
 		
 		try:
@@ -200,6 +204,7 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	@query_except_handler
 	def get_catalog_elements(self, id=None):
+		
 		session = Session()
 		
 		try:
@@ -246,20 +251,20 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	@query_except_handler
 	def get_redirect_list(self):
+		
 		session = Session()
 		
 		try:
 			data = session.query(UrlMapping).all()
 		except Exception as e:
-			session.close()
 			print(
 				'adm/AdminMainHandler.get_redirect_list(): ' +
 				'cannot get data from UrlMapping model:\n',
 				e, file=sys.stderr
 			)
 			raise e
-		
-		session.close()
+		finally:
+			session.close()
 		
 		return self.json_response({
 			'status': 'success',
@@ -269,20 +274,20 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	@query_except_handler
 	def get_accounts_list(self):
+		
 		session = Session()
 		
 		try:
 			data = session.query(User).all()
 		except Exception as e:
-			session.close()
 			print(
 				'adm/AdminMainHandler.get_accounts_list(): ' +
 				'cannot get users:\n',
 				e, file=sys.stderr
 			)
 			raise e
-		
-		session.close()
+		finally:
+			session.close()
 		
 		return self.json_response({
 			'status': 'success',
@@ -298,6 +303,7 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	@query_except_handler
 	def get_static_page(self, id=None):
+		
 		session = Session()
 		
 		try:
@@ -319,36 +325,57 @@ class AdminMainHandler(JsonResponseMixin):
 		})
 	
 	
+	_section_model_map = {
+		'pages': StaticPageModel,
+		'redirect': UrlMapping,
+		'catalog_section': CatalogSectionModel,
+		'catalog_element': CatalogItemModel,
+		'data': NonRelationData
+	}
+	
+	# models that support custom ordering
+	_custom_ordering_models = [
+		StaticPageModel
+	]
+	
+	
 	@query_except_handler
 	def create(self, **kwargs):
+		
+		# kwargs will be used to fill model with values
+		
 		section = kwargs['section']
-		del kwargs['section']
+		del kwargs['section'] # it's not model field, get rid of it from kwargs
 		
-		for item in (
-			x for x in kwargs.keys()
-			if x.startswith('is_') or x.startswith('has_')
-		):
-			kwargs[item] = True
-		
-		section_map = {
-			'pages': StaticPageModel,
-			'redirect': UrlMapping,
-			'catalog_section': CatalogSectionModel,
-			'catalog_element': CatalogItemModel,
-			'data': NonRelationData
-		}
+		# set as True flags that was checked
+		# only checked flags will be received from admin-panel front-end
+		kwargs.update({
+			key: True for key in kwargs.keys()
+			if key.startswith('is_') or key.startswith('has_')
+		})
 		
 		session = Session()
 		
-		page = section_map[section](**kwargs)
+		Model = self._section_model_map[section]
+		
+		if Model in self._custom_ordering_models:
+			kwargs['prev_elem'] = Model.extract_prev_elem(
+				session.query(Model).instances(
+					session.execute(
+						Model.get_ordered_list_query().only_last().done()
+					)
+				)
+			)
+		
+		item = Model(**kwargs)
 		
 		try:
-			session.add(page)
+			session.add(item)
 		except Exception as e:
 			session.close()
 			print(
 				'adm/AdminMainHandler.create(): ' +
-				'cannot create page by "%s" section:\n' % str(section),
+				'cannot create item by "%s" section:\n' % str(section),
 				e, file=sys.stderr
 			)
 			raise e
@@ -375,7 +402,7 @@ class AdminMainHandler(JsonResponseMixin):
 			session.close()
 			print(
 				'adm/AdminMainHandler.create(): ' +
-				'cannot commit create page by "%s" section:\n' % str(section),
+				'cannot commit create item by "%s" section:\n' % str(section),
 				e, file=sys.stderr
 			)
 			raise e
@@ -388,39 +415,34 @@ class AdminMainHandler(JsonResponseMixin):
 	@query_except_handler
 	def update_page(self, **kwargs):
 		
+		# kwargs will be used to fill model with values
+		
 		id = kwargs['id']
 		section = kwargs['section']
 		
+		# remove keys that is not model fields
 		del kwargs['id']
 		del kwargs['section']
 		
-		section_map = {
-			'pages': StaticPageModel,
-			'redirect': UrlMapping,
-			'catalog_section': CatalogSectionModel,
-			'catalog_element': CatalogItemModel,
-			'data': NonRelationData
-		}
+		Model = self._section_model_map[section]
 		
-		fields = db_inspector.get_columns(
-			section_map[section].__tablename__
-		)
+		fields = db_inspector.get_columns(Model.__tablename__)
 		
-		for item in (
-			x for x in fields
-			if x['name'].startswith('is_')
-			or x['name'].startswith('has_')
-			or x['name'].startswith('inherit_seo_')
-		):
-			if item['name'] not in kwargs.keys():
-				kwargs.update({ item['name']: False })
-			else:
-				kwargs[item['name']] = True
+		kwargs_keys = kwargs.keys()
+		kwargs.update({
+			# set as True flags that was checked and as False that wasn't
+			# only checked flags will be received from admin-panel front-end
+			field['name']: field['name'] in kwargs_keys
+			for field in fields
+			if field['name'].startswith('is_')
+			or field['name'].startswith('has_')
+			or field['name'].startswith('inherit_seo_')
+		})
 		
 		session = Session()
 		
 		try:
-			data = session.query(section_map[section]).filter_by(id=id)
+			data = session.query(Model).filter_by(id=id)
 		except Exception as e:
 			session.close()
 			print(
@@ -469,6 +491,7 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	@query_except_handler
 	def delete_smth(self, model=None, id=None): # smth - something
+		
 		session = Session()
 		models = {
 			'pages': StaticPageModel,
@@ -485,7 +508,6 @@ class AdminMainHandler(JsonResponseMixin):
 				.delete(synchronize_session=True)
 			session.commit()
 		except Exception as e:
-			session.close()
 			print(
 				'adm/AdminMainHandler.delete_smth(): ' +
 				'cannot delete page by id #%s:\n' % str(id),
@@ -495,28 +517,29 @@ class AdminMainHandler(JsonResponseMixin):
 				'status': 'error',
 				'error_code': 'system_fail'
 			})
-		
-		session.close()
+		finally:
+			session.close()
 		
 		return self.json_response({'status': 'success'})
 	
 	
 	@query_except_handler
 	def get_data_list(self):
+		
 		session = Session()
 		
 		try:
 			data = session.query(NonRelationData).all()
 		except Exception as e:
-			session.close()
 			print(
 				'adm/AdminMainHandler.get_data_list(): ' +
 				'cannot get non-relation data elements:\n',
 				e, file=sys.stderr
 			)
 			raise e
+		finally:
+			session.close()
 		
-		session.close()
 		return self.json_response({
 			'status': 'success',
 			'data_list': [x.item for x in data]
@@ -525,6 +548,7 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	@query_except_handler
 	def get_fields(self, model=None, edit=False, id=None):
+		
 		session = Session()
 		
 		models = {
@@ -606,13 +630,9 @@ class AdminMainHandler(JsonResponseMixin):
 		
 		session.close()
 		
-		try:
-			del values['create_date']
-			del values['last_change']
-			del values['_sa_instance_state']
-			del values['password']
-		except Exception:
-			pass
+		for k in ['create_date', 'last_change', '_sa_instance_state', 'password']:
+			try: del values[k]
+			except Exception: pass
 		
 		return self.json_response({
 			'status': 'success',
