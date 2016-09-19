@@ -35,6 +35,7 @@ B.ajax = (opts)->
 		process-data : on
 		error: (xhr, status, err)!->
 			return if status is \abort
+			opts.error? ...
 			police.commands.execute \panic, err
 
 require! {
@@ -42,7 +43,9 @@ require! {
 }
 
 # caching localization data
-<-! (!-> new LocalizationModel! .fetch success: it)
+error = (xhr, status, err)!-> $ \.js-loading-message .text \
+	"Fatal error! Cannot get localization data: #{err.error-thrown ? err}"
+<-! (!-> new LocalizationModel! .fetch { success: it, error })
 
 <-! $ # dom ready
 

@@ -50,6 +50,8 @@ class LocalizationModel extends Model
 	
 	defaults:
 		page_loading: \Loading...
+		error: \Error
+		fatal_error: 'Fatal error!'
 
 
 module.exports = LocalizationModel
