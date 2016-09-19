@@ -9,98 +9,106 @@ require! {
 	\jquery                   : $
 	\ckeditor/adapters/jquery : {}
 	
-	\backbone.marionette      : M
+	\backbone.marionette      : { ItemView, CompositeView }
 	
-	'./files'                 : FilesItemView
-	'./data-fields'           : DataFieldsItemView
-	'../../model/basic'       : BasicModel
+	\./files                  : FilesItemView
+	\./data-fields            : DataFieldsItemView
+	\../../model/basic        : BasicModel
 }
 
-class InputItemView extends M.ItemView
+
+class InputItemView extends ItemView
 	tag-name: \label
 
+
 class TextItemView extends InputItemView
-	class-name: 'text'
-	template: 'form/text'
+	class-name: \text
+	template: \form/text
+
 
 class CheckboxItemView extends InputItemView
-	class-name: 'checkbox'
-	template: 'form/checkbox'
+	class-name: \checkbox
+	template: \form/checkbox
+
 
 class HTMLInputItemView extends InputItemView
-	class-name: 'html'
-	template: 'form/html'
+	
+	class-name: \html
+	template: \form/html
 	ui:
 		textarea: \textarea
-	check-for-alive: ->
-		unless @? and @ui? and @ui.textarea? and @ui.textarea.ckeditor?
-			false
-		else
-			true
+	check-for-alive: -> Boolean @?ui?textarea?ckeditor?
+		
 	on-render: !->
-		set-timeout (!~> #hack
+		!~>
 			return unless @check-for-alive!
 			@ui.textarea.ckeditor!
-		), 1
+		|> set-timeout _, 1 #hack
+
 
 class SelectItemView extends InputItemView
 	class-name: \select
-	template: 'form/select'
+	template: \form/select
+
 
 class PasswordItemView extends TextItemView
-	class-name: 'password'
-	template: 'form/password'
+	class-name: \password
+	template: \form/password
 
-class FormView extends M.CompositeView
+
+class FormView extends CompositeView
+	
 	tag-name: \form
 	class-name: 'form edit-form'
 	child-view-container: \.fields
-	template: 'form/form'
+	template: \form/form
 	ui:
 		\cancel : \.cancel
 	events:
-		'click @ui.cancel': \cancel
-	
-	cancel: ->
-		@trigger \cancel:form
-		false
+		'click @ui.cancel' : \cancel
 	
 	initialize: !->
-		@model = new BasicModel {
+		
+		super ...
+		
+		@model = new BasicModel do
 			page: @get-option \page
 			type: @get-option \type
 			err_key: null
 			values: {}
-		}
 		
-		@on \form-msg, (err-key)!->
-			@model.set \err_key, err-key
-			$ 'html,body' .scroll-top 0
-			@render!
+		@on \form-msg, @on-form-msg
+	
+	on-form-msg: (err-key)!->
+		@model.set \err_key, err-key
+		$ 'html,body' .scroll-top 0
+		@render!
+	
+	cancel: (e)!->
+		e.prevent-default!
+		@trigger \cancel:form
 	
 	on-render: !->
-		$form = @$el
-		$form.off \submit.store-values
-		$form.on \submit.store-values, !~>
-			vals = {}
-			for item in $form.serialize-array!
-				vals[item.name] = item.value
-			@model.set \values, vals
+		@$el.off \submit.store-values
+		@$el.on \submit.store-values, !~>
+			@model.set \values, \
+				{[x.name, x.value] for x in @$el.serialize-array!}
 	
-	child-view-options: (model, index)~>
-		model.set \local, @model.get \local
-		model.set \page @get-option \page
-		model.set \values @model.get \values
+	child-view-options: (model, index)!~>
+		model.set do
+			local  : @model.get \local
+			page   : @get-option \page
+			values : @model.get \values
 	
 	get-child-view: (item)~>
 		switch item.get \type
-		| \checkbox => return CheckboxItemView
-		| \html => return HTMLInputItemView
-		| \select => return SelectItemView
-		| \files => return FilesItemView
-		| \password => return PasswordItemView
-		| \data_fields => return DataFieldsItemView
-		
-		TextItemView
+		| \checkbox    => CheckboxItemView
+		| \html        => HTMLInputItemView
+		| \select      => SelectItemView
+		| \files       => FilesItemView
+		| \password    => PasswordItemView
+		| \data_fields => DataFieldsItemView
+		| otherwise    => TextItemView
+
 
 module.exports = FormView

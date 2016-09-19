@@ -31,8 +31,7 @@ class ListView extends SmoothView
 		super ...
 		@loader-view = new LoaderView! .render!
 	
-	on-show: !->
-		@get-region \main .show @loader-view
+	on-show: !-> @get-region \main .show @loader-view
 	
 	init-table-list: (View, options = {}, {
 		Collection = TableListCollection

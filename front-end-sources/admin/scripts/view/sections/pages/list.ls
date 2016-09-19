@@ -31,6 +31,7 @@ class CompositeListView extends OrderingTableListView
 class PagesListView extends ListView
 	
 	initialize: !->
+		
 		super ...
 		
 		options =
@@ -50,11 +51,8 @@ class PagesListView extends ListView
 		super ...
 		@table-list.fetch!
 	
-	update-list: !->
-		@table-list.fetch!
-	
-	show-table-view: !->
-		@get-region \main .show @table-view
+	update-list: !-> @table-list.fetch!
+	show-table-view: !-> @get-region \main .show @table-view
 
 
 module.exports = PagesListView

@@ -6,17 +6,17 @@
  */
 
 require! {
-	\../model/basic : BasicModel
-	\./smooth       : SmoothView
+	\../model/ask-sure : AskSureModel
+	\./smooth          : SmoothView
 }
 
 
 class AskSureView extends SmoothView
+	
 	initialize: (options)!->
 		super ...
-		@model = new BasicModel message: (options.message or null)
-		unless (@model.get \message)?
-			@model.set \message, _ <| @model.get \local .get \sure .msg
+		@model = new AskSureModel { options.message ? null }
+	
 	template: \ask-sure
 	ui:
 		yes : \.btn.yes
@@ -24,6 +24,7 @@ class AskSureView extends SmoothView
 	events:
 		'click @ui.yes' : \yes
 		'click @ui.no'  : \no
+	
 	yes: (e)!->
 		e.prevent-default! if e?prevent-default?
 		@trigger \yes

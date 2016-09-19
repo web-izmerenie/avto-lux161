@@ -14,7 +14,7 @@ require! {
 class FatalErrorView extends SmoothView
 	initialize: (options)!->
 		super ...
-		@model = new BasicModel exception: (options.exception or '')
+		@model = new BasicModel { options.exception ? '' }
 	class-name: 'fatal-error container'
 	template: \fatal-error
 

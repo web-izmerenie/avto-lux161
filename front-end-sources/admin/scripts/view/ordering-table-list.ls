@@ -27,10 +27,11 @@ class OrderingTableListView extends TableListView
 		'drop      @ui.row'              : \on-row-drop
 	} <<< super::events
 	
-	collection-events:
+	collection-events: {
 		sort  : \actualize-order-column
 		sync  : \actualize-order-column
 		reset : \actualize-order-column
+	} <<< super::collection-events
 	
 	on-render: !->
 		for item in @ui.\ordering-column

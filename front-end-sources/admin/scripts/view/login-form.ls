@@ -6,21 +6,16 @@
  */
 
 require! {
-	\backbone              : { history }
-	\backbone.marionette   : { proxy-get-option }
-	\backbone.wreqr        : { radio }
+	\backbone            : { history }
+	\backbone.marionette : { proxy-get-option }
+	\backbone.wreqr      : { radio }
 	
-	\../model/basic        : BasicModel
-	\../model/localization : LocalizationModel
-	\./smooth              : SmoothView
-	\./loader              : LoaderView
-	\./error-msg           : ErrorMessageView
+	\../model/basic      : BasicModel
+	\./smooth            : SmoothView
+	\./loader            : LoaderView
+	\./error-msg         : ErrorMessageView
 	\../ajax-req
 }
-
-
-# TODO remove this
-localization-model = new LocalizationModel!
 
 
 class LoginFormView extends SmoothView
@@ -52,7 +47,7 @@ class LoginFormView extends SmoothView
 			|> radio.commands.execute \police, \panic, _
 		
 		err-view = new ErrorMessageView do
-			message: localization-model.get \forms .err[json.error_code]
+			message: @model.get \local .get \forms .err[json.error_code]
 		
 		@get-region \message .show err-view
 	

@@ -40,10 +40,6 @@ class OrderingElementsListCollection extends ElementsListCollection
 				| _     => ...
 		| otherwise => @ordering-field = field
 		@sort!
-	
-	fetch: (opts={})!->
-		# 'reset' flag fixes magic error with fetching after reordering
-		super {} <<< opts <<< { +reset }
 
 
 module.exports = OrderingElementsListCollection

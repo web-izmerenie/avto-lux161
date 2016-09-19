@@ -6,22 +6,49 @@
  */
 
 require! {
-	\jquery        : $
-	\backbone      : B
+	\jquery              : $
+	\backbone            : B
+	\backbone.marionette : { TemplateCache, Renderer }
+	\backbone.wreqr      : { radio }
 	
-	\./config.json : {}
+	# just to check if config file exists
+	\./config.json       : {}
 }
 
+
+police = radio.channel \police
+
 B.$ = $
+
+# must be declared here, before any project modules requiring,
+# because they can create new instances of models as static or
+# prototype properties that in tern can immidiately call
+# `.fetch` method skipping this middleware.
+B.ajax = (opts)->
+	B.$.ajax {} <<< opts <<< do
+		cache        : opts.force-cache  ? off
+		type         : opts.force-method ? \POST
+		method       : opts.force-method ? \POST
+		data-type    : \json
+		content-type : 'application/x-www-form-urlencoded; charset=UTF-8'
+		parse        : on
+		process-data : on
+		error: (xhr, status, err)!->
+			return if status is \abort
+			police.commands.execute \panic, err
+
+require! {
+	\./model/localization : LocalizationModel
+}
+
+# caching localization data
+<-! (!-> new LocalizationModel! .fetch success: it)
 
 <-! $ # dom ready
 
 $html = $ \html
 
 require! {
-	\backbone.marionette     : { TemplateCache, Renderer }
-	\backbone.wreqr          : { radio }
-	
 	\./template-handlers
 	\./app                   : App
 	\./view/fatal-error      : FatalErrorView
@@ -29,8 +56,8 @@ require! {
 	\./controller/app-router : AppRouterController
 }
 
-TemplateCache.prototype.load-template = template-handlers.load
-TemplateCache.prototype.compile-template = template-handlers.compile
+TemplateCache::load-template = template-handlers.load
+TemplateCache::compile-template = template-handlers.compile
 Renderer.render = template-handlers.render
 
 app = new App do
@@ -40,27 +67,11 @@ app = new App do
 router-controller = new AppRouterController app: app
 router = new AppRouter controller: router-controller
 
-police = radio.channel \police
-
 police.commands.set-handler \panic, (err)!->
 	app.get-region \container .show new FatalErrorView exception: err
 	app.destroy!
 	router-controller.destroy!
 	router := void
 	throw err
-
-B.ajax = (opts)->
-	B.$.ajax {} <<< opts <<< {
-		-cache
-		type         : \POST
-		method       : \POST
-		data-type    : \json
-		content-type : 'application/x-www-form-urlencoded; charset=UTF-8'
-		parse        : on
-		process-data : on
-		error: (xhr, status, err)!->
-			return if status is \abort
-			radio.commands.execute \police, \panic, err
-	}
 
 app.start!

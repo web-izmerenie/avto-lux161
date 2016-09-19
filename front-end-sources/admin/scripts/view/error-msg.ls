@@ -14,7 +14,7 @@ require! {
 class ErrorMessageView extends SmoothView
 	initialize: (options)!->
 		super ...
-		@model = new BasicModel message: (options.message or '')
+		@model = new BasicModel { options.message ? '' }
 	template: \err-msg
 
 

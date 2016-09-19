@@ -6,40 +6,50 @@
  */
 
 require! {
-	\jquery   : $
-	\backbone : { Model }
+	\jquery         : $
+	\backbone       : { Model }
+	\backbone.wreqr : { radio }
 }
 
 
-lang = $ \html .attr \lang
-local = {}
+$html = $ \html
+$body = $html.children \body
+
+lang  = $html.attr \lang
+url   = $html.attr \data-local-file
 
 
-# TODO refactoring
 class LocalizationModel extends Model
-	lang: lang
-	initialize: (options={})!->
+	
+	lang : lang
+	url  : url
+	
+	@_cache = {}
+	
+	initialize: (attrs = null, options = {})!->
+		super ...
 		@lang = options.lang if options.lang?
-		
-		if local[@.lang]?
-			@set local[@.lang]
-			return
-		
-		$ .ajax do
-			url: $ \html .attr \data-local-file
-			method: \GET
-			cache: true # cache mark by back-end
-			async: false
-			data-type: \json
-			success: (json)!~>
-				unless json[@.lang]?
-					throw new Error "
-						Can't get localization data by this lang: #{@.lang}"
-				local[@.lang] := json[@.lang]
-			error: (xhr, status, err)!->
-				throw err
-		
-		@set local[@.lang]
+		@@_cache[@lang] ? {} |> @set _, { +silent }
+		@changed = {}
+	
+	fetch: (opts)!->
+		super {} <<< opts <<< do
+			force-method: \GET
+			force-cache: on # revision mark in file path to clear cache
+			success: (model, response)!~>
+				@@_cache[@lang] = @parse response
+				opts.success? ...
+	
+	# must be determined and immutable
+	parse: (response)->
+		| response[@lang]? => response[@lang]
+		| otherwise =>
+			err = new Error "Can't get localization data by this lang: #{@lang}"
+			radio.commands.execute \police, \panic, err
+			throw err
+	
+	defaults:
+		page_loading: \Loading...
 
 
 module.exports = LocalizationModel

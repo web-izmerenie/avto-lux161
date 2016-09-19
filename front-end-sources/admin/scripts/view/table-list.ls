@@ -23,6 +23,8 @@ class TableListView extends CompositeView
 		\refresh : \.refresh
 	events:
 		'click @ui.refresh' : \refresh-list
+	model-events: {}
+	collection-events: {}
 	
 	\refresh-list : (e)!->
 		e.prevent-default!

@@ -10,16 +10,19 @@ require! {
 	\backbone            : { Model }
 	\backbone.marionette : { proxy-get-option }
 	
-	'./localization'     : LocalizationModel
+	\./localization      : LocalizationModel
 }
 
 
 class BasicModel extends Model
 	
-	initialize: (attrs=null, options={})!->
+	initialize: (attrs = null, options = {})!->
+		
 		super ...
 		@options = {} <<< (_.result @, \options) <<< options
-		@set \local, new LocalizationModel!
+		
+		new LocalizationModel! |> @set \local, _, { +silent }
+		@changed = {}
 	
 	get-option: proxy-get-option
 

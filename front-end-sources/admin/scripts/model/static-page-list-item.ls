@@ -36,14 +36,14 @@ implements TypeValidationModelMixin
 		url               : \String
 		is_main_menu_item : \Boolean
 	
-	\check-if-is-valid : !-> @check-if-is-valid ...
 	check-if-is-valid: !->
-		panic-attack new Error @validation-error unless @is-valid!
+		unless @is-valid!
+			panic-attack new Error @validation-error
 	
 	initialize: !->
 		super ...
 		@check-if-is-valid!
-		@on \change, \check-if-is-valid
+		@on \change, @check-if-is-valid
 	
 	parse: (response)->
 		try

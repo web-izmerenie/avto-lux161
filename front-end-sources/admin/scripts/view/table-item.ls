@@ -18,13 +18,13 @@ class TableItemView extends ItemView
 		link: \a
 	events:
 		click: \on-row-click
+	model-events: {}
 	
 	\on-row-click : (e)!->
 		e.prevent-default!
 		history.navigate _, { +trigger } <| @ui.link.attr \href
 	
-	on-render: !->
-		@$el.css \cursor, \pointer
+	on-render: !-> @$el.css \cursor, \pointer
 
 
 module.exports = TableItemView

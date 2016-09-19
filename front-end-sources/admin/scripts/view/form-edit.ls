@@ -29,6 +29,8 @@ class FormEditView extends SmoothView
 	
 	on-show: !->
 		
+		super ...
+		
 		@get-region \main .show @loader-view
 		
 		args = model: @get-option \section

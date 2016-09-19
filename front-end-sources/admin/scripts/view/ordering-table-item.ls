@@ -15,11 +15,11 @@ class OrderingTableItemView extends TableItemView
 	attributes:
 		draggable: true
 	
-	model-events:
+	model-events: {
 		\view:ordering-drag-off : \on-ordering-drag-off
+	} <<< super::model-events
 	
-	\on-ordering-drag-off : !->
-		@$el.css \opacity, ''
+	\on-ordering-drag-off : !-> @$el.css \opacity, ''
 
 
 module.exports = OrderingTableItemView
