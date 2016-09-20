@@ -63,8 +63,7 @@ TemplateCache::load-template = template-handlers.load
 TemplateCache::compile-template = template-handlers.compile
 Renderer.render = template-handlers.render
 
-app = new App do
-	container: \.main-page-container
+app = new App container: \.main-page-container
 
 router-controller = new AppRouterController app: app
 router = new AppRouter controller: router-controller

@@ -19,10 +19,6 @@ class LoginFormView extends SmoothView
 	
 	get-option: proxy-get-option
 	
-	initialize: !->
-		super ...
-		@model = @get-option \app .auth-model
-	
 	is-processing: no
 	
 	class-name: 'login-form container'

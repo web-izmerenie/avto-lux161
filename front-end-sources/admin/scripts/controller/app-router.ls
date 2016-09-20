@@ -76,7 +76,8 @@ class AppRouterController extends Controller
 			history.navigate \#panel, { +trigger, +replace }
 			return
 		
-		login-form-view = new LoginFormView app: @get-option \app .render!
+		model = @get-option \app .auth-model
+		login-form-view = new LoginFormView { model } .render!
 		
 		@get-option \app .get-region \container .show login-form-view
 	
