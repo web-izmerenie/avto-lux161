@@ -13,7 +13,6 @@ from app.configparser import config
 
 from app.utils import get_json_localization
 
-from app.mixins import AuthMixin
 from app.mixins.routes_mixin import JsonResponseMixin
 
 from app.models.dbconnect import Session, db_inspector

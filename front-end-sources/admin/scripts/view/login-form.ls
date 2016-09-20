@@ -10,27 +10,23 @@ require! {
 	\backbone.marionette : { proxy-get-option }
 	\backbone.wreqr      : { radio }
 	
-	\../model/basic      : BasicModel
 	\./smooth            : SmoothView
-	\./loader            : LoaderView
 	\./error-msg         : ErrorMessageView
-	\../ajax-req
 }
 
 
 class LoginFormView extends SmoothView
 	
-	\auth-url : \/adm/auth # TODO try get with prefix from Backbone.history
-	
 	get-option: proxy-get-option
 	
-	process: no # default value
-	set-processing: !-> @process = it
-	is-processing: -> @process
+	initialize: !->
+		super ...
+		@model = @get-option \app .auth-model
+	
+	is-processing: no
 	
 	class-name: 'login-form container'
 	template: \login-form
-	model: new BasicModel!
 	regions:
 		message: \.message
 	ui:
@@ -40,41 +36,37 @@ class LoginFormView extends SmoothView
 	events:
 		'submit @ui.form' : \form-handler
 	
-	on-json-error: (json)!->
-		if not json.error_code?
-		or json.error_code not in <[ user_not_found incorrect_password ]>
-			new Error 'Unknown "error_code"'
+	on-auth-fail: !->
+		
+		error_code = @model.get \error_code
+		
+		if not error_code?
+		or error_code not in <[ user_not_found incorrect_password ]>
+			new Error "Unknown 'error_code': '#error_code'"
 			|> radio.commands.execute \police, \panic, _
 		
 		err-view = new ErrorMessageView do
-			message: @model.get \local .get \forms .err[json.error_code]
+			message: @model.get \local .get \forms .err[error_code]
 		
 		@get-region \message .show err-view
 	
-	on-json-success: (json)!->
-		@get-option \app .is-auth = true
+	on-auth-success: !->
 		history.navigate \#panel, { +trigger, +replace }
 	
 	\form-handler : (e)!->
 		
 		e.prevent-default!
-		if @is-processing!
+		if @is-processing
 			then return
-			else @set-processing true
+			else @is-processing = yes
 		
-		ajax-req do
-			url: @get-option \auth-url
-			data:
-				user: @ui.user.val!
-				pass: @ui.pass.val!
-			success: (json)!~>
-				switch json.status
-				| \success => @trigger-method \jsonSuccess, json
-				| \error => @trigger-method \jsonError, json
-				| _ =>
-					new Error 'Unknown response JSON status'
-					|> radio.commands.execute \police, \panic, _
-				@set-processing false
+		@model.login @ui.user.val!, @ui.pass.val!, do
+			success: !~>
+				@on-auth-success!
+				@is-processing = no
+			fail: !~>
+				@on-auth-fail!
+				@is-processing = no
 
 
 module.exports = LoginFormView

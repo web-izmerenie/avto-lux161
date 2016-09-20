@@ -8,6 +8,9 @@
 require! {
 	\backbone              : { history }
 	\backbone.marionette   : { Application, proxy-get-option }
+	
+	\./model/auth          : { auth-model }
+	
 	\./config.json         : { root_url }
 	
 	\base/styles/main.styl : {}
@@ -19,9 +22,10 @@ class App extends Application
 	get-option: proxy-get-option
 	
 	container: \body
-	is-auth: false
+	auth-model: auth-model
 	
 	initialize: !->
+		super ...
 		@add-regions container: @get-option \container
 	
 	start: (options)!->

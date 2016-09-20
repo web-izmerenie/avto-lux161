@@ -24,15 +24,19 @@ def request_except_handler(fn):
 		try:
 			return fn(*args, **kwargs)
 		except NoArgumentFound as e:
-			print('adm/request_except_handler(): NoArgumentFound:\n',\
-				e, file=sys.stderr)
+			print(
+				'adm/request_except_handler(): NoArgumentFound:\n',
+				e, file=sys.stderr
+			)
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'Too less arguments was send'
 			})
 		except Exception as e:
-			print('adm/request_except_handler(): error:\n',\
-				e, file=sys.stderr)
+			print(
+				'adm/request_except_handler(): error:\n',
+				e, file=sys.stderr
+			)
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'system_fail'
@@ -42,20 +46,16 @@ def request_except_handler(fn):
 
 
 class AdminMainRoute(JsonResponseMixin):
+	
 	def get(self, *args):
-		
 		lang = config('LOCALIZATION')['LANG']
 		localization = get_json_localization('ADMIN')[lang]
 		kwrgs = {
 			'page_title': localization['page_title'],
 			'lang': lang,
 			'local': localization,
-			'is_auth': (
-				lambda: 1 if self.get_current_user() else 0)(),
-			'is_debug': (
-				lambda: 1 \
-					if self.application.settings.get('debug') \
-					else 0)()
+			'is_auth': 1 if self.get_current_user() else 0,
+			'is_debug': 1 if self.application.settings.get('debug') else 0
 		}
 		return self.render('admin/layout.jade', **kwrgs)
 	
@@ -64,28 +64,36 @@ class AdminMainRoute(JsonResponseMixin):
 
 
 class AuthHandler(AuthMixin, JsonResponseMixin):
+	
 	def post(self):
-		session = Session()
+		
 		if self.get_current_user():
-			# TODO : Change status to already auth
 			return self.json_response({'status': 'success'})
+		
+		session = Session()
 		try:
-			usr = session.query(User).filter_by(
-				login=self.get_argument('user')
-			).one()
+			usr = (
+				session
+					.query(User)
+					.filter_by(login=self.get_argument('user'))
+					.one()
+			)
 		except Exception as e:
-			session.close()
-			print('adm/AuthHandler.post(): user not found:\n',\
-				e, file=sys.stderr)
+			print(
+				'adm/AuthHandler.post(): user not found:\n',
+				e, file=sys.stderr
+			)
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'user_not_found'
 			})
-		session.close()
+		finally:
+			session.close()
 		
 		compared = self.compare_password(
 			hpasswd=usr.password,
-			password=self.get_argument('pass'))
+			password=self.get_argument('pass')
+		)
 		
 		if compared and usr.is_active:
 			self.set_secure_cookie('user', usr.login)
@@ -95,9 +103,11 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 				'status': 'error',
 				'error_code': 'user_inactive'
 			})
+		
 		return self.json_response({
 			'status': 'error',
-			'error_code': 'incorrect_password'})
+			'error_code': 'incorrect_password'
+		})
 	
 	def get_current_user(self):
 		return self.get_secure_cookie('user')
@@ -110,18 +120,22 @@ class LogoutHandler(JsonResponseMixin):
 
 
 class CreateUser(AuthMixin, JsonResponseMixin):
+	
 	def post(self):
-		session = Session()
+		
 		login = self.get_argument('login')
 		passwd = self.get_argument('password')
-		is_active = True
+		
+		session = Session()
 		
 		try:
 			olds = [x[0] for x in session.query(User.login).all()]
 		except Exception as e:
 			session.close()
-			print('adm/CreateUser.post(): cannot get users logins:\n',\
-				e, file=sys.stderr)
+			print(
+				'adm/CreateUser.post(): cannot get users logins:\n',
+				e, file=sys.stderr
+			)
 			raise e
 		
 		if login == '':
@@ -134,6 +148,8 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 				'status': 'error',
 				'error_code': 'incorrect_data'
 			})
+		
+		is_active = True
 		try:
 			self.get_argument('is_active')
 		except:
@@ -150,43 +166,52 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 			session.add(usr)
 			session.commit()
 		except Exception as e:
-			session.close()
-			print('adm/CreateUser.post(): cannot add user:\n',\
-				e, file=sys.stderr)
+			print(
+				'adm/CreateUser.post(): cannot add user:\n',
+				e, file=sys.stderr
+			)
 			raise e
+		finally:
+			session.close()
 		
-		session.close()
 		return self.json_response({'status': 'success'})
 
 
 class UpdateUser(AuthMixin, JsonResponseMixin):
+	
 	def post(self):
-		session = Session()
+		
 		kwargs = {}
 		passwrd = self.get_argument('password')
 		login = self.get_argument('login')
 		id = self.get_argument('id')
+		
 		is_active = True
 		try:
 			self.get_argument('is_active')
 		except:
 			is_active = False
 		
+		session = Session()
 		try:
 			usr = session.query(User).filter_by(id=id).one()
 		except Exception as e:
 			session.close()
-			print('adm/UpdateUser.post(): cannot get user'+\
-				' by #%s id:\n' % str(id),\
-				e, file=sys.stderr)
+			print(
+				'adm/UpdateUser.post(): cannot get user'+
+				' by #%s id:\n' % str(id),
+				e, file=sys.stderr
+			)
 			raise e
 		
 		try:
 			olds = [x[0] for x in session.query(User.login).all()]
 		except Exception as e:
 			session.close()
-			print('adm/UpdateUser.post(): cannot get users logins:\n',\
-				e, file=sys.stderr)
+			print(
+				'adm/UpdateUser.post(): cannot get users logins:\n',
+				e, file=sys.stderr
+			)
 			raise e
 		
 		if login == '':
@@ -200,7 +225,10 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 				'error_code': 'incorrect_data'
 			})
 		
-		kwargs.update({'login': login, 'is_active': is_active})
+		kwargs.update({
+			'login': login,
+			'is_active': is_active
+		})
 		if passwrd != '':
 			kwargs.update({'password': self.create_password(passwrd)})
 		
@@ -208,24 +236,24 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 			session.query(User).filter_by(id=id).update(kwargs)
 			session.commit()
 		except Exception as e:
-			session.close()
 			print('adm/UpdateUser.post(): cannot update '+\
 				'user #%s data:\n' % str(id),\
 				e, file=sys.stderr)
 			raise e
+		finally:
+			session.close()
 		
-		session.close()
 		return self.json_response({'status': 'success'})
 
 
 class FileUpload(JsonResponseMixin):
+	
 	@request_except_handler
 	def post(self):
+		
 		if not self.get_current_user():
 			self.set_status(403)
-			return self.json_response({
-				'status': 'unauthorized'
-			})
+			return self.json_response({'status': 'unauthorized'})
 		
 		file_path = config('UPLOAD_FILES_PATH')
 		hashes = []
@@ -233,7 +261,8 @@ class FileUpload(JsonResponseMixin):
 			_file = f[1][0]
 			
 			_filename = hashlib.sha512(
-				str(time.time()).encode('utf-8')).hexdigest()[0:35]
+				str(time.time()).encode('utf-8')
+			).hexdigest()[0:35]
 			fname = _filename + '.' + _file['content_type'].split('/')[1]
 			
 			f = open(os.path.join(file_path, fname), 'wb')

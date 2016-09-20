@@ -10,9 +10,6 @@ require! {
 	\backbone.marionette                    : { Controller, proxy-get-option }
 	\backbone.wreqr                         : { radio }
 	
-	\../config.json                         : { logout_url }
-	\../ajax-req
-	
 	\../collection/panel-menu               : panel-menu-list
 	\../view/login-form                     : LoginFormView
 	\../view/panel                          : PanelView
@@ -75,7 +72,7 @@ class AppRouterController extends Controller
 		
 		return unless restore-last-page!
 		
-		if @get-option \app .is-auth
+		if @get-option \app .auth-model .get \is_authorized
 			history.navigate \#panel, { +trigger, +replace }
 			return
 		
@@ -141,16 +138,8 @@ class AppRouterController extends Controller
 	\logout : !->
 		
 		return if not restore-last-page! or not @auth-handler false
-		
-		ajax-req do
-			url: logout_url
-			success: (json)!~>
-				
-				unless json.status is \logout
-					police.commands.execute \panic, new Error 'Logout error'
-				
-				@get-option \app .is-auth = false
-				history.navigate \#, { +trigger, +replace }
+		@get-option \app .auth-model .logout success: !~>
+			history.navigate \#, { +trigger, +replace }
 	
 	\unknown : !->
 		return unless restore-last-page!
@@ -158,7 +147,7 @@ class AppRouterController extends Controller
 	
 	
 	auth-handler: (store-ref=true)->
-		| not @get-option \app .is-auth =>
+		| not @get-option \app .auth-model .get \is_authorized =>
 			@store-ref = history.fragment if store-ref
 			history.navigate \#, { +trigger, +replace }
 			false

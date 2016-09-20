@@ -64,7 +64,6 @@ TemplateCache::compile-template = template-handlers.compile
 Renderer.render = template-handlers.render
 
 app = new App do
-	is-auth: ($ \html .attr \data-is-auth .to-string! is \1)
 	container: \.main-page-container
 
 router-controller = new AppRouterController app: app

@@ -4,7 +4,9 @@ __all__ = ['routes_mixin']
 
 import hashlib
 
+
 class AuthMixin:
+	
 	def create_password(self, symbols):
 		return str(hashlib.sha512(symbols.encode('utf-8')).hexdigest())
 	
