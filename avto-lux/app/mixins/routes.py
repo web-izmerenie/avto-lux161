@@ -12,7 +12,7 @@ from app.models.catalogmodels import CatalogSectionModel
 from app.models.non_relation_data import NonRelationData
 
 
-class MenuProviderMixin():
+class MenuProviderMixin:
 	def getmenu(
 		self,
 		page_alias=None,
@@ -83,7 +83,7 @@ class MenuProviderMixin():
 		return menu
 
 
-class NonRelationDataProvider():
+class NonRelationDataProvider:
 	def get_nonrel_arr(self, code1, code2):
 		res = []
 		level1 = None
@@ -151,7 +151,7 @@ class NonRelationDataProvider():
 
 phone_link_reg = re.compile('[^+0-9]')
 
-class HelpersProviderMixin():
+class HelpersProviderMixin:
 	def get_phone_link(self, phone):
 		return 'tel:' + phone_link_reg.sub('', phone)
 	

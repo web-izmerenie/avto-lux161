@@ -37,7 +37,9 @@ class LoginFormView extends SmoothView
 		error_code = @model.get \error_code
 		
 		if not error_code?
-		or error_code not in <[ user_not_found incorrect_password ]>
+		or error_code not in <[
+			user_not_found incorrect_password user_inactive
+		]>
 			new Error "Unknown 'error_code': '#error_code'"
 			|> radio.commands.execute \police, \panic, _
 		

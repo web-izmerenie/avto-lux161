@@ -5,7 +5,7 @@ import sys
 from .base import BaseHandler
 from .decorators import route_except_handler
 from app.models.dbconnect import Session
-from app.mixins.routes_mixin import ErrorHandlerMixin
+from app.mixins.routes import ErrorHandlerMixin
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.models.catalogmodels import(

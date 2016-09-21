@@ -7,7 +7,7 @@ import tornado.template
 from tornado.web import HTTPError, MissingArgumentError
 from .base import BaseHandler
 
-from app.mixins.routes_mixin import (
+from app.mixins.routes import (
 	ErrorHandlerMixin,
 	JsonResponseMixin
 )

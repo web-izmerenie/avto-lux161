@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from tornado.web import RequestHandler
-from app.mixins.routes_mixin import (
+from app.mixins.routes import (
 	MenuProviderMixin,
 	NonRelationDataProvider,
 	HelpersProviderMixin

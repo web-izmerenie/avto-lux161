@@ -1,48 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import os
+import os, time, sys
 import hashlib
-import time
-import sys
+import datetime
+
+from .helpers import (request_except_handler, require_auth)
+
 from app.configparser import config
 from app.utils import get_json_localization
 
-from app.mixins import AuthMixin
-
-from app.mixins.routes_mixin import (
-	JsonResponseMixin
-)
+from app.mixins.auth import AuthMixin
+from app.mixins.routes import JsonResponseMixin
 
 from app.models.dbconnect import Session
 from app.models.usermodels import User
-import datetime
-
-
-def request_except_handler(fn):
-	def wrap(*args, **kwargs):
-		self = args[0]
-		try:
-			return fn(*args, **kwargs)
-		except NoArgumentFound as e:
-			print(
-				'adm/request_except_handler(): NoArgumentFound:\n',
-				e, file=sys.stderr
-			)
-			return self.json_response({
-				'status': 'error',
-				'error_code': 'Too less arguments was send'
-			})
-		except Exception as e:
-			print(
-				'adm/request_except_handler(): error:\n',
-				e, file=sys.stderr
-			)
-			return self.json_response({
-				'status': 'error',
-				'error_code': 'system_fail'
-			})
-	wrap.__name__ = fn.__name__
-	return wrap
 
 
 class AdminMainRoute(JsonResponseMixin):
@@ -54,20 +25,17 @@ class AdminMainRoute(JsonResponseMixin):
 			'page_title': localization['page_title'],
 			'lang': lang,
 			'local': localization,
-			'is_auth': 1 if self.get_current_user() else 0,
+			'is_auth': 1 if self.get_secure_cookie('user') else 0,
 			'is_debug': 1 if self.application.settings.get('debug') else 0
 		}
 		return self.render('admin/layout.jade', **kwrgs)
-	
-	def get_current_user(self):
-		return self.get_secure_cookie('user')
 
 
 class AuthHandler(AuthMixin, JsonResponseMixin):
 	
 	def post(self):
 		
-		if self.get_current_user():
+		if self.get_secure_cookie('user'):
 			return self.json_response({'status': 'success'})
 		
 		session = Session()
@@ -108,9 +76,6 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 			'status': 'error',
 			'error_code': 'incorrect_password'
 		})
-	
-	def get_current_user(self):
-		return self.get_secure_cookie('user')
 
 
 class LogoutHandler(JsonResponseMixin):
@@ -121,6 +86,7 @@ class LogoutHandler(JsonResponseMixin):
 
 class CreateUser(AuthMixin, JsonResponseMixin):
 	
+	@require_auth
 	def post(self):
 		
 		login = self.get_argument('login')
@@ -179,6 +145,7 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 
 class UpdateUser(AuthMixin, JsonResponseMixin):
 	
+	@require_auth
 	def post(self):
 		
 		kwargs = {}
@@ -248,12 +215,9 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 
 class FileUpload(JsonResponseMixin):
 	
+	@require_auth
 	@request_except_handler
 	def post(self):
-		
-		if not self.get_current_user():
-			self.set_status(403)
-			return self.json_response({'status': 'unauthorized'})
 		
 		file_path = config('UPLOAD_FILES_PATH')
 		hashes = []
@@ -274,9 +238,6 @@ class FileUpload(JsonResponseMixin):
 			'status': 'success',
 			'files': hashes
 		})
-	
-	def get_current_user(self):
-		return self.get_secure_cookie('user')
 
 
 class FileSave(JsonResponseMixin):

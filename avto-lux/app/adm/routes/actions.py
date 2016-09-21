@@ -1,19 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import os, json, sys
-import datetime
-import time
-import tornado.template
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql import func
+import json, sys
 from tornado.web import RedirectHandler, URLSpec
 
+from .helpers import (query_except_handler, require_auth)
 
-from app.configparser import config
-
-from app.utils import get_json_localization
-
-from app.mixins.routes_mixin import JsonResponseMixin
+from app.mixins.routes import JsonResponseMixin
 
 from app.models.dbconnect import Session, db_inspector
 from app.models.usermodels import User
@@ -22,52 +14,10 @@ from app.models.non_relation_data import NonRelationData
 from app.models.catalogmodels import (CatalogSectionModel, CatalogItemModel)
 
 
-def query_except_handler(fn):
-	def wrap(*args, **kwargs):
-		self = args[0]
-		try:
-			return fn(*args, **kwargs)
-		except NoResultFound as n:
-			self.set_status(404)
-			return self.json_response({
-				'status': 'data_not_found'
-			})
-		except Exception as e:
-			if e.__class__.__name__ == 'IntegrityError':
-				print(
-					'adm/query_except_handler(): IntegrityError:\n',
-					e, file=sys.stderr
-				)
-				return self.json_response({
-					'status': 'error',
-					'error_code': 'unique_key_exist',
-				})
-			elif e.__class__.__name__ == 'DataError':
-				print(
-					'adm/query_except_handler(): DataError:\n',
-					e, file=sys.stderr
-				)
-				return self.json_response({
-					'status': 'error',
-					'error_code': 'incorrect_data',
-				})
-			print('adm/query_except_handler(): error:\n', e, file=sys.stderr)
-			self.set_status(500)
-			return self.json_response({
-				'status': 'error',
-				'error_code': 'system_fail'
-			})
-	wrap.__name__ = fn.__name__
-	return wrap
-
-
 class AdminMainHandler(JsonResponseMixin):
 	
+	@require_auth
 	def post(self):
-		
-		if not self.get_current_user():
-			self.set_status(403)
-			return self.json_response({ 'status': 'unauthorized' })
 		
 		action = self.get_argument('action')
 		kwrgs = {}
@@ -100,10 +50,6 @@ class AdminMainHandler(JsonResponseMixin):
 		func = actions[action]
 		
 		return func(**kwrgs)
-	
-	
-	def get_current_user(self):
-		return self.get_secure_cookie('user')
 	
 	
 	@query_except_handler
@@ -247,6 +193,7 @@ class AdminMainHandler(JsonResponseMixin):
 				} for x in data
 			]
 		})
+	
 	
 	@query_except_handler
 	def get_redirect_list(self):
@@ -409,6 +356,7 @@ class AdminMainHandler(JsonResponseMixin):
 		session.close()
 		
 		return self.json_response({'status': 'success'})
+	
 	
 	##TODO :: Clear shitcode
 	@query_except_handler

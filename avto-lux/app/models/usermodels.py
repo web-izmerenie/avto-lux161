@@ -14,7 +14,7 @@ from app.configparser import config
 from .dbconnect import Base, dbprefix, engine, Session
 from .pagemodels import IdMixin
 from .init_models import init_models
-from app.mixins import AuthMixin
+from app.mixins.auth import AuthMixin
 
 
 class User(Base, IdMixin):

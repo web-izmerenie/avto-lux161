@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['main']
+__all__ = [
+	'main',
+	'actions'
+]
 
 from pyjade.ext.tornado import patch_tornado
 patch_tornado()
@@ -14,6 +17,7 @@ from .main import (
 	FileUpload
 )
 from .actions import AdminMainHandler
+
 
 routes = [
 	('/adm/', AdminMainRoute),
