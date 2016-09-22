@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
+import warnings
 import getopt
 from app.configparser import config
 from app.app import run_instance
@@ -33,7 +34,7 @@ def dbsync():
 		print('Models syncronization...')
 		init_models()
 	except Exception as e:
-		print(e)
+		warnings.warn(e)
 
 
 def createadmin():
