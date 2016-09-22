@@ -35,8 +35,18 @@ B.ajax = (opts)->
 		process-data : on
 		error: (xhr, status, err)!->
 			return if status is \abort
-			opts.error? ...
-			police.commands.execute \panic, err
+			if xhr?responseJSON?status is \unauthorized
+				new Error 'Authorization lost'
+				|> police.commands.execute \panic, _
+			else
+				opts.error? ...
+				police.commands.execute \panic, err
+		success: (data)!->
+			if data?status is \unauthorized
+				new Error 'Authorization lost'
+				|> police.commands.execute \panic, _
+			else
+				opts.success? ...
 
 require! {
 	\./model/localization : LocalizationModel
