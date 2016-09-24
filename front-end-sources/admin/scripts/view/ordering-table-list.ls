@@ -15,16 +15,17 @@ class OrderingTableListView extends TableListView
 	ui: {
 		\ordering-column      : \.js-ordering-column
 		\ordering-column-text : '.js-ordering-column span'
-		\row                  : 'tbody tr'
+		\ordering-row         : 'tbody tr'
 	} <<< super::ui
 	
 	events: {
 		'click @ui.ordering-column-text' : \on-ordering-column-click
 		
-		'dragstart @ui.row'              : \on-row-drag-start
-		'dragover  @ui.row'              : \on-row-drag-over
-		'dragleave @ui.row'              : \on-row-drag-leave
-		'drop      @ui.row'              : \on-row-drop
+		'dragstart @ui.ordering-row'     : \on-ordering-row-drag-start
+		'dragover  @ui.ordering-row'     : \on-ordering-row-drag-over
+		'dragleave @ui.ordering-row'     : \on-ordering-row-drag-leave
+		'dragend   @ui.ordering-row'     : \on-ordering-row-drag-end
+		'drop      @ui.ordering-row'     : \on-ordering-row-drop
 	} <<< super::events
 	
 	collection-events: {
@@ -60,45 +61,70 @@ class OrderingTableListView extends TableListView
 	
 	\on-ordering-column-click : (e)!->
 		e.prevent-default!
-		@collection.trigger \order-by (@$ e.target .parent! .data \field)
+		@collection.trigger \order-by _ <| @$ e.target .parent! .data \field
 	
 	
-	\on-row-drag-start : (e)!->
+	\on-ordering-row-drag-start : (e)!->
 		
 		@$ e.current-target .css \opacity, 0.3
 		id = @$ e.current-target .find \.js-model-id .data \model-id |> Number
 		
 		e.original-event.data-transfer
 			..effect-allowed = \copy
-			..set-data \drag-id, id
+			..set-data \ordering-drag-collection, \
+				@get-ordering-collection-unique-id!
+			..set-data \ordering-drag-model-id, id
 	
-	\on-row-drag-over : (e)!->
+	\on-ordering-row-drag-over : (e)!->
 		e.prevent-default!
 		e.original-event.data-transfer.drop-effect = \copy
 		@$ e.current-target .add-class \ordering-drag-over
 	
-	\on-row-drag-leave : (e)!->
+	\on-ordering-row-drag-leave : (e)!->
 		@$ e.current-target .remove-class \ordering-drag-over
 	
-	\on-row-drop : (e)!->
+	\on-ordering-row-drop : (e)!->
+		
+		try { model-id } = @ordering-prepare-transfer-data e
+		catch then if e instanceof @@OrderingBreak then return else throw e
 		
 		e.prevent-default!
 		e.stop-propagation!
 		
-		@$ e.current-target .remove-class \ordering-drag-over
-		
-		drag-id = e.original-event.data-transfer.get-data \drag-id |> Number
 		at-id = @$ e.current-target
 			.find \.js-model-id
 			.data \model-id
 			|> Number
 		
-		drag-model = @collection.get drag-id
+		@$ e.current-target .remove-class \ordering-drag-over
+		
+		drag-model = @collection.get model-id
 		at-model   = @collection.get at-id
 		
-		drag-model.trigger \view:ordering-drag-off
-		
 		drag-model.put-at at-model
+	
+	\on-ordering-row-drag-end : (e)!->
+		
+		try { model-id } = @ordering-prepare-transfer-data e
+		catch then if e instanceof @@OrderingBreak then return else throw e
+		
+		@collection.get model-id .trigger \view:ordering-drag-off
+	
+	get-ordering-collection-unique-id: -> [..cid for @collection.models] * \,
+	
+	ordering-prepare-transfer-data: (e)->
+		
+		e.original-event.data-transfer
+			collection-id = ..get-data \ordering-drag-collection
+			model-id = ..get-data \ordering-drag-model-id
+		
+		if '' in [collection-id, model-id]
+		or collection-id isnt @get-ordering-collection-unique-id!
+			throw new @@OrderingBreak
+		
+		{ collection-id, model-id: Number model-id }
+	
+	class @OrderingBreak extends Error then !-> super '---break---'
 
 
 module.exports = OrderingTableListView

@@ -6,8 +6,6 @@
  */
 
 require! {
-	\backbone                                   : B
-	
 	# models
 	\../../../collection/ordering-elements-list : OrderingElementsListCollection
 	\../../../model/static-page-list-item       : StaticPageListItemModel
