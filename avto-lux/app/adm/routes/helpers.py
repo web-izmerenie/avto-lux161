@@ -2,6 +2,7 @@
 
 from warnings import warn
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import IntegrityError, DataError
 
 
 # decorator to catch exceptions
@@ -11,26 +12,25 @@ def query_except_handler(fn):
 		self = args[0]
 		try:
 			return fn(*args, **kwargs)
-		except NoResultFound as n:
+		except NoResultFound as e:
+			warn('adm/query_except_handler(): NoResultFound:\n%s' % e)
 			self.set_status(404)
 			return self.json_response({
 				'status': 'data_not_found'
 			})
+		except IntegrityError as e:
+			warn('adm/query_except_handler(): IntegrityError:\n%s' % e)
+			return self.json_response({
+				'status': 'error',
+				'error_code': 'unique_key_exist',
+			})
+		except DataError as e:
+			warn('adm/query_except_handler(): DataError:\n%s' % e)
+			return self.json_response({
+				'status': 'error',
+				'error_code': 'incorrect_data',
+			})
 		except Exception as e:
-			# TODO FIXME instance of exception
-			if e.__class__.__name__ == 'IntegrityError':
-				warn('adm/query_except_handler(): IntegrityError:\n%s' % e)
-				return self.json_response({
-					'status': 'error',
-					'error_code': 'unique_key_exist',
-				})
-			# TODO FIXME instance of exception
-			elif e.__class__.__name__ == 'DataError':
-				warn('adm/query_except_handler(): DataError:\n%s' % e)
-				return self.json_response({
-					'status': 'error',
-					'error_code': 'incorrect_data',
-				})
 			warn('adm/query_except_handler(): error:\n%s' % e)
 			self.set_status(500)
 			return self.json_response({
