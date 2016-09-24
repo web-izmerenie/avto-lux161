@@ -33,7 +33,7 @@ class FormEditView extends SmoothView
 		
 		@get-region \main .show @loader-view
 		
-		args = model: @get-option \section
+		args = section: @get-option \section
 		if (@get-option \type) is \edit
 			args <<< { id: (@get-option \id), +edit }
 		

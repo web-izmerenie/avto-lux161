@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import sys
+from warnings import warn
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -19,25 +19,19 @@ def query_except_handler(fn):
 		except Exception as e:
 			# TODO FIXME instance of exception
 			if e.__class__.__name__ == 'IntegrityError':
-				print(
-					'adm/query_except_handler(): IntegrityError:\n',
-					e, file=sys.stderr
-				)
+				warn('adm/query_except_handler(): IntegrityError:\n%s' % e)
 				return self.json_response({
 					'status': 'error',
 					'error_code': 'unique_key_exist',
 				})
 			# TODO FIXME instance of exception
 			elif e.__class__.__name__ == 'DataError':
-				print(
-					'adm/query_except_handler(): DataError:\n',
-					e, file=sys.stderr
-				)
+				warn('adm/query_except_handler(): DataError:\n%s' % e)
 				return self.json_response({
 					'status': 'error',
 					'error_code': 'incorrect_data',
 				})
-			print('adm/query_except_handler(): error:\n', e, file=sys.stderr)
+			warn('adm/query_except_handler(): error:\n%s' % e)
 			self.set_status(500)
 			return self.json_response({
 				'status': 'error',
@@ -55,19 +49,13 @@ def request_except_handler(fn):
 		try:
 			return fn(*args, **kwargs)
 		except NoArgumentFound as e:
-			print(
-				'adm/request_except_handler(): NoArgumentFound:\n',
-				e, file=sys.stderr
-			)
+			warn('adm/request_except_handler(): NoArgumentFound:\n%s' % e)
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'not_enough_arguments'
 			})
 		except Exception as e:
-			print(
-				'adm/request_except_handler(): error:\n',
-				e, file=sys.stderr
-			)
+			warn('adm/request_except_handler(): error:\n%s' % e)
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'system_fail'

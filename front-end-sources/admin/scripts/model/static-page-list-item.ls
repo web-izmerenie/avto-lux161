@@ -23,7 +23,7 @@ class StaticPageListItemModel
 extends OrderingElementsItemModel
 implements TypeValidationModelMixin
 	
-	action: \reorder_page
+	section: \pages
 	
 	attributes-typings:
 		local             : (instanceof LocalizationModel)

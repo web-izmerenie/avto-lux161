@@ -20,15 +20,16 @@ panic-attack = (err)!->
 
 class OrderingElementsItemModel extends BasicModel
 	
-	action: null # must be overwritten (can be overwritten by options)
+	section: null # must be overwritten (can be overwritten by options)
 	url: ajax_data_url
 	
 	put-at: (at-model)!-> @sync \update, @, do
 		data:
-			action: @get-option \action
+			action: \reorder
 			args: JSON.stringify do
-				at_id: at-model.id
-				page_id: @id
+				section   : @get-option \section
+				target_id : @id
+				at_id     : at-model.id
 		success: (response)!~>
 			if response.status isnt \success
 				panic-attack new Error "reordering error#{

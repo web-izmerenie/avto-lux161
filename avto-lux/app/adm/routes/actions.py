@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import json, sys
+import json
+from warnings import warn
 from tornado.web import RedirectHandler, URLSpec
 
-from .helpers import (query_except_handler, require_auth)
+from .helpers import query_except_handler, require_auth
 
 from app.mixins.routes import JsonResponseMixin
 
 from app.models.dbconnect import Session, db_inspector
 from app.models.usermodels import User
-from app.models.pagemodels import (StaticPageModel, UrlMapping)
+from app.models.pagemodels import StaticPageModel, UrlMapping
 from app.models.non_relation_data import NonRelationData
-from app.models.catalogmodels import (CatalogSectionModel, CatalogItemModel)
+from app.models.catalogmodels import CatalogSectionModel, CatalogItemModel
 
 
 class AdminMainHandler(JsonResponseMixin):
@@ -36,10 +37,10 @@ class AdminMainHandler(JsonResponseMixin):
 			
 			'get_fields': self.get_fields,
 			'add': self.create, # for add new element/section forms
-			'update': self.update_page, # for editing elements/sections forms
-			'delete': self.delete_smth, # for deleting elements/sections
+			'update': self.update, # for editing elements/sections forms
+			'delete': self.delete, # for deleting elements/sections
 			
-			'reorder_page': self.reorder_page # custom reordering for static pages
+			'reorder': self.reorder # custom reordering
 		}
 		
 		if action not in actions.keys():
@@ -63,10 +64,9 @@ class AdminMainHandler(JsonResponseMixin):
 			)
 			data = session.query(StaticPageModel).instances(result)
 		except Exception as e:
-			print(
-				'adm/AdminMainHandler.get_pages_list(): ' +
-				'cannot get static pages:\n',
-				e, file=sys.stderr
+			warn(
+				'adm/AdminMainHandler.get_pages_list(): '+
+				'cannot get static pages:\n%s' % e
 			)
 			raise e
 		finally:
@@ -92,10 +92,9 @@ class AdminMainHandler(JsonResponseMixin):
 			cats = session.query(CatalogSectionModel.id).all()
 		except Exception as e:
 			session.close()
-			print(
+			warn(
 				'adm/AdminMainHandler.get_catalog_sections(): ' +
-				'cannot get catalog sections:\n',
-				e, file=sys.stderr
+				'cannot get catalog sections:\n%s' % e
 			)
 			raise e
 		
@@ -110,10 +109,10 @@ class AdminMainHandler(JsonResponseMixin):
 				)
 			except Exception as e:
 				session.close()
-				print(
+				warn(
 					'adm/AdminMainHandler.get_catalog_sections(): ' +
-					'cannot get catalog items by section id #%s:\n' % str(i[0]),
-					e, file=sys.stderr
+					'cannot get catalog items by section id #%s:\n%s' %
+					(str(i[0]), e)
 				)
 				raise e
 			counts.append((len(count),))
@@ -126,10 +125,9 @@ class AdminMainHandler(JsonResponseMixin):
 			).all()
 		except Exception as e:
 			session.close()
-			print(
+			warn(
 				'adm/AdminMainHandler.get_catalog_sections(): ' +
-				'cannot get catalog sections:\n',
-				e, file=sys.stderr
+				'cannot get catalog sections:\n%s' % e
 			)
 			raise e
 		
@@ -148,7 +146,7 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	
 	@query_except_handler
-	def get_catalog_elements(self, id=None):
+	def get_catalog_elements(self, id):
 		
 		session = Session()
 		
@@ -160,10 +158,10 @@ class AdminMainHandler(JsonResponseMixin):
 			).filter_by(section_id=id).all()
 		except Exception as e:
 			session.close()
-			print(
+			warn(
 				'adm/AdminMainHandler.get_catalog_elements(): ' +
-				'cannot get catalog items by section id #%s:\n' % str(id),
-				e, file=sys.stderr
+				'cannot get catalog items by section id #%s:\n%s' %
+				(str(id), e)
 			)
 			raise e
 		
@@ -173,10 +171,9 @@ class AdminMainHandler(JsonResponseMixin):
 			).filter_by(id=id).one()
 		except Exception as e:
 			session.close()
-			print(
+			warn(
 				'adm/AdminMainHandler.get_catalog_elements(): ' +
-				'cannot get catalog section by id #%s:\n' % str(id),
-				e, file=sys.stderr
+				'cannot get catalog section by id #%s:\n%s' % (str(id), e)
 			)
 			raise e
 		
@@ -203,10 +200,9 @@ class AdminMainHandler(JsonResponseMixin):
 		try:
 			data = session.query(UrlMapping).all()
 		except Exception as e:
-			print(
+			warn(
 				'adm/AdminMainHandler.get_redirect_list(): ' +
-				'cannot get data from UrlMapping model:\n',
-				e, file=sys.stderr
+				'cannot get data from UrlMapping model:\n%s' % e
 			)
 			raise e
 		finally:
@@ -226,10 +222,9 @@ class AdminMainHandler(JsonResponseMixin):
 		try:
 			data = session.query(User).all()
 		except Exception as e:
-			print(
+			warn(
 				'adm/AdminMainHandler.get_accounts_list(): ' +
-				'cannot get users:\n',
-				e, file=sys.stderr
+				'cannot get users:\n%s' % e
 			)
 			raise e
 		finally:
@@ -248,7 +243,7 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	
 	@query_except_handler
-	def get_static_page(self, id=None):
+	def get_static_page(self, id):
 		
 		session = Session()
 		
@@ -256,10 +251,9 @@ class AdminMainHandler(JsonResponseMixin):
 			data = session.query(StaticPageModel).filter_by(id=id).one()
 		except Exception as e:
 			session.close()
-			print(
+			warn(
 				'adm/AdminMainHandler.get_static_page(): ' +
-				'cannot get static page by id #%s:\n' % str(id),
-				e, file=sys.stderr
+				'cannot get static page by id #%s:\n%s' % (str(id), e)
 			)
 			raise e
 		
@@ -279,6 +273,9 @@ class AdminMainHandler(JsonResponseMixin):
 		'data': NonRelationData
 	}
 	
+	_section_model_map_with_accounts = _section_model_map.copy()
+	_section_model_map_with_accounts['accounts'] = User
+	
 	# models that support custom ordering
 	_custom_ordering_models = [
 		StaticPageModel
@@ -286,17 +283,12 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	
 	@query_except_handler
-	def create(self, **kwargs):
-		
-		# kwargs will be used to fill model with values
-		
-		section = kwargs['section']
-		del kwargs['section'] # it's not model field, get rid of it from kwargs
+	def create(self, section, **fields_data):
 		
 		# set as True flags that was checked
 		# only checked flags will be received from admin-panel front-end
-		kwargs.update({
-			key: True for key in kwargs.keys()
+		fields_data.update({
+			key: True for key in fields_data.keys()
 			if key.startswith('is_') or key.startswith('has_')
 		})
 		
@@ -305,7 +297,7 @@ class AdminMainHandler(JsonResponseMixin):
 		Model = self._section_model_map[section]
 		
 		if Model in self._custom_ordering_models:
-			kwargs['prev_elem'] = Model.extract_prev_elem(
+			fields_data['prev_elem'] = Model.extract_prev_elem(
 				session.query(Model).instances(
 					session.execute(
 						Model.get_ordered_list_query().only_last().done()
@@ -313,43 +305,40 @@ class AdminMainHandler(JsonResponseMixin):
 				)
 			)
 		
-		item = Model(**kwargs)
+		item = Model(**fields_data)
 		
 		try:
 			session.add(item)
 		except Exception as e:
 			session.close()
-			print(
+			warn(
 				'adm/AdminMainHandler.create(): ' +
-				'cannot create item by "%s" section:\n' % str(section),
-				e, file=sys.stderr
+				'cannot create item by "%s" section:\n%s' % (str(section), e)
 			)
 			raise e
 		
 		if section == 'redirect':
-			permanent = 'status' in kwargs and kwargs['status'] == '301'
+			
+			if not self._validate_redirect(fields_data):
+				return self.json_response({
+					'status': 'error',
+					'error_code': 'incorrect_data'
+				})
+			
 			from app.app import application
 			
 			application().handlers[0][1][:0] = [
-				URLSpec(
-					kwargs['old_url'] + '$',
-					RedirectHandler,
-					kwargs={
-						'url': kwargs['new_url'],
-						'permanent': permanent
-					},
-					name=None
-				)
+				self._get_redirect_router_item(fields_data)
 			]
 		
 		try:
 			session.commit()
 		except Exception as e:
 			session.close()
-			print(
+			warn(
 				'adm/AdminMainHandler.create(): ' +
-				'cannot commit create item by "%s" section:\n' % str(section),
-				e, file=sys.stderr
+				'cannot commit create item by "%s" section:\n%s' %
+				(str(section), e)
 			)
 			raise e
 			
@@ -358,28 +347,17 @@ class AdminMainHandler(JsonResponseMixin):
 		return self.json_response({'status': 'success'})
 	
 	
-	##TODO :: Clear shitcode
 	@query_except_handler
-	def update_page(self, **kwargs):
-		
-		# kwargs will be used to fill model with values
-		
-		id = kwargs['id']
-		section = kwargs['section']
-		
-		# remove keys that is not model fields
-		del kwargs['id']
-		del kwargs['section']
+	def update(self, id, section, **fields_data):
 		
 		Model = self._section_model_map[section]
 		
 		fields = db_inspector.get_columns(Model.__tablename__)
-		
-		kwargs_keys = kwargs.keys()
-		kwargs.update({
+		fields_data_keys = fields_data.keys()
+		fields_data.update({
 			# set as True flags that was checked and as False that wasn't
 			# only checked flags will be received from admin-panel front-end
-			field['name']: field['name'] in kwargs_keys
+			field['name']: field['name'] in fields_data_keys
 			for field in fields
 			if field['name'].startswith('is_')
 			or field['name'].startswith('has_')
@@ -392,73 +370,66 @@ class AdminMainHandler(JsonResponseMixin):
 			data = session.query(Model).filter_by(id=id)
 		except Exception as e:
 			session.close()
-			print(
-				'adm/AdminMainHandler.update_page(): ' +
-				'cannot update page by "%s" section:\n' % str(section),
-				e, file=sys.stderr
+			warn(
+				'adm/AdminMainHandler.update(): ' +
+				'cannot update page by "%s" section:\n%s' %
+				(str(section), e)
 			)
 			raise e
 		
+		# TODO :: Clear shitcode
 		if section == 'redirect':
-			permanent = 'status' in kwargs and kwargs['status'] == '301'
+			
+			if not self._validate_redirect(fields_data):
+				return self.json_response({
+					'status': 'error',
+					'error_code': 'incorrect_data'
+				})
+			
 			from app.app import application
-			counter = 0
 			hndlr = application().handlers[0][1]
-			for item in range(len(hndlr)):
+			
+			for idx in range(len(hndlr)):
 				try:
-					if hndlr[item].__dict__['kwargs']['url'] == data.one().new_url:
-						hndlr[item] = URLSpec(
-							kwargs['old_url'] + '$',
-							RedirectHandler,
-							kwargs={
-								'url': kwargs['new_url'],
-								'permanent': permanent
-							},
-							name=None
-						)
+					if hndlr[idx].__dict__['kwargs']['url'] == data.one().new_url:
+						hndlr[idx] = self._get_redirect_router_item(fields_data)
 				except KeyError:
 					continue
-		data.update(kwargs)
+		
+		data.update(fields_data)
 		
 		try:
 			session.commit()
 		except Exception as e:
-			session.close()
-			print(
-				'adm/AdminMainHandler.update_page(): ' +
-				'cannot commit update page by "%s" section:\n' % str(section),
-				e, file=sys.stderr
+			warn(
+				'adm/AdminMainHandler.update(): ' +
+				'cannot commit update page by "%s" section:\n%s' %
+				(str(section), e)
 			)
 			raise e
-		
-		session.close()
+		finally:
+			session.close()
 		
 		return self.json_response({'status': 'success'})
 	
 	
 	@query_except_handler
-	def delete_smth(self, model=None, id=None): # smth - something
+	def delete(self, section, id):
+		
+		Model = self._section_model_map_with_accounts(section)
 		
 		session = Session()
-		models = {
-			'pages': StaticPageModel,
-			'redirect': UrlMapping,
-			'catalog_section': CatalogSectionModel,
-			'catalog_element': CatalogItemModel,
-			'accounts': User
-		}
 		
 		try:
 			session \
-				.query(models[model]) \
+				.query(Model) \
 				.filter_by(id=id) \
 				.delete(synchronize_session=True)
 			session.commit()
 		except Exception as e:
-			print(
-				'adm/AdminMainHandler.delete_smth(): ' +
-				'cannot delete page by id #%s:\n' % str(id),
-				e, file=sys.stderr
+			warn(
+				'adm/AdminMainHandler.delete(): ' +
+				'cannot delete page by id #%s:\n%s' % (str(id), e)
 			)
 			return self.json_response({
 				'status': 'error',
@@ -478,10 +449,9 @@ class AdminMainHandler(JsonResponseMixin):
 		try:
 			data = session.query(NonRelationData).all()
 		except Exception as e:
-			print(
+			warn(
 				'adm/AdminMainHandler.get_data_list(): ' +
-				'cannot get non-relation data elements:\n',
-				e, file=sys.stderr
+				'cannot get non-relation data elements:\n%s' % e
 			)
 			raise e
 		finally:
@@ -494,22 +464,13 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	
 	@query_except_handler
-	def get_fields(self, model=None, edit=False, id=None):
+	def get_fields(self, section, edit=False, id=None):
 		
 		session = Session()
 		
-		models = {
-			'pages': StaticPageModel,
-			'redirect': UrlMapping,
-			'catalog_section': CatalogSectionModel,
-			'catalog_element': CatalogItemModel,
-			'accounts': User,
-			'data': NonRelationData
-		}
+		Model = self._section_model_map_with_accounts[section]
 		
-		fields = db_inspector.get_columns(
-			models[model].__tablename__
-		)
+		fields = db_inspector.get_columns(Model.__tablename__)
 		
 		# TODO :: refactoring
 		types_map = {
@@ -519,7 +480,7 @@ class AdminMainHandler(JsonResponseMixin):
 			'VARCHAR(8192)': 'text',
 			'VARCHAR(1024)': 'text',
 			'VARCHAR(5000)': 'password',
-			'JSON': 'data_fields' if model == 'data' else 'files',
+			'JSON': 'data_fields' if section == 'data' else 'files',
 			'INTEGER': 'text'
 		}
 		vidgets = []
@@ -540,29 +501,28 @@ class AdminMainHandler(JsonResponseMixin):
 		values = None
 		if edit and id is not None:
 			try:
-				data = session.query(models[model]).filter_by(id=id).one()
+				data = session.query(Model).filter_by(id=id).one()
 			except Exception as e:
 				session.close()
-				print(
+				warn(
 					'adm/AdminMainHandler.get_fields(): ' +
-					'cannot get fields by "%s" model and id #%s:\n' % (model, id),
-					e, file=sys.stderr
+					'cannot get fields by "%s" model and id #%s:\n%s' %
+					(Model.__name__, id, e)
 				)
 				raise e
 			values = data.item
 			
-			if model == 'catalog_element':
+			if section == 'catalog_element':
 				values.update({'section_id': data.section_id})
 		
-		if model == 'catalog_element':
+		if section == 'catalog_element':
 			try:
 				sections = session.query(CatalogSectionModel).all()
 			except Exception as e:
 				session.close()
-				print(
+				warn(
 					'adm/AdminMainHandler.get_fields(): ' +
-					'cannot get catalog sections list:\n',
-					e, file=sys.stderr
+					'cannot get catalog sections list:\n%s' % e
 				)
 				raise e
 			
@@ -589,9 +549,9 @@ class AdminMainHandler(JsonResponseMixin):
 	
 	
 	@query_except_handler
-	def reorder_page(self, page_id, at_id):
+	def reorder(self, section, target_id, at_id):
 		
-		if page_id == at_id:
+		if target_id == at_id:
 			self.json_response({'status': 'success'})
 			return
 		
@@ -601,19 +561,46 @@ class AdminMainHandler(JsonResponseMixin):
 			session.execute(
 				StaticPageModel
 					.get_reorder_page_query()
-					.page(page_id)
+					.page(target_id)
 					.place_before(at_id)
 					.done()
 			)
 			session.commit()
 		except Exception as e:
-			print(
-				'adm/AdminMainHandler.reorder_page(): ' +
-				'cannot reorder "%d" at "%d":\n' % (page_id, at_id),
-				e, file=sys.stderr
+			warn(
+				'adm/AdminMainHandler.reorder(): ' +
+				'cannot reorder "%d" at "%d":\n%s' % (target_id, at_id, e)
 			)
 			raise e
 		finally:
 			session.close()
 		
 		self.json_response({'status': 'success'})
+	
+	
+	# helpers
+	
+	# UrlMapping model
+	def _validate_redirect(self, fields_data):
+		try:
+			fields_data['status'] = int(fields_data['status']) \
+				if 'status' in fields_data \
+				and bool(fields_data['status']) \
+				else 300
+			if fields_data['status'] not in [300, 301]:
+				raise Exception('---invalid---')
+		except:
+			return False
+		return True
+	
+	# UrlMapping model
+	def _get_redirect_router_item(self, fields_data):
+		return URLSpec(
+			pattern=fields_data['old_url'] + '$',
+			handler=RedirectHandler,
+			kwargs={
+				'url': fields_data['new_url'],
+				'permanent': fields_data['status'] == 301
+			},
+			name=None
+		)

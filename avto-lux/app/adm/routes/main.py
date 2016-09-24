@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import os, time, sys
+import os, time
 import hashlib
 import datetime
+from warnings import warn
 
-from .helpers import (request_except_handler, require_auth)
+from .helpers import request_except_handler, require_auth
 
 from app.configparser import config
 from app.utils import get_json_localization
@@ -47,10 +48,7 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 					.one()
 			)
 		except Exception as e:
-			print(
-				'adm/AuthHandler.post(): user not found:\n',
-				e, file=sys.stderr
-			)
+			warn('adm/AuthHandler.post(): user not found:\n%s' % e)
 			return self.json_response({
 				'status': 'error',
 				'error_code': 'user_not_found'
@@ -98,10 +96,7 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 			olds = [x[0] for x in session.query(User.login).all()]
 		except Exception as e:
 			session.close()
-			print(
-				'adm/CreateUser.post(): cannot get users logins:\n',
-				e, file=sys.stderr
-			)
+			warn('adm/CreateUser.post(): cannot get users logins:\n%s' % e)
 			raise e
 		
 		if login == '':
@@ -132,10 +127,7 @@ class CreateUser(AuthMixin, JsonResponseMixin):
 			session.add(usr)
 			session.commit()
 		except Exception as e:
-			print(
-				'adm/CreateUser.post(): cannot add user:\n',
-				e, file=sys.stderr
-			)
+			warn('adm/CreateUser.post(): cannot add user:\n%s' % e)
 			raise e
 		finally:
 			session.close()
@@ -164,10 +156,9 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 			usr = session.query(User).filter_by(id=id).one()
 		except Exception as e:
 			session.close()
-			print(
-				'adm/UpdateUser.post(): cannot get user'+
-				' by #%s id:\n' % str(id),
-				e, file=sys.stderr
+			warn(
+				'adm/UpdateUser.post(): cannot get user by #%s id:\n%s' %
+				(str(id), e)
 			)
 			raise e
 		
@@ -175,10 +166,7 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 			olds = [x[0] for x in session.query(User.login).all()]
 		except Exception as e:
 			session.close()
-			print(
-				'adm/UpdateUser.post(): cannot get users logins:\n',
-				e, file=sys.stderr
-			)
+			warn('adm/UpdateUser.post(): cannot get users logins:\n%s' % e)
 			raise e
 		
 		if login == '':
@@ -203,9 +191,10 @@ class UpdateUser(AuthMixin, JsonResponseMixin):
 			session.query(User).filter_by(id=id).update(kwargs)
 			session.commit()
 		except Exception as e:
-			print('adm/UpdateUser.post(): cannot update '+\
-				'user #%s data:\n' % str(id),\
-				e, file=sys.stderr)
+			warn(
+				'adm/UpdateUser.post(): cannot update user #%s data:\n%s' %
+				(str(id), e)
+			)
 			raise e
 		finally:
 			session.close()
@@ -238,7 +227,3 @@ class FileUpload(JsonResponseMixin):
 			'status': 'success',
 			'files': hashes
 		})
-
-
-class FileSave(JsonResponseMixin):
-	pass
