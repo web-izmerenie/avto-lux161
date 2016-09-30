@@ -6,7 +6,7 @@
  */
 
 require! {
-	\../../form-edit : FormEditView
+	\app/view/form-edit : FormEditView
 }
 
 

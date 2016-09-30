@@ -6,7 +6,7 @@
  */
 
 require! {
-	\./basic : BasicCollection
+	\./basic : { BasicCollection }
 }
 
 
@@ -19,4 +19,4 @@ data =
 	* ref: \#logout         , title: \Выход
 
 
-module.exports = new BasicCollection data
+export panel-menu-list = new BasicCollection data

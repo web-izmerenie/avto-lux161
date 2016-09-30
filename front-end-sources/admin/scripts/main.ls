@@ -49,7 +49,7 @@ B.ajax = (opts)->
 				opts.success? ...
 
 require! {
-	\./model/localization : LocalizationModel
+	\./model/localization : { LocalizationModel }
 }
 
 # caching localization data

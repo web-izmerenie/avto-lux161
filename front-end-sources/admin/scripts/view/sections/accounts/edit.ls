@@ -6,15 +6,17 @@
  */
 
 require! {
-	'../../form-edit' : FormEditView
+	\app/view/form-edit : FormEditView
 }
+
 
 class EditAccountView extends FormEditView
 	initialize: !->
 		@options.type = \edit
 		@options.id = @get-option \id
-		@options[\list-page] = '#panel/accounts'
+		@options.\list-page = '#panel/accounts'
 		@options.section = \accounts
-		FormEditView.prototype.initialize ...
+		super ...
+
 
 module.exports = EditAccountView

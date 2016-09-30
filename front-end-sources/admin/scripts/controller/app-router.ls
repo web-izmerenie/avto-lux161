@@ -10,7 +10,7 @@ require! {
 	\backbone.marionette                    : { Controller, proxy-get-option }
 	\backbone.wreqr                         : { radio }
 	
-	\../collection/panel-menu               : panel-menu-list
+	\../collection/panel-menu               : { panel-menu-list }
 	\../view/login-form                     : LoginFormView
 	\../view/panel                          : PanelView
 	\../view/sections/pages/list            : PagesListView

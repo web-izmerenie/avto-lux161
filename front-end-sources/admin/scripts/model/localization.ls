@@ -6,9 +6,10 @@
  */
 
 require! {
-	\jquery         : $
-	\backbone       : { Model }
-	\backbone.wreqr : { radio }
+	\jquery                 : $
+	\backbone               : { Model }
+	
+	\app/utils/panic-attack : { panic-attack }
 }
 
 
@@ -19,7 +20,7 @@ lang  = $html.attr \lang
 url   = $html.attr \data-local-file
 
 
-class LocalizationModel extends Model
+export class LocalizationModel extends Model
 	
 	lang : lang
 	url  : url
@@ -44,14 +45,10 @@ class LocalizationModel extends Model
 	parse: (response)->
 		| response[@lang]? => response[@lang]
 		| otherwise =>
-			err = new Error "Can't get localization data by this lang: #{@lang}"
-			radio.commands.execute \police, \panic, err
-			throw err
+			new Error "Can't get localization data by this lang: #{@lang}"
+			|> panic-attack
 	
 	defaults:
 		page_loading: \Loading...
 		error: \Error
 		fatal_error: 'Fatal error!'
-
-
-module.exports = LocalizationModel

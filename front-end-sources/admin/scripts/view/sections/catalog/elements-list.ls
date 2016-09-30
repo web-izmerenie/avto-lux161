@@ -8,7 +8,7 @@
 require! {
 	\backbone.marionette   : M
 	
-	'../../../model/basic' : BasicModel
+	'../../../model/basic' : { BasicModel }
 	
 	# views
 	'../../table-list'     : TableListView

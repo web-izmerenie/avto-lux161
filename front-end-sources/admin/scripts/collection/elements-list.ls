@@ -7,16 +7,17 @@
  */
 
 require! {
-	\underscore          : _
-	\backbone.marionette : { proxy-get-option }
-	\backbone.wreqr      : { radio }
+	\underscore             : _
+	\backbone.marionette    : { proxy-get-option }
 	
-	\../config.json      : { ajax_data_url }
-	\./basic             : BasicCollection
+	\./basic                : { BasicCollection }
+	
+	\app/config.json        : { ajax_data_url }
+	\app/utils/panic-attack : { panic-attack }
 }
 
 
-class ElementsListCollection extends BasicCollection
+export class ElementsListCollection extends BasicCollection
 	
 	url: ajax_data_url
 	action: null # must be overwritten by child class or by option
@@ -27,8 +28,7 @@ class ElementsListCollection extends BasicCollection
 				throw new Error 'Incorrect server data'
 			response.data_list
 		catch
-			radio.commands.execute \police, \panic, e
-			throw e
+			panic-attack e
 	
 	fetch: (opts={})->
 		try
@@ -40,8 +40,4 @@ class ElementsListCollection extends BasicCollection
 			data = { action } <<< (opts.data ? {})
 			super {} <<< opts <<< { data }
 		catch
-			radio.commands.execute \police, \panic, e
-			throw e
-
-
-module.exports = ElementsListCollection
+			panic-attack e

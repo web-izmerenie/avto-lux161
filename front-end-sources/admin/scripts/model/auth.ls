@@ -6,27 +6,25 @@
  */
 
 require! {
-	\backbone          : { history }
-	\backbone.wreqr    : { radio }
+	\backbone                : { history }
 	
-	\./basic           : BasicModel
-	\./localization    : LocalizationModel
-	\./type-validation : TypeValidationModelMixin
+	\./basic                 : { BasicModel }
+	\./localization          : { LocalizationModel }
+	\./type-validation-mixin : { type-validation-model-mixin }
 	
-	\../config.json    : { login_url, logout_url }
+	\app/config.json         : { login_url, logout_url }
+	\app/utils/panic-attack  : { panic-attack }
 }
 
 
 is-auth-at-start = $ \html .attr \data-is-auth .to-string! is \1
 
-panic-attack = (err)!->
-	radio.commands.execute \police, \panic, err
-	throw err
-
 
 export class AuthModel
 extends BasicModel
-implements TypeValidationModelMixin
+implements type-validation-model-mixin
+	
+	url: null
 	
 	attributes-typings:
 		local         : (instanceof LocalizationModel)
@@ -37,10 +35,6 @@ implements TypeValidationModelMixin
 		is_authorized : \Boolean
 	
 	parse: (response)-> {} <<< response <<< { response.error_code ? null }
-	
-	check-if-is-valid: !->
-		unless @is-valid!
-			panic-attack new Error @validation-error
 	
 	login: (user, pass, { success = null, fail = null } = {})!->
 		

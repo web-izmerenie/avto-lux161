@@ -8,9 +8,9 @@
 require! {
 	\backbone.marionette      : { LayoutView }
 	
-	\../model/basic           : BasicModel
+	\../model/basic           : { BasicModel }
 	\../view/panel-menu       : PanelMenuListView
-	\../collection/panel-menu : panel-menu-list
+	\../collection/panel-menu : { panel-menu-list }
 }
 
 

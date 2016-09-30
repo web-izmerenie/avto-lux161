@@ -6,11 +6,13 @@
  */
 
 require! {
-	\./basic : BasicModel
+	\./basic : { BasicModel }
 }
 
 
-class AskSureModel extends BasicModel
+export class AskSureModel extends BasicModel
+	
+	url: null
 	
 	defaults:
 		message: null
@@ -19,6 +21,3 @@ class AskSureModel extends BasicModel
 		super ...
 		unless (@get \message)?
 			@set \message, _ <| @get \local .get \sure .msg
-
-
-module.exports = AskSureModel

@@ -12,7 +12,7 @@ require! {
 	\../ajax-req
 	\../config.json
 	
-	\../model/basic : BasicModel
+	\../model/basic : { BasicModel }
 	
 	# views
 	\./smooth       : SmoothView

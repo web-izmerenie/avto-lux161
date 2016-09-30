@@ -1,27 +1,17 @@
 /**
- * Ordering elements list model
+ * Ordering elements list item model mixin
  *
  * @author Viacheslav Lotsmanov
  * @author Andrew Fatkulin
  */
 
-require! {
-	\backbone.wreqr : { radio }
+require! \app/utils/panic-attack : { panic-attack }
+
+
+export ordering-elements-item-model-mixin =
 	
-	\./basic        : BasicModel
-	\../config.json : { ajax_data_url }
-}
-
-
-panic-attack = (err)!->
-	radio.commands.execute \police, \panic, err
-	throw err
-
-
-class OrderingElementsItemModel extends BasicModel
-	
-	section: null # must be overwritten (can be overwritten by options)
-	url: ajax_data_url
+	# must be set (can be set by constructor options)
+	# section: \section-value-example
 	
 	put-at: (at-model)!-> @sync \update, @, do
 		data:
@@ -37,6 +27,3 @@ class OrderingElementsItemModel extends BasicModel
 					else ''
 				}"
 			@trigger \reordered
-
-
-module.exports = OrderingElementsItemModel

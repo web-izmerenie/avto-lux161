@@ -5,8 +5,14 @@
  * @author Andrew Fatkulin
  */
 
+require! \app/utils/panic-attack : { panic-attack }
 
-TypeValidationModelMixin =
+
+export type-validation-model-mixin =
+	
+	check-if-is-valid: !->
+		unless @is-valid!
+			panic-attack new Error @validation-error
 	
 	# nulls for every field from @attributes-typings by default
 	defaults: -> {[k, null] for k of @attributes-typings}
@@ -39,6 +45,3 @@ TypeValidationModelMixin =
 			return "invalid attributes: #{invalid-attrs * ', '}"
 		
 		null
-
-
-module.exports = TypeValidationModelMixin

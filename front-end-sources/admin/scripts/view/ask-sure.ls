@@ -6,7 +6,7 @@
  */
 
 require! {
-	\../model/ask-sure : AskSureModel
+	\../model/ask-sure : { AskSureModel }
 	\./smooth          : SmoothView
 }
 

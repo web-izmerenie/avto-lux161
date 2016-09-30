@@ -13,13 +13,11 @@ require! {
 }
 
 
-class BasicCollection extends Collection
+export class BasicCollection extends Collection
 	
 	get-option: proxy-get-option
 	
 	initialize: (models=null, options={})!->
 		super ...
 		@options = {} <<< (_.result @, \options) <<< options
-
-
-module.exports = BasicCollection
+		@cid = _.unique-id \BasicCollection

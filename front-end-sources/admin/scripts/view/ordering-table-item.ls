@@ -6,20 +6,18 @@
  */
 
 require! {
-	\./table-item : TableItemView
+	\./table-item                : TableItemView
+	\./drag-row-table-item-mixin : { drag-row-table-item-view-mixin }
 }
 
 
-class OrderingTableItemView extends TableItemView
+class OrderingTableItemView
+extends TableItemView
+implements drag-row-table-item-view-mixin
 	
-	attributes:
-		draggable: true
-	
-	model-events: {
-		\view:ordering-drag-off : \on-ordering-drag-off
-	} <<< super::model-events
-	
-	\on-ordering-drag-off : !-> @$el.css \opacity, ''
+	model-events: {}
+		<<< super::model-events
+		<<< drag-row-table-item-view-mixin.model-events
 
 
 module.exports = OrderingTableItemView

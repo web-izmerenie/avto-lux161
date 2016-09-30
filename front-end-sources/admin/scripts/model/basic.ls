@@ -10,11 +10,15 @@ require! {
 	\backbone            : { Model }
 	\backbone.marionette : { proxy-get-option }
 	
-	\./localization      : LocalizationModel
+	\./localization      : { LocalizationModel }
+	
+	\app/config.json     : { ajax_data_url }
 }
 
 
-class BasicModel extends Model
+export class BasicModel extends Model
+	
+	url: ajax_data_url
 	
 	initialize: (attrs = null, options = {})!->
 		
@@ -25,6 +29,3 @@ class BasicModel extends Model
 		@changed = {}
 	
 	get-option: proxy-get-option
-
-
-module.exports = BasicModel

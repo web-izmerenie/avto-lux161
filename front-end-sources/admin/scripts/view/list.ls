@@ -6,18 +6,19 @@
  */
 
 require! {
-	\backbone       : { Collection }
-	\backbone.wreqr : { radio }
+	\backbone                     : { Collection }
+	\backbone.wreqr               : { radio }
 	
 	# helpers
 	\../ajax-req
 	
 	# models
-	\../model/basic : BasicModel
+	\app/model/basic              : { BasicModel }
+	\app/collection/elements-list : { ElementsListCollection }
 	
 	# views
-	\./loader       : LoaderView
-	\./smooth       : SmoothView
+	\./loader                     : LoaderView
+	\./smooth                     : SmoothView
 }
 
 
@@ -31,16 +32,30 @@ class ListView extends SmoothView
 		super ...
 		@loader-view = new LoaderView! .render!
 	
-	on-show: !-> @get-region \main .show @loader-view
+	on-show: !->
+		@get-region \main .show @loader-view
+		@table-list.fetch! if @table-list instanceof ElementsListCollection
 	
 	init-table-list: (View, options = {}, {
 		Collection = TableListCollection
 		collection-options = {}
 	} = {})!->
+		
 		@table-list = new Collection [], collection-options
 		@table-view = new View {} <<< options <<< { collection: @table-list }
 		@table-view.render!
+		
+		# fetch again when refresh event is triggered
 		@listen-to @table-view, \refresh:list, @update-list
+		
+		# replace loader to table after fetch
+		@listen-to-once @table-list, 'sync reset', @show-table-view
+	
+	show-table-view: !->
+		@get-region \main .show @table-view
+	
+	update-list: !->
+		@table-list.fetch! if @table-list instanceof ElementsListCollection
 	
 	# cb: data-arr
 	# TODO remove after refactoring

@@ -6,22 +6,18 @@
  */
 
 require! {
-	\backbone.wreqr           : { radio }
+	\app/model/basic                        : { BasicModel }
+	\app/model/localization                 : { LocalizationModel }
+	\app/model/type-validation-mixin        : { type-validation-model-mixin }
+	\app/model/ordering-elements-item-mixin : { ordering-elements-item-model-mixin }
 	
-	\./localization           : LocalizationModel
-	\./type-validation        : TypeValidationModelMixin
-	\./ordering-elements-item : OrderingElementsItemModel
+	\app/utils/panic-attack                 : { panic-attack }
 }
 
 
-panic-attack = (err)!->
-	radio.commands.execute \police, \panic, err
-	throw err
-
-
-class StaticPageListItemModel
-extends OrderingElementsItemModel
-implements TypeValidationModelMixin
+export class StaticPageListItemModel
+extends BasicModel
+implements type-validation-model-mixin, ordering-elements-item-model-mixin
 	
 	section: \pages
 	
@@ -35,10 +31,6 @@ implements TypeValidationModelMixin
 		name              : \String
 		url               : \String
 		is_main_menu_item : \Boolean
-	
-	check-if-is-valid: !->
-		unless @is-valid!
-			panic-attack new Error @validation-error
 	
 	initialize: !->
 		super ...
@@ -58,6 +50,3 @@ implements TypeValidationModelMixin
 			}
 		catch
 			panic-attack e
-
-
-module.exports = StaticPageListItemModel

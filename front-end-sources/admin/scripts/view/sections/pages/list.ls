@@ -7,13 +7,12 @@
 
 require! {
 	# models
-	\../../../collection/ordering-elements-list : OrderingElementsListCollection
-	\../../../model/static-page-list-item       : StaticPageListItemModel
+	\app/collection/sections/static-pages-list : { StaticPagesListCollection }
 	
 	# views
-	\../../ordering-table-list                  : OrderingTableListView
-	\../../ordering-table-item                  : OrderingTableItemView
-	\../../list                                 : ListView
+	\app/view/ordering-table-list              : OrderingTableListView
+	\app/view/ordering-table-item              : OrderingTableItemView
+	\app/view/list                             : ListView
 }
 
 
@@ -27,30 +26,12 @@ class CompositeListView extends OrderingTableListView
 
 
 class PagesListView extends ListView
-	
 	initialize: !->
-		
 		super ...
-		
-		options =
-			model: StaticPageListItemModel
-			action: \get_pages_list
-		
 		@init-table-list do
 			CompositeListView
 			null
-			do
-				Collection: OrderingElementsListCollection
-				collection-options: options
-		
-		@listen-to @table-list, 'sync reset', @show-table-view
-	
-	on-show: !->
-		super ...
-		@table-list.fetch!
-	
-	update-list: !-> @table-list.fetch!
-	show-table-view: !-> @get-region \main .show @table-view
+			Collection: StaticPagesListCollection
 
 
 module.exports = PagesListView

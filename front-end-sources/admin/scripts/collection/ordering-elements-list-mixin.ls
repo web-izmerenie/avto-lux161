@@ -5,17 +5,11 @@
  * @author Andrew Fatkulin
  */
 
-require! {
-	\backbone        : B
-	
-	\./elements-list : ElementsListCollection
-}
 
-
-class OrderingElementsListCollection extends ElementsListCollection
+# supposed to be used with ElementsListCollection
+export ordering-elements-list-collection-mixin =
 	
 	initialize: !->
-		super ...
 		@on \order-by, @on-order-by
 		@on \reordered, @fetch
 	
@@ -40,6 +34,3 @@ class OrderingElementsListCollection extends ElementsListCollection
 				| _     => ...
 		| otherwise => @ordering-field = field
 		@sort!
-
-
-module.exports = OrderingElementsListCollection

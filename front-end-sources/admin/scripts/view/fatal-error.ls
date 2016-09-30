@@ -7,7 +7,7 @@
 
 require! {
 	\./smooth       : SmoothView
-	\../model/basic : BasicModel
+	\../model/basic : { BasicModel }
 }
 
 

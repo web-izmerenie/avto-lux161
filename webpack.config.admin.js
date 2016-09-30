@@ -26,7 +26,8 @@ module.exports = webpackMerge.smart(baseConfig, {
 	},
 	resolve: {
 		alias: {
-			base: path.resolve(BASE_DIR, 'front-end-sources', 'admin')
+			base: path.resolve(BASE_DIR, 'front-end-sources', 'admin'),
+			app: path.resolve(BASE_DIR, 'front-end-sources', 'admin', 'scripts')
 		},
 		extensions: ['', '.js', '.ls']
 	},
