@@ -11,8 +11,18 @@ require! {
 	\./drop-custom-ordering-table-list-mixin : {
 		drop-custom-ordering-table-list-view-mixin
 	}
+	
+	\app/utils/mixins : { call-class-mixins, extend-class-mixins }
+	\app/utils/dashes : { camelize }
 }
 
+
+list-mixins =
+	* drag-row-table-list-view-mixin
+	* drop-custom-ordering-table-list-view-mixin
+
+call-class = call-class-mixins list-mixins
+extend-class = extend-class-mixins list-mixins
 
 class OrderingTableListView
 extends TableListView
@@ -20,31 +30,23 @@ implements \
 	drag-row-table-list-view-mixin, \
 	drop-custom-ordering-table-list-view-mixin
 	
+	initialize: !->
+		(call-class super::, \initialize) ...
+		@listen-to @collection, 'sort sync reset', @\actualize-order-column
+	
 	ui: {
 		\ordering-column      : \.js-ordering-column
 		\ordering-column-text : '.js-ordering-column span'
-	}
-		<<< (super::ui ? {})
-		<<< (drag-row-table-list-view-mixin.ui ? {})
-		<<< (drop-custom-ordering-table-list-view-mixin.ui ? {})
+	} <<< (extend-class super::, \ui)
 	
 	events: {
 		'click @ui.ordering-column-text' : \on-ordering-column-click
-	}
-		<<< (super::events ? {})
-		<<< (drag-row-table-list-view-mixin.events ? {})
-		<<< (drop-custom-ordering-table-list-view-mixin.events ? {})
-	
-	collection-events: {
-		sort  : \actualize-order-column
-		sync  : \actualize-order-column
-		reset : \actualize-order-column
-	} <<< (super::collection-events ? {})
+	} <<< (extend-class super::, \events)
 	
 	on-render: !->
-		super? ...
-		for item in @ui.\ordering-column
-			@$ item .find \>span .css \cursor, \pointer
+		(call-class super::, camelize \on-render) ...
+		for @ui.\ordering-column
+			@$ (..) .find \>span .css \cursor, \pointer
 		@actualize-order-column!
 	
 	\actualize-order-column : !-> @actualize-order-column ...
@@ -52,8 +54,8 @@ implements \
 		
 		{ ordering-field, ordering-method } = @collection
 		
-		for item in @ui.\ordering-column
-			@$ item
+		for @ui.\ordering-column
+			@$ ..
 				if (..data \field) is ordering-field
 					switch ordering-method
 					| \asc =>
