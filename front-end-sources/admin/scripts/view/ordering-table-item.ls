@@ -16,8 +16,8 @@ extends TableItemView
 implements drag-row-table-item-view-mixin
 	
 	model-events: {}
-		<<< super::model-events
-		<<< drag-row-table-item-view-mixin.model-events
+		<<< (super::model-events ? {})
+		<<< (drag-row-table-item-view-mixin.model-events ? {})
 
 
 module.exports = OrderingTableItemView
