@@ -30,10 +30,11 @@
   },
   "scripts": {
     "webpack": "node_modules/.bin/webpack",
-    "bundle-development-client": "env NODE_ENV=development webpack --config webpack.config.client.js --progress",
-    "bundle-development-admin": "env NODE_ENV=development webpack --config webpack.config.admin.js --progress",
+    "bundle-development-client": "env NODE_ENV=development webpack --config webpack.config.client.js --progress --watch",
+    "bundle-development-admin": "env NODE_ENV=development webpack --config webpack.config.admin.js --progress --watch",
+    "bundle-development": "env NODE_ENV=development webpack --config webpack.config.both.js --progress --watch",
     "bundle-production-client": "env NODE_ENV=production webpack --config webpack.config.client.js --progress",
     "bundle-production-admin": "env NODE_ENV=production webpack --config webpack.config.admin.js --progress",
-    "bundle-production": "npm run bundle-production-client ; npm run bundle-production-admin"
+    "bundle-production": "env NODE_ENV=production webpack --config webpack.config.both.js --progress"
   }
 }

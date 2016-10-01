@@ -12,7 +12,9 @@ const BASE_DIR = __dirname;
 
 module.exports = webpackMerge.smart(baseConfig, {
 	entry: {
-		'app': path.join(BASE_DIR, 'front-end-sources', 'client', 'scripts', 'main.ls'),
+		'app': path.join(
+			BASE_DIR, 'front-end-sources', 'client', 'scripts', 'main.ls'
+		),
 		'vendor': [
 			'jquery',
 			'jquery-colorbox',
@@ -23,7 +25,9 @@ module.exports = webpackMerge.smart(baseConfig, {
 	resolve: {
 		alias: {
 			base: path.resolve(BASE_DIR, 'front-end-sources', 'client'),
-			modernizr: path.resolve(BASE_DIR, 'front-end-sources', 'client', '.modernizrrc')
+			modernizr: path.resolve(
+				BASE_DIR, 'front-end-sources', 'client', '.modernizrrc'
+			)
 		},
 		extensions: ['', '.js', '.ls']
 	},

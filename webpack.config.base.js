@@ -7,7 +7,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
 	devtool: 'source-map',
-	watch: process.env.NODE_ENV === 'development',
 	module: {
 		loaders: [
 			{ test: /\.ls$/,   loader: 'livescript-loader' },
@@ -17,7 +16,10 @@ module.exports = {
 			{ test: /\.modernizrrc$/, loader: 'modernizr' },
 			{
 				test: /\.styl$/,
-				loader: ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader')
+				loader: ExtractTextPlugin.extract(
+					'style-loader',
+				   	'css-loader!stylus-loader'
+				)
 			}
 		]
 	},
