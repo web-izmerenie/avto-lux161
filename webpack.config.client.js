@@ -3,14 +3,15 @@
 /*jshint node: true */
 
 const path = require('path');
-const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const baseConfig = require('./webpack.config.base.js');
 
 const BASE_DIR = __dirname;
 
-module.exports = webpackMerge.smart(baseConfig, {
+const extractCss = new ExtractTextPlugin('client-[name].bundle.css');
+
+module.exports = baseConfig(extractCss)({
 	entry: {
 		'app': path.join(
 			BASE_DIR, 'front-end-sources', 'client', 'scripts', 'main.ls'
@@ -36,6 +37,6 @@ module.exports = webpackMerge.smart(baseConfig, {
 		filename: 'client-[name].bundle.js'
 	},
 	plugins: [
-		new ExtractTextPlugin('client-[name].bundle.css')
+		extractCss
 	]
 });

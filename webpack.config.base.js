@@ -3,9 +3,9 @@
 /*jshint node: true */
 
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpackMerge = require('webpack-merge');
 
-module.exports = {
+module.exports = (extractCss) => (config) => webpackMerge.smart({
 	devtool: 'source-map',
 	module: {
 		loaders: [
@@ -16,9 +16,9 @@ module.exports = {
 			{ test: /\.modernizrrc$/, loader: 'modernizr' },
 			{
 				test: /\.styl$/,
-				loader: ExtractTextPlugin.extract(
+				loader: extractCss.extract(
 					'style-loader',
-				   	'css-loader!stylus-loader'
+				   	'css-loader?sourceMap!stylus-loader'
 				)
 			}
 		]
@@ -31,17 +31,14 @@ module.exports = {
 			names: ['app', 'vendor'],
 			minChunks: Infinity
 		})
-	]
-};
-
-if (process.env.NODE_ENV === 'production') {
-	module.exports.plugins.push(
+	].concat(
+		(process.env.NODE_ENV === 'production') ?
 		new webpack.optimize.UglifyJsPlugin({
 			compress: {
 				warnings: false,
 				drop_console: false,
 				unsafe: true
 			}
-		})
-	);
-}
+		}) : []
+	)
+}, config);
