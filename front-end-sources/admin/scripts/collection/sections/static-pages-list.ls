@@ -6,21 +6,27 @@
  */
 
 require! {
-	\app/model/sections/static-page-list-item    : { StaticPageListItemModel }
-	\app/collection/elements-list                : { ElementsListCollection }
-	\app/collection/ordering-elements-list-mixin : {
-		ordering-elements-list-collection-mixin
+	\app/model/sections/static-page-list-item : { StaticPageListItemModel }
+	\app/collection/elements-list : { ElementsListCollection }
+	\app/collection/by-column-ordering-elements-list-mixin : {
+		by-column-ordering-elements-list-collection-mixin
 	}
+	
+	\app/utils/mixins : { call-class-mixins }
 }
 
 
+list-mixins =
+	* by-column-ordering-elements-list-collection-mixin
+	...
+
+call-class = call-class-mixins list-mixins
+
 export class StaticPagesListCollection
 extends ElementsListCollection
-implements ordering-elements-list-collection-mixin
+implements by-column-ordering-elements-list-collection-mixin
 	
 	model: StaticPageListItemModel
 	action: \get_pages_list
 	
-	initialize: !->
-		super ...
-		ordering-elements-list-collection-mixin.initialize ...
+	initialize: !-> (call-class super::, \initialize) ...

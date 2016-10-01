@@ -25,8 +25,9 @@ extends TableItemView
 implements drag-row-table-item-view-mixin
 	
 	initialize: !-> (call-class super::, \initialize) ...
-	ui     : {} <<< (extend-class super::, \ui)
-	events : {} <<< (extend-class super::, \events)
+	
+	ui     : extend-class super::, \ui
+	events : extend-class super::, \events
 
 
 module.exports = OrderingTableItemView

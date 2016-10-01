@@ -8,7 +8,7 @@
 require! \app/utils/panic-attack : { panic-attack }
 
 
-export ordering-elements-item-model-mixin =
+export custom-reordering-elements-item-model-mixin =
 	
 	# must be set (can be set by constructor options)
 	# section: \section-value-example

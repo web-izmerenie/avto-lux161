@@ -1,5 +1,5 @@
 /**
- * Ordering elements list collection
+ * Ordering elements by column collection mixin
  *
  * @author Viacheslav Lotsmanov
  * @author Andrew Fatkulin
@@ -7,7 +7,7 @@
 
 
 # supposed to be used with ElementsListCollection
-export ordering-elements-list-collection-mixin =
+export by-column-ordering-elements-list-collection-mixin =
 	
 	initialize: !->
 		@on \order-by, @on-order-by

@@ -6,18 +6,22 @@
  */
 
 require! {
-	\app/model/basic                        : { BasicModel }
-	\app/model/localization                 : { LocalizationModel }
-	\app/model/type-validation-mixin        : { type-validation-model-mixin }
-	\app/model/ordering-elements-item-mixin : { ordering-elements-item-model-mixin }
+	\app/model/basic : { BasicModel }
+	\app/model/localization : { LocalizationModel }
+	\app/model/type-validation-mixin : { type-validation-model-mixin }
+	\app/model/custom-reordering-elements-item-mixin : {
+		custom-reordering-elements-item-model-mixin
+	}
 	
-	\app/utils/panic-attack                 : { panic-attack }
+	\app/utils/panic-attack : { panic-attack }
 }
 
 
 export class StaticPageListItemModel
 extends BasicModel
-implements type-validation-model-mixin, ordering-elements-item-model-mixin
+implements \
+	type-validation-model-mixin, \
+	custom-reordering-elements-item-model-mixin
 	
 	section: \pages
 	
