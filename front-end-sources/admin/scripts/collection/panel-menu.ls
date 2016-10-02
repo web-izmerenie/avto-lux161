@@ -6,7 +6,7 @@
  */
 
 require! {
-	\./basic : { BasicCollection }
+	\app/collection/basic : { BasicCollection }
 }
 
 

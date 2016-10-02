@@ -6,13 +6,13 @@
  */
 
 require! {
-	\underscore          : _
-	\backbone            : { Model }
-	\backbone.marionette : { proxy-get-option }
+	\underscore             : _
+	\backbone               : { Model }
+	\backbone.marionette    : { proxy-get-option }
 	
-	\./localization      : { LocalizationModel }
+	\app/model/localization : { LocalizationModel }
 	
-	\app/config.json     : { ajax_data_url }
+	\app/config.json        : { ajax_data_url }
 }
 
 

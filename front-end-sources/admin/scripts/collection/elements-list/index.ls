@@ -10,7 +10,7 @@ require! {
 	\underscore             : _
 	\backbone.marionette    : { proxy-get-option }
 	
-	\./basic                : { BasicCollection }
+	\app/collection/basic   : { BasicCollection }
 	
 	\app/config.json        : { ajax_data_url }
 	\app/utils/panic-attack : { panic-attack }

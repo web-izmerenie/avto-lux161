@@ -6,7 +6,7 @@
  */
 
 require! {
-	\./basic : { BasicModel }
+	\app/model/basic : { BasicModel }
 }
 
 

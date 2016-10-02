@@ -6,19 +6,19 @@
  */
 
 require! {
-	\backbone                     : { Collection }
-	\backbone.wreqr               : { radio }
+	\backbone       : { Collection }
+	\backbone.wreqr : { radio }
 	
 	# helpers
 	\../ajax-req
 	
 	# models
-	\app/model/basic              : { BasicModel }
-	\app/collection/elements-list : { ElementsListCollection }
+	\app/model/basic : { BasicModel }
+	\app/collection/elements-list/index : { ElementsListCollection }
 	
 	# views
-	\./loader                     : LoaderView
-	\./smooth                     : SmoothView
+	\app/view/loader : LoaderView
+	\app/view/smooth : SmoothView
 }
 
 

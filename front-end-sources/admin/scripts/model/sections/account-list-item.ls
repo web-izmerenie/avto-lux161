@@ -9,9 +9,6 @@ require! {
 	\app/model/basic : { BasicModel }
 	\app/model/localization : { LocalizationModel }
 	\app/model/type-validation-mixin : { type-validation-model-mixin }
-	\app/model/custom-reordering-elements-item-mixin : {
-		custom-reordering-elements-item-model-mixin
-	}
 	
 	\app/utils/panic-attack : { panic-attack }
 }

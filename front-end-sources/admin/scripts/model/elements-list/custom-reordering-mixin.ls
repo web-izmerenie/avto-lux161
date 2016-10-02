@@ -8,6 +8,7 @@
 require! \app/utils/panic-attack : { panic-attack }
 
 
+# supposed to be used with model of ElementsListCollection
 export custom-reordering-elements-item-model-mixin =
 	
 	# must be set (can be set by constructor options)

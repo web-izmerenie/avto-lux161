@@ -7,8 +7,8 @@
 
 require! {
 	\app/model/sections/static-page-list-item : { StaticPageListItemModel }
-	\app/collection/elements-list : { ElementsListCollection }
-	\app/collection/by-column-ordering-elements-list-mixin : {
+	\app/collection/elements-list/index : { ElementsListCollection }
+	\app/collection/elements-list/by-column-ordering-mixin : {
 		by-column-ordering-elements-list-collection-mixin
 	}
 	

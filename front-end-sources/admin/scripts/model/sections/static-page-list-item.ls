@@ -9,7 +9,7 @@ require! {
 	\app/model/basic : { BasicModel }
 	\app/model/localization : { LocalizationModel }
 	\app/model/type-validation-mixin : { type-validation-model-mixin }
-	\app/model/custom-reordering-elements-item-mixin : {
+	\app/model/elements-list/custom-reordering-mixin : {
 		custom-reordering-elements-item-model-mixin
 	}
 	

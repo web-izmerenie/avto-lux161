@@ -7,7 +7,7 @@
 
 require! {
 	\app/model/sections/account-list-item : { AccountListItemModel }
-	\app/collection/elements-list         : { ElementsListCollection }
+	\app/collection/elements-list/index   : { ElementsListCollection }
 }
 
 

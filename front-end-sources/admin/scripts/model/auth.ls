@@ -6,14 +6,14 @@
  */
 
 require! {
-	\backbone                : { history }
+	\backbone                        : { history }
 	
-	\./basic                 : { BasicModel }
-	\./localization          : { LocalizationModel }
-	\./type-validation-mixin : { type-validation-model-mixin }
+	\app/model/basic                 : { BasicModel }
+	\app/model/localization          : { LocalizationModel }
+	\app/model/type-validation-mixin : { type-validation-model-mixin }
 	
-	\app/config.json         : { login_url, logout_url }
-	\app/utils/panic-attack  : { panic-attack }
+	\app/config.json                 : { login_url, logout_url }
+	\app/utils/panic-attack          : { panic-attack }
 }
 
 
