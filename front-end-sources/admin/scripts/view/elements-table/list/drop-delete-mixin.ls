@@ -7,6 +7,7 @@
 
 
 # required to be used with drag-row-table-list-view-mixin
+# TODO
 export drop-delete-table-list-view-mixin =
 	
 	ui:

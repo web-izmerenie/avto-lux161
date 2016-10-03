@@ -7,31 +7,36 @@
 
 require! {
 	# views
-	'../../table-list' : TableListView
-	'../../table-item' : TableItemView
-	'../../list'       : ListView
+	\app/view/list                      : ListView
+	\app/view/elements-table/list/index : TableListView
+	\app/view/elements-table/item/index : TableItemView
 }
 
+
 class ItemView extends TableItemView
-	template: 'catalog/sections-list-item'
+	template: \catalog/sections-list-item
+
 
 class CompositeListView extends TableListView
-	template: 'catalog/sections-list'
+	template: \catalog/sections-list
 	child-view: ItemView
 	child-view-options: (model, index)~>
 		model.set \local , @model.get \local
 
+
 class CatalogSectionsListView extends ListView
+	
 	initialize: !->
-		ListView.prototype.initialize ...
+		super? ...
 		@init-table-list CompositeListView
 	
 	on-show: !->
-		ListView.prototype.on-show ...
+		super? ...
 		@update-list !~> @get-region \main .show @table-view
 	
 	update-list: (cb)!->
-		(data-arr)<~! @get-list { action: \get_catalog_sections }
+		
+		(data-arr)<~! @get-list action: \get_catalog_sections
 		
 		new-data-list = []
 		for item in data-arr
@@ -44,5 +49,6 @@ class CatalogSectionsListView extends ListView
 		
 		@table-list.reset new-data-list
 		cb! if cb?
+
 
 module.exports = CatalogSectionsListView

@@ -8,7 +8,7 @@
 require! {
 	\backbone.marionette : { CompositeView }
 	
-	\../model/basic      : { BasicModel }
+	\app/model/basic     : { BasicModel }
 }
 
 

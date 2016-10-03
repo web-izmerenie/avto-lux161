@@ -6,7 +6,7 @@
  */
 
 require! {
-	\./drag-row-table-list-mixin : { DragBreak }
+	\./drag-row-mixin : { DragBreak }
 }
 
 

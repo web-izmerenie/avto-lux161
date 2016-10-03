@@ -10,9 +10,9 @@ require! {
 	\app/collection/sections/accounts-list : { AccountsListCollection }
 	
 	# views
-	\app/view/table-list                   : TableListView
-	\app/view/table-item                   : TableItemView
-	\app/view/list                         : ListView
+	\app/view/list                      : ListView
+	\app/view/elements-table/list/index : TableListView
+	\app/view/elements-table/item/index : TableItemView
 }
 
 
@@ -27,7 +27,7 @@ class CompositeListView extends TableListView
 
 class AccountsListView extends ListView
 	initialize: !->
-		super ...
+		super? ...
 		@init-table-list do
 			CompositeListView
 			null

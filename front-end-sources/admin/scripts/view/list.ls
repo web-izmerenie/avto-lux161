@@ -6,14 +6,14 @@
  */
 
 require! {
-	\backbone       : { Collection }
 	\backbone.wreqr : { radio }
 	
 	# helpers
 	\../ajax-req
 	
 	# models
-	\app/model/basic : { BasicModel }
+	\app/model/basic                    : { BasicModel }
+	\app/collection/basic               : { BasicCollection }
 	\app/collection/elements-list/index : { ElementsListCollection }
 	
 	# views
@@ -22,17 +22,18 @@ require! {
 }
 
 
-class TableListCollection extends Collection
+class TableListCollection extends BasicCollection
 	comparator: \id
 
 
 class ListView extends SmoothView
 	
 	initialize: !->
-		super ...
+		super? ...
 		@loader-view = new LoaderView! .render!
 	
 	on-show: !->
+		super? ...
 		@get-region \main .show @loader-view
 		@table-list.fetch! if @table-list instanceof ElementsListCollection
 	
