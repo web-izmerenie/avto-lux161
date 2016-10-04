@@ -281,6 +281,10 @@ class AdminMainHandler(JsonResponseMixin):
 		StaticPageModel
 	]
 	
+	_able_to_remove_elements_models = [
+		User
+	]
+	
 	
 	@query_except_handler
 	def create(self, section, **fields_data):
@@ -372,7 +376,7 @@ class AdminMainHandler(JsonResponseMixin):
 			session.close()
 			warn(
 				'adm/AdminMainHandler.update(): ' +
-				'cannot update page by "%s" section:\n%s' %
+				'cannot update element by "%s" section:\n%s' %
 				(str(section), e)
 			)
 			raise e
@@ -403,7 +407,7 @@ class AdminMainHandler(JsonResponseMixin):
 		except Exception as e:
 			warn(
 				'adm/AdminMainHandler.update(): ' +
-				'cannot commit update page by "%s" section:\n%s' %
+				'cannot commit update element by "%s" section:\n%s' %
 				(str(section), e)
 			)
 			raise e
@@ -416,20 +420,27 @@ class AdminMainHandler(JsonResponseMixin):
 	@query_except_handler
 	def delete(self, section, id):
 		
-		Model = self._section_model_map_with_accounts(section)
+		Model = self._section_model_map_with_accounts[section]
+		if Model not in self._able_to_remove_elements_models:
+			warn(
+				'adm/AdminMainHandler.delete(): ' +
+				'model "%s" is not able to delete elements' % Model.__name__
+			)
+			return self.json_response({
+				'status': 'error',
+				'error_code': 'model_is_not_able_to_delete_elements'
+			})
 		
 		session = Session()
 		
+		# TODO :: support custom reordering
 		try:
-			session \
-				.query(Model) \
-				.filter_by(id=id) \
-				.delete(synchronize_session=True)
+			session.query(Model).filter_by(id=id).delete()
 			session.commit()
 		except Exception as e:
 			warn(
 				'adm/AdminMainHandler.delete(): ' +
-				'cannot delete page by id #%s:\n%s' % (str(id), e)
+				'cannot delete element by id #%s:\n%s' % (str(id), e)
 			)
 			return self.json_response({
 				'status': 'error',
@@ -551,6 +562,10 @@ class AdminMainHandler(JsonResponseMixin):
 	@query_except_handler
 	def reorder(self, section, target_id, at_id):
 		
+		# TODO
+		# Model =
+		self._custom_ordering_models
+		
 		if target_id == at_id:
 			self.json_response({'status': 'success'})
 			return
@@ -558,6 +573,7 @@ class AdminMainHandler(JsonResponseMixin):
 		session = Session()
 		
 		try:
+			# TODO :: multiple models
 			session.execute(
 				StaticPageModel
 					.get_reorder_page_query()

@@ -9,7 +9,7 @@
 export by-column-ordering-table-list-view-mixin =
 	
 	initialize: !->
-		@listen-to @collection, 'sort sync reset', @\actualize-order-column
+		@listen-to @collection, 'sort sync reset', @actualize-order-column
 	
 	ui:
 		\ordering-column      : \.js-ordering-column
@@ -43,6 +43,7 @@ export by-column-ordering-table-list-view-mixin =
 					..remove-class \ordering-column--asc
 					..remove-class \ordering-column--desc
 	
-	\on-ordering-column-click : (e)!->
+	\on-ordering-column-click : !-> @on-ordering-column-click ...
+	on-ordering-column-click: (e)!->
 		e.prevent-default!
 		@collection.trigger \order-by _ <| @$ e.target .parent! .data \field

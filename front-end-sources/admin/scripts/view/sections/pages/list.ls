@@ -34,29 +34,20 @@ require! {
 }
 
 
-[ drag-row-table-item-view-mixin ]
-	call-class = call-class-mixins ..
-	extend-class = extend-class-mixins ..
-
-class ItemView
-extends TableItemView
-implements drag-row-table-item-view-mixin
+class ItemView extends TableItemView implements drag-row-table-item-view-mixin
+	
+	[ drag-row-table-item-view-mixin ]
+		@_call-class = call-class-mixins ..
+		@_extend-class = extend-class-mixins ..
 	
 	template   : \pages/list-item
 	
-	ui         : extend-class super::, \ui
-	events     : extend-class super::, \events
+	ui         : @@_extend-class super::, \ui
+	events     : @@_extend-class super::, \events
 	
-	initialize : !-> (call-class super::, \initialize) ...
+	initialize : !-> (@@_call-class super::, \initialize) ...
+	on-render  : !-> (@@_call-class super::, camelize \on-render) ...
 
-
-[
-	drag-row-table-list-view-mixin
-	drop-custom-ordering-table-list-view-mixin
-	by-column-ordering-table-list-view-mixin
-]
-	call-class = call-class-mixins ..
-	extend-class = extend-class-mixins ..
 
 class CompositeListView
 extends TableListView
@@ -65,14 +56,22 @@ drag-row-table-list-view-mixin, \
 drop-custom-ordering-table-list-view-mixin, \
 by-column-ordering-table-list-view-mixin
 	
+	[
+		drag-row-table-list-view-mixin
+		drop-custom-ordering-table-list-view-mixin
+		by-column-ordering-table-list-view-mixin
+	]
+		@_call-class = call-class-mixins ..
+		@_extend-class = extend-class-mixins ..
+	
 	template   : \pages/list
 	child-view : ItemView
 	
-	ui         : extend-class super::, \ui
-	events     : extend-class super::, \events
+	ui         : @@_extend-class super::, \ui
+	events     : @@_extend-class super::, \events
 	
-	initialize : !-> (call-class super::, \initialize) ...
-	on-render  : !-> (call-class super::, camelize \on-render) ...
+	initialize : !-> (@@_call-class super::, \initialize) ...
+	on-render  : !-> (@@_call-class super::, camelize \on-render) ...
 
 
 class PagesListView extends ListView

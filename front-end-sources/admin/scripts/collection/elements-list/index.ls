@@ -30,7 +30,7 @@ export class ElementsListCollection extends BasicCollection
 		catch
 			panic-attack e
 	
-	fetch: (opts={})->
+	fetch: (opts = {})->
 		try
 			action = @get-option \action
 			

@@ -33,9 +33,16 @@ export drag-row-table-list-view-mixin =
 		
 		{ collection-id, model-id: Number model-id }
 	
-	\on-drag-row-drag-start : (e)!->
+	\on-drag-row-drag-start : !-> @on-drag-row-drag-start ...
+	on-drag-row-drag-start: (e)!->
 		
-		id = @$ e.current-target .find \.js-model-id .data \model-id |> Number
+		@$ e.current-target .find \th
+			throw new Error "Cannot find <th>" if ..length < 1
+			..eq 0 .data \model-id
+				if (String ..) is (String Number ..)
+					id = Number ..
+				else
+					throw new Error "Cannot get model-id for drag'n'drop"
 		
 		@collection.get id .trigger \view:drag-row-drag-start
 		
@@ -44,7 +51,8 @@ export drag-row-table-list-view-mixin =
 			..set-data \drag-collection, @collection.cid
 			..set-data \drag-model-id, id
 	
-	\on-drag-row-drag-end : (e)!->
+	\on-drag-row-drag-end : !-> @on-drag-row-drag-end ...
+	on-drag-row-drag-end: (e)!->
 		
 		try { model-id } = @extract-drag-data e
 		catch then if e instanceof DragBreak then return else throw e

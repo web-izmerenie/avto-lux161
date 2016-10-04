@@ -14,14 +14,21 @@ require! {
 	}
 	
 	\app/utils/panic-attack : { panic-attack }
+	\app/utils/mixins       : { call-class-mixins }
 }
 
 
 export class StaticPageListItemModel
 extends BasicModel
 implements \
-	type-validation-model-mixin, \
-	custom-reordering-elements-item-model-mixin
+type-validation-model-mixin, \
+custom-reordering-elements-item-model-mixin
+	
+	[
+		type-validation-model-mixin
+		custom-reordering-elements-item-model-mixin
+	]
+		@_call-class = call-class-mixins ..
 	
 	section: \pages
 	
@@ -37,7 +44,7 @@ implements \
 		is_main_menu_item : \Boolean
 	
 	initialize: !->
-		super ...
+		(@@_call-class super::, \initialize) ...
 		@check-if-is-valid!
 		@on \change, @check-if-is-valid
 	

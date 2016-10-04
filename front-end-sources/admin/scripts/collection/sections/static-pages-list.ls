@@ -16,17 +16,14 @@ require! {
 }
 
 
-list-mixins =
-	* by-column-ordering-elements-list-collection-mixin
-	...
-
-call-class = call-class-mixins list-mixins
-
 export class StaticPagesListCollection
 extends ElementsListCollection
 implements by-column-ordering-elements-list-collection-mixin
 	
+	[ by-column-ordering-elements-list-collection-mixin ]
+		@_call-class = call-class-mixins ..
+	
 	model: StaticPageListItemModel
 	action: \get_pages_list
 	
-	initialize: !-> (call-class super::, \initialize) ...
+	initialize: !-> (@@_call-class super::, \initialize) ...

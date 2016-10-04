@@ -3,11 +3,16 @@
 		.col.col-md-6
 			h1.h5= local.get('sections').accounts.accounts_list
 		.col.col-md-6.align-right
+			.thumbnail.thumbnail-drop-delete-zone.js-drop-delete-zone
+				span.glyphicon.glyphicon-remove
+				= ' ' + local.get('sections').accounts.drag_to_remove
 			.btn-group
 				button.refresh.btn.btn-default
 					span.glyphicon.glyphicon-transfer
 					= ' ' + local.get('sections').accounts.refresh
-				a.add.btn.btn-default.btn-success(href="#panel/accounts/add.html")
+				a.add.btn.btn-default.btn-success(
+					href="#panel/accounts/add.html"
+				)
 					span.glyphicon.glyphicon-plus
 					= ' ' + local.get('sections').accounts.add
 table.table

@@ -12,8 +12,16 @@ export drag-row-table-item-view-mixin =
 		draggable: true
 	
 	initialize: !->
-		@listen-to @model, \view:drag-row-drag-start, @\on-drag-row-drag-start
-		@listen-to @model, \view:drag-row-drag-end,   @\on-drag-row-drag-end
+		@listen-to @model, \view:drag-row-drag-start, @on-drag-row-drag-start
+		@listen-to @model, \view:drag-row-drag-end,   @on-drag-row-drag-end
 	
-	\on-drag-row-drag-start : !-> @$el.css \opacity, 0.3
-	\on-drag-row-drag-end   : !-> @$el.css \opacity, ''
+	\on-drag-row-drag-start : !-> @on-drag-row-drag-start ...
+	on-drag-row-drag-start: !-> @$el.css \opacity, 0.3
+	
+	\on-drag-row-drag-end : !-> @on-drag-row-drag-end ...
+	on-drag-row-drag-end: !-> @$el.css \opacity, ''
+	
+	on-render: !->
+		@$ \th
+			throw new Error "Cannot find <th>" if ..length < 1
+			..eq 0 .data \model-id, @model.id

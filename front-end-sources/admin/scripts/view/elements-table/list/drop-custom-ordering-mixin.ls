@@ -5,9 +5,7 @@
  * @author Andrew Fatkulin
  */
 
-require! {
-	\./drag-row-mixin : { DragBreak }
-}
+require! \./drag-row-mixin : { DragBreak }
 
 
 # required to be used with drag-row-table-list-view-mixin
@@ -21,7 +19,8 @@ export drop-custom-ordering-table-list-view-mixin =
 		'dragleave @ui.drop-custom-ordering-row' : \on-custom-ordering-row-drag-leave
 		'drop      @ui.drop-custom-ordering-row' : \on-custom-ordering-row-drop
 	
-	\on-custom-ordering-row-drag-over : (e)!->
+	\on-custom-ordering-row-drag-over : !-> @on-custom-ordering-row-drag-over ...
+	on-custom-ordering-row-drag-over: (e)!->
 		
 		try @extract-drag-data e
 		catch then if e instanceof DragBreak then return else throw e
@@ -30,14 +29,16 @@ export drop-custom-ordering-table-list-view-mixin =
 		e.original-event.data-transfer.drop-effect = \copy
 		@$ e.current-target .add-class \ordering-drag-over
 	
-	\on-custom-ordering-row-drag-leave : (e)!->
+	\on-custom-ordering-row-drag-leave : !-> @on-custom-ordering-row-drag-leave ...
+	on-custom-ordering-row-drag-leave: (e)!->
 		
 		try @extract-drag-data e
 		catch then if e instanceof DragBreak then return else throw e
 		
 		@$ e.current-target .remove-class \ordering-drag-over
 	
-	\on-custom-ordering-row-drop : (e)!->
+	\on-custom-ordering-row-drop : !-> @on-custom-ordering-row-drop ...
+	on-custom-ordering-row-drop: (e)!->
 		
 		try { model-id } = @extract-drag-data e
 		catch then if e instanceof DragBreak then return else throw e
@@ -45,12 +46,15 @@ export drop-custom-ordering-table-list-view-mixin =
 		e.prevent-default!
 		e.stop-propagation!
 		
-		at-id = @$ e.current-target
-			.find \.js-model-id
-			.data \model-id
-			|> Number
-		
-		@$ e.current-target .remove-class \ordering-drag-over
+		@$ e.current-target
+			..find \th
+				throw new Error "Cannot find <th>" if ..length < 1
+				..eq 0 .data \model-id
+					if (String ..) is (String Number ..)
+						at-id = Number ..
+					else
+						throw new Error "Cannot get model-id for drag'n'drop"
+			..remove-class \ordering-drag-over
 		
 		drag-model = @collection.get model-id
 		at-model   = @collection.get at-id

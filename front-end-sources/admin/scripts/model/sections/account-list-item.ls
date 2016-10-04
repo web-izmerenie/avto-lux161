@@ -9,14 +9,24 @@ require! {
 	\app/model/basic : { BasicModel }
 	\app/model/localization : { LocalizationModel }
 	\app/model/type-validation-mixin : { type-validation-model-mixin }
+	\app/model/elements-list/delete-mixin : { delete-elements-item-model-mixin }
 	
 	\app/utils/panic-attack : { panic-attack }
+	\app/utils/mixins       : { call-class-mixins }
 }
 
 
 export class AccountListItemModel
 extends BasicModel
-implements type-validation-model-mixin
+implements \
+type-validation-model-mixin, \
+delete-elements-item-model-mixin
+	
+	[
+		type-validation-model-mixin
+		delete-elements-item-model-mixin
+	]
+		@_call-class = call-class-mixins ..
 	
 	section: \accounts
 	
@@ -29,7 +39,7 @@ implements type-validation-model-mixin
 		is_active : \Boolean
 	
 	initialize: !->
-		super ...
+		(@@_call-class super::, \initialize) ...
 		@check-if-is-valid!
 		@on \change, @check-if-is-valid
 	
