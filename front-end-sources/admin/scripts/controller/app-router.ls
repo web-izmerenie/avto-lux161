@@ -6,31 +6,31 @@
  */
 
 require! {
-	\backbone                               : { history }
-	\backbone.marionette                    : { Controller, proxy-get-option }
-	\backbone.wreqr                         : { radio }
+	\backbone                                : { history }
+	\backbone.marionette                     : { Controller, proxy-get-option }
+	\backbone.wreqr                          : { radio }
 	
-	\../collection/panel-menu               : { panel-menu-list }
-	\../view/login-form                     : LoginFormView
-	\../view/panel                          : PanelView
-	\../view/sections/pages/list            : PagesListView
-	\../view/sections/pages/add             : AddPageView
-	\../view/sections/pages/edit            : EditPageView
-	\../view/sections/catalog/sections-list : CatalogSectionsListView
-	\../view/sections/catalog/section-add   : CatalogSectionAddView
-	\../view/sections/catalog/section-edit  : CatalogSectionEditView
-	\../view/sections/catalog/elements-list : CatalogElementsListView
-	\../view/sections/catalog/element-add   : CatalogElementAddView
-	\../view/sections/catalog/element-edit  : CatalogElementEditView
-	\../view/sections/redirect/list         : RedirectListView
-	\../view/sections/redirect/add          : AddRedirectView
-	\../view/sections/redirect/edit         : EditRedirectView
-	\../view/sections/data/list             : DataListView
-	\../view/sections/data/add              : AddDataView
-	\../view/sections/data/edit             : EditDataView
-	\../view/sections/accounts/list         : AccountsListView
-	\../view/sections/accounts/add          : AddAccountView
-	\../view/sections/accounts/edit         : EditAccountView
+	\app/collection/panel-menu               : { panel-menu-list }
+	\app/view/login-form                     : LoginFormView
+	\app/view/panel                          : PanelView
+	\app/view/sections/pages/list            : PagesListView
+	\app/view/sections/pages/add             : AddPageView
+	\app/view/sections/pages/edit            : EditPageView
+	\app/view/sections/catalog/sections-list : CatalogSectionsListView
+	\app/view/sections/catalog/section-add   : CatalogSectionAddView
+	\app/view/sections/catalog/section-edit  : CatalogSectionEditView
+	\app/view/sections/catalog/elements-list : CatalogElementsListView
+	\app/view/sections/catalog/element-add   : CatalogElementAddView
+	\app/view/sections/catalog/element-edit  : CatalogElementEditView
+	\app/view/sections/redirect/list         : RedirectListView
+	\app/view/sections/redirect/add          : AddRedirectView
+	\app/view/sections/redirect/edit         : EditRedirectView
+	\app/view/sections/data/list             : DataListView
+	\app/view/sections/data/add              : AddDataView
+	\app/view/sections/data/edit             : EditDataView
+	\app/view/sections/accounts/list         : AccountsListView
+	\app/view/sections/accounts/add          : AddAccountView
+	\app/view/sections/accounts/edit         : EditAccountView
 }
 
 
@@ -87,7 +87,7 @@ class AppRouterController extends Controller
 		
 		if history.fragment is \panel
 			# go to first menu item
-			first-ref = panel-menu-list.toJSON![0].ref
+			first-ref = panel-menu-list.toJSON!.0.ref
 			history.navigate first-ref, { +trigger, +replace }
 	
 	\pages-list : !->
@@ -95,24 +95,24 @@ class AppRouterController extends Controller
 	\add-page : !->
 		@panel-page-handler <| new AddPageView! .render!
 	\edit-page : (id)!->
-		@panel-page-handler <| new EditPageView {id} .render!
+		@panel-page-handler <| new EditPageView { id } .render!
 	
 	\catalog-sections-list : !->
 		@panel-page-handler <| new CatalogSectionsListView! .render!
 	\catalog-section-add : !->
 		@panel-page-handler <| new CatalogSectionAddView! .render!
 	\catalog-section-edit : (sid)!->
-		new CatalogSectionEditView {\section-id : sid, id: sid} .render!
+		new CatalogSectionEditView { \section-id : sid, id: sid } .render!
 		|> @panel-page-handler
 	
 	\catalog-elements-list : (sid)!->
-		new CatalogElementsListView {\section-id : sid} .render!
+		new CatalogElementsListView { \section-id : sid } .render!
 		|> @panel-page-handler
 	\catalog-element-add : (sid)!->
-		new CatalogElementAddView {\section-id : sid} .render!
+		new CatalogElementAddView { \section-id : sid } .render!
 		|> @panel-page-handler
 	\catalog-element-edit : (sid, eid)!->
-		new CatalogElementEditView {\section-id : sid, id: eid} .render!
+		new CatalogElementEditView { \section-id : sid, id: eid } .render!
 		|> @panel-page-handler
 	
 	\redirect-list : !->
@@ -120,24 +120,23 @@ class AppRouterController extends Controller
 	\add-redirect : !->
 		@panel-page-handler <| new AddRedirectView! .render!
 	\edit-redirect : (id)!->
-		@panel-page-handler <| new EditRedirectView {id} .render!
+		@panel-page-handler <| new EditRedirectView { id } .render!
 	
 	\data-list : !->
 		@panel-page-handler <| new DataListView! .render!
 	\add-data : !->
 		@panel-page-handler <| new AddDataView! .render!
 	\edit-data : (id)!->
-		@panel-page-handler <| new EditDataView {id} .render!
+		@panel-page-handler <| new EditDataView { id } .render!
 	
 	\accounts : !->
 		@panel-page-handler <| new AccountsListView! .render!
 	\account-add : !->
 		@panel-page-handler <| new AddAccountView! .render!
 	\account-edit : (id)!->
-		@panel-page-handler <| new EditAccountView {id} .render!
+		@panel-page-handler <| new EditAccountView { id } .render!
 	
 	\logout : !->
-		
 		return if not restore-last-page! or not @auth-handler false
 		@get-option \app .auth-model .logout success: !~>
 			history.navigate \#, { +trigger, +replace }

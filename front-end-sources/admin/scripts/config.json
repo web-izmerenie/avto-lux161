@@ -2,6 +2,7 @@
   "root_url": "/adm/",
   "login_url": "/adm/auth",
   "logout_url": "/adm/logout",
+  "auth_fetch_url": "/adm/auth",
   "ajax_data_url": "/adm/data.json",
   "upload_file_url": "/adm/upload.json",
   "uploaded_file_prefix": "/uploaded-files/",

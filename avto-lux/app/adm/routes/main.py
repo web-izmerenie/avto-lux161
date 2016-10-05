@@ -37,7 +37,10 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 	def post(self):
 		
 		if self.get_secure_cookie('user'):
-			return self.json_response({'status': 'success'})
+			return self.json_response({
+				'status': 'success',
+				'username': self.get_secure_cookie('user').decode('utf-8')
+			})
 		
 		session = Session()
 		try:
@@ -63,7 +66,10 @@ class AuthHandler(AuthMixin, JsonResponseMixin):
 		
 		if compared and usr.is_active:
 			self.set_secure_cookie('user', usr.login)
-			return self.json_response({'status': 'success'})
+			return self.json_response({
+				'status': 'success',
+				'username': usr.login
+			})
 		elif not usr.is_active:
 			return self.json_response({
 				'status': 'error',

@@ -49,6 +49,7 @@ templates-bundle =
 	\main                         : require \base/templates/main.jade
 	\menu-item                    : require \base/templates/menu-item.jade
 	\panel                        : require \base/templates/panel.jade
+	\panel-username               : require \base/templates/panel-username.jade
 
 compiled-templates = {[k, jade.compile v] for k, v of templates-bundle}
 

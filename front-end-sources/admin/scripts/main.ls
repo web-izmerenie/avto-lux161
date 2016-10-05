@@ -12,7 +12,7 @@ require! {
 	\backbone.wreqr      : { radio }
 	
 	# just to check if config file exists
-	\./config.json       : {}
+	\app/config.json     : {}
 }
 
 
@@ -48,9 +48,7 @@ B.ajax = (opts)->
 			else
 				opts.success? ...
 
-require! {
-	\./model/localization : { LocalizationModel }
-}
+require! \app/model/localization : { LocalizationModel }
 
 # caching localization data
 error = (xhr, status, err)!-> $ \.js-loading-message .text \
@@ -62,11 +60,11 @@ error = (xhr, status, err)!-> $ \.js-loading-message .text \
 $html = $ \html
 
 require! {
-	\./template-handlers
-	\./app                   : App
-	\./view/fatal-error      : FatalErrorView
-	\./router                : AppRouter
-	\./controller/app-router : AppRouterController
+	\app/template-handlers
+	\app/app                   : App
+	\app/view/fatal-error      : FatalErrorView
+	\app/router                : AppRouter
+	\app/controller/app-router : AppRouterController
 }
 
 TemplateCache::load-template = template-handlers.load

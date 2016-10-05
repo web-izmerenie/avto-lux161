@@ -8,13 +8,17 @@
 require! {
 	\backbone              : { history }
 	\backbone.marionette   : { Application, proxy-get-option }
+	\backbone.wreqr        : { radio }
 	
-	\./model/auth          : { auth-model }
+	\app/model/auth        : { auth-model }
 	
-	\./config.json         : { root_url }
+	\app/config.json       : { root_url }
 	
 	\base/styles/main.styl : {}
 }
+
+
+authentication = radio.channel \authentication
 
 
 class App extends Application
@@ -25,14 +29,24 @@ class App extends Application
 	auth-model: auth-model
 	
 	initialize: !->
-		super ...
+		
+		super? ...
+		
 		@add-regions container: @get-option \container
+		
+		authentication.reqres
+			..set-handler \username, ~> @auth-model.get \username
+		@listen-to @auth-model, \change:username, !->
+			authentication.vent.trigger \username, @auth-model.get \username
 	
 	start: (options)!->
+		super? ...
 		history.start root: root_url
 	
 	on-destroy: !->
+		super? ...
 		history.stop!
+		authentication.reqres.remove-handler \username
 
 
 module.exports = App
