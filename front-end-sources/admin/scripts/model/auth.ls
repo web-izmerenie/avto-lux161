@@ -6,19 +6,14 @@
  */
 
 require! {
-	\backbone                        : { history }
-	
 	\app/model/basic                 : { BasicModel }
 	\app/model/localization          : { LocalizationModel }
 	\app/model/type-validation-mixin : { type-validation-model-mixin }
 	
 	\app/config.json                 : { login_url, logout_url, auth_fetch_url }
-	\app/utils/panic-attack          : { panic-attack }
 	\app/utils/mixins                : { call-class-mixins }
+	\app/utils/panic-attack          : { panic-attack }
 }
-
-
-is-auth-at-start = $ \html .attr \data-is-auth .to-string! is \1
 
 
 export class AuthModel
@@ -118,7 +113,3 @@ implements type-validation-model-mixin
 				
 				success? @, response
 				@trigger \auth-fetch
-
-
-export auth-model = new AuthModel is_authorized: is-auth-at-start
-auth-model.fetch! if is-auth-at-start
