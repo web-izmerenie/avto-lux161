@@ -255,7 +255,11 @@
           "password": "Пароль"
         },
         "save": "Сохранить",
-        "cancel": "Отмена"
+        "cancel": "Отмена",
+        "err": {
+          "cannot_remove_current_user": "Невозможно удалить авторизованного пользователя."
+        },
+        "confirm_remove": "Вы уверены, что хотите удалить пользователя '{username}'?"
       },
       "login_form": {
         "username": "Логин",

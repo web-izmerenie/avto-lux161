@@ -6,6 +6,8 @@
  */
 
 require! {
+	\backbone.wreqr : { radio }
+	
 	# models
 	\app/collection/sections/accounts-list : { AccountsListCollection }
 	
@@ -28,7 +30,11 @@ require! {
 	# helpers
 	\app/utils/mixins : { call-class-mixins, extend-class-mixins }
 	\app/utils/dashes : { camelize }
+	\app/utils/panic-attack : { panic-attack }
 }
+
+
+authentication = radio.channel \authentication
 
 
 class ItemView extends TableItemView implements drag-row-table-item-view-mixin
@@ -67,6 +73,25 @@ drop-delete-table-list-view-mixin
 	
 	initialize : !-> (@@_call-class super::, \initialize) ...
 	on-render  : !-> (@@_call-class super::, camelize \on-render) ...
+	
+	delete-by-model-id: (model-id, cb = null)!->
+		
+		model = @collection.get model-id
+			unless ..?
+				panic-attack new Error "Model by id '#model-id' not found"
+		
+		switch
+		| (authentication.reqres.request \username) is (model.get \login) =>
+			window.alert <|
+				@model.get \local .get \sections
+					.accounts.err.cannot_remove_current_user
+		| otherwise =>
+			if window.confirm <| @model.get \local .get \sections
+				.accounts.confirm_remove
+				.replace /{username}/gi, model.get \login
+			then @collection.get model-id .destroy!
+		
+		cb?!
 
 
 class AccountsListView extends ListView

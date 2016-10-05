@@ -5,7 +5,11 @@
  * @author Andrew Fatkulin
  */
 
-require! \./drag-row-mixin : { DragBreak }
+require! {
+	\./drag-row-mixin : { DragBreak }
+	
+	\app/utils/panic-attack : { panic-attack }
+}
 
 
 # required to be used with drag-row-table-list-view-mixin
@@ -30,9 +34,17 @@ export drop-delete-table-list-view-mixin =
 		e.prevent-default!
 		e.stop-propagation!
 		
-		@collection.get model-id .destroy!
+		<~! @delete-by-model-id model-id
 		
-		@ui.\drop-delete-zone .remove-class \drop-over
+		@ui.'drop-delete-zone'? .remove-class \drop-over
+	
+	# can be overwritten to put some middleware
+	delete-by-model-id: (model-id, cb = null)!->
+		@collection.get model-id
+			unless ..?
+				panic-attack new Error "Model by id '#model-id' not found"
+			..destroy!
+		cb?!
 	
 	\on-delete-drop-over : !-> @on-delete-drop-over ...
 	on-delete-drop-over: (e)!->
