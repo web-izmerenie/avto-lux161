@@ -16,6 +16,7 @@ config.yaml
 .avto-lux
 TMP
 log.txt
+.lvimrc
 
 # node
 node_modules
