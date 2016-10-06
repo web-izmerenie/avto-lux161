@@ -6,10 +6,13 @@
  */
 
 require! {
-	\app/model/sections/account-list-item      : { AccountListItemModel }
-	\app/collection/elements-list/index        : { ElementsListCollection }
+	\app/model/sections/account-list-item : { AccountListItemModel }
+	\app/collection/elements-list/index : { ElementsListCollection }
 	\app/collection/elements-list/delete-mixin : {
 		delete-elements-list-collection-mixin
+	}
+	\app/collection/elements-list/by-column-ordering-mixin : {
+		by-column-ordering-elements-list-collection-mixin
 	}
 	
 	\app/utils/mixins : { call-class-mixins }
@@ -18,12 +21,18 @@ require! {
 
 export class AccountsListCollection
 extends ElementsListCollection
-implements delete-elements-list-collection-mixin
+implements \
+delete-elements-list-collection-mixin, \
+by-column-ordering-elements-list-collection-mixin
 	
-	[ delete-elements-list-collection-mixin ]
+	[
+		delete-elements-list-collection-mixin
+		by-column-ordering-elements-list-collection-mixin
+	]
 		@_call-class = call-class-mixins ..
 	
 	model: AccountListItemModel
 	action: \get_accounts_list
+	ordering-field: \login
 	
 	initialize: !-> (@@_call-class super::, \initialize) ...

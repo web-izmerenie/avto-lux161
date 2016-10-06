@@ -18,7 +18,10 @@
 table.table
 	thead
 		tr
-			th= local.get('sections').accounts.id
-			th= local.get('sections').accounts.is_active
-			th= local.get('sections').accounts.login
+			th(class="js-ordering-column ordering-column" data-field="id")
+				span= local.get('sections').accounts.id
+			th(class="js-ordering-column ordering-column" data-field="is_active")
+				span= local.get('sections').accounts.is_active
+			th(class="js-ordering-column ordering-column" data-field="login")
+				span= local.get('sections').accounts.login
 	tbody

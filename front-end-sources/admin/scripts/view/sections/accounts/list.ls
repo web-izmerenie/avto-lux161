@@ -26,6 +26,9 @@ require! {
 	\app/view/elements-table/list/drop-delete-mixin : {
 		drop-delete-table-list-view-mixin
 	}
+	\app/view/elements-table/list/by-column-ordering-mixin : {
+		by-column-ordering-table-list-view-mixin
+	}
 	
 	# helpers
 	\app/utils/mixins : { call-class-mixins, extend-class-mixins }
@@ -56,11 +59,13 @@ class CompositeListView
 extends TableListView
 implements \
 drag-row-table-list-view-mixin, \
-drop-delete-table-list-view-mixin
+drop-delete-table-list-view-mixin, \
+by-column-ordering-table-list-view-mixin
 	
 	[
 		drag-row-table-list-view-mixin
 		drop-delete-table-list-view-mixin
+		by-column-ordering-table-list-view-mixin
 	]
 		@_call-class = call-class-mixins ..
 		@_extend-class = extend-class-mixins ..
