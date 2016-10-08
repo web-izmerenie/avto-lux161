@@ -9,12 +9,13 @@ require! {
 	\jquery              : $
 	\jquery-ui/sortable  : {}
 	
-	\backbone            : B
-	\backbone.marionette : M
+	\backbone            : { Collection }
+	\backbone.marionette : { CompositeView, ItemView, CollectionView }
 	
-	'../error-msg'       : ErrorMessageView
-	'../ask-sure'        : AskSureView
+	\app/view/error-msg  : ErrorMessageView
+	\app/view/ask-sure   : AskSureView
 }
+
 
 sort-collection-cb = (e, ui)!->
 	models = @collection.models
@@ -33,8 +34,10 @@ sort-collection-cb = (e, ui)!->
 	@collection.set new-list
 	@collection.trigger \change
 
+
 # {{{
-class FieldView extends M.CompositeView
+
+class FieldView extends CompositeView
 	tag-name: \li
 	class-name: \list-group-item
 	template: 'form/data-fields/field'
@@ -46,7 +49,7 @@ class FieldView extends M.CompositeView
 		\value
 		...
 	initialize: !->
-		@collection = new B.Collection @model.get \values
+		@collection = new Collection @model.get \values
 		@$el.data \model, @model
 	on-render: !->
 		if @model.get \multiple
@@ -86,8 +89,10 @@ class FieldView extends M.CompositeView
 		@collection.push value: ''
 		false
 
+
 # value item
-class FieldItemView extends M.ItemView
+
+class FieldItemView extends ItemView
 	tag-name: \li
 	class-name: \list-group-item
 	events:
@@ -105,10 +110,13 @@ class FieldItemView extends M.ItemView
 		false
 	initialize: !->
 		@$el.data \model, @model
+
 # }}}
 
+
 # {{{
-class AddFieldView extends M.ItemView
+
+class AddFieldView extends ItemView
 	tag-name: \li
 	class-name: \list-group-item
 	template: 'form/data-fields/add'
@@ -157,9 +165,12 @@ class AddFieldView extends M.ItemView
 	del: ->
 		@model.collection.remove @model
 		false
+
 # }}}
 
+
 # {{{
+
 class TextItemFieldView extends FieldItemView
 	template: 'form/data-fields/text'
 	ui:
@@ -169,9 +180,12 @@ class TextItemFieldView extends FieldItemView
 
 class TextFieldView extends FieldView
 	child-view: TextItemFieldView
+
 # }}}
 
+
 # {{{
+
 class TextareaItemFieldView extends FieldItemView
 	template: 'form/data-fields/textarea'
 	ui:
@@ -181,9 +195,11 @@ class TextareaItemFieldView extends FieldItemView
 
 class TextareaFieldView extends FieldView
 	child-view: TextareaItemFieldView
+
 # }}}
 	
-class ListView extends M.CollectionView
+	
+class ListView extends CollectionView
 	tag-name: \ul
 	class-name: \list-group
 	child-view-options: (model, index)!~>
@@ -198,7 +214,8 @@ class ListView extends M.CollectionView
 		@$el.sortable update: (e, ui)!~>
 			sort-collection-cb ...
 
-class DataFieldsItemView extends M.ItemView
+
+class DataFieldsItemView extends ItemView
 	tag-name: \div
 	class-name: \data-fields
 	template: 'form/data-fields'
@@ -227,7 +244,7 @@ class DataFieldsItemView extends M.ItemView
 			data = JSON.parse values[@model.get \name]
 			data = [] unless typeof! data is \Array
 		
-		@flist = new B.Collection data
+		@flist = new Collection data
 		@flist-view = new ListView {
 			collection: @flist
 			model: @model.clone!
@@ -249,5 +266,6 @@ class DataFieldsItemView extends M.ItemView
 			data = new-data
 			
 			@ui.data.val JSON.stringify data
+
 
 module.exports = DataFieldsItemView

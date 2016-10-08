@@ -15,7 +15,7 @@ class AddPageView extends FormEditView
 		@options.type = \add
 		@options.\list-page = \#panel/pages
 		@options.section = \pages
-		super ...
+		super? ...
 
 
 module.exports = AddPageView

@@ -13,9 +13,9 @@ require! {
 class AddAccountView extends FormEditView
 	initialize: !->
 		@options.type = \add
-		@options.\list-page = '#panel/accounts'
+		@options.\list-page = \#panel/accounts
 		@options.section = \accounts
-		super ...
+		super? ...
 
 
 module.exports = AddAccountView

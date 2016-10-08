@@ -13,7 +13,7 @@ require! {
 	
 	\./files                  : FilesItemView
 	\./data-fields            : DataFieldsItemView
-	\../../model/basic        : { BasicModel }
+	\app/model/basic          : { BasicModel }
 }
 
 

@@ -9,27 +9,29 @@ require! {
 	\backbone       : { history, Collection }
 	\backbone.wreqr : { radio }
 	
-	\../ajax-req
-	\../config.json
+	\../ajax-req # TODO remove
 	
-	\../model/basic : { BasicModel }
+	\app/config.json
+	
+	# models
+	\app/model/basic : { BasicModel }
 	
 	# views
-	\./smooth       : SmoothView
-	\./loader       : LoaderView
-	\./form/form    : FormView
+	\app/view/smooth    : SmoothView
+	\app/view/loader    : LoaderView
+	\app/view/form/form : FormView
 }
 
 
 class FormEditView extends SmoothView
 	
 	initialize: !->
-		super ...
+		super? ...
 		@loader-view = new LoaderView! .render!
 	
 	on-show: !->
 		
-		super ...
+		super? ...
 		
 		@get-region \main .show @loader-view
 		

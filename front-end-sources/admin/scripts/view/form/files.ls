@@ -9,22 +9,25 @@ require! {
 	\jquery              : $
 	\jquery-ui/sortable  : {}
 	
-	\backbone.marionette : M
-	\backbone.wreqr      : W
+	\backbone.marionette : { ItemView }
+	\backbone.wreqr      : { radio }
 	
-	'../../ajax-req'
-	'../../config.json'
+	'../../ajax-req' # TODO remove
+	
+	\app/config.json
 }
 
-class FilesItemView extends M.ItemView
+
+class FilesItemView extends ItemView
+	
 	tag-name: \div
 	class-name: \files
-	template: 'form/files'
+	template: \form/files
 	
 	ui:
 		file: 'input[type=file]'
 		json: 'input[type=hidden]'
-		list: 'ul.uploaded-earlier-list'
+		list: \ul.uploaded-earlier-list
 	
 	rebuild-files: !->
 		name = @model.get \name
@@ -90,7 +93,7 @@ class FilesItemView extends M.ItemView
 		name = @model.get \name
 		
 		@ui.file.on \change, !~>
-			W.radio.commands .execute \police, \request-stop
+			radio.commands .execute \police, \request-stop
 			@ui.file.attr \disabled, \disabled
 			fd = new FormData!
 			for file,i in @ui.file[0].files
@@ -110,87 +113,13 @@ class FilesItemView extends M.ItemView
 					@rebuild-files!
 					@ui.file.remove-attr \disabled
 					@ajax = null
-					W.radio.commands .execute \police, \request-free
+					radio.commands .execute \police, \request-free
 	on-destroy: !->
 		@ajax.abort! if @ajax?
 		@ui.file.off \change
 		
 		# TODO :: need to check if initialized
 		#@ui.list.sortable \destroy
-	
-	# TODO :: backend fix
-	#ui:
-		#input: \input
-		#upload_list: \ul.upload-list
-		#dragndrop_area: \.upload-area
-	#check-for-alive: ->
-		#unless @? and @ui? and @ui.input? and @ui.upload_list
-		#and @ui.dragndrop_area
-			#false
-		#else
-			#true
-	#on-render: !->
-		#D = require \jquery.dragndrop-file-upload
-		#set-timeout (!~> #hack
-			#return unless @check-for-alive!
-			#@files-dom-list = {}
-			#@D = new D {
-				#dragndrop-area: @ui.dragndrop_area
-				#upload-url: config.upload_file_url
-				#drag-over-class: \fileover
-				
-				#add-file-callback: (err, id, file-name, file-size, file-type)!~>
-					#return unless @check-for-alive!
-					
-					#if err?
-						#window.alert err
-						#return
-					
-					#$li = $ '<li/>' data-upload-id: id
-					#$filename = $ '<div/>' class: \filename
-					#$progress = $ '<div/>' class: \progress
-					#$bar = $ '<div/>' class: \progress-bar .css \width, \0%
-					#$progress.append $bar
-					#$li.append $filename
-					#$li.append $progress
-					#$bar.text \0%
-					#file-size = (file-size / 1024.0 / 1024.0).to-fixed 2
-					#mib = @model.get \local .get \mib
-					#$filename.text "#file-name (#file-size #mib)"
-					
-					#@files-dom-list[id] = $bar: $bar
-					
-					#$ @ui.upload_list[0] .append $li
-				
-				#progress-callback: (id, progress)!~>
-					#return unless @check-for-alive!
-					
-					#@files-dom-list[id].$bar
-						#.css \width, progress + '%'
-						#.text progress + '%'
-				
-				#end-callback: (err, id, response)!~>
-					#return unless @check-for-alive!
-					
-					#$el = @files-dom-list[id].$bar
-					
-					#if err?
-						#$el.add-class \progress-bar-danger
-						#$el .text (@model.get \local .get \forms .err.upload_error) .css \width, \100%
-						#window.alert err
-						#return
-					
-					#console.log response
-					
-					#$el.css \window, \100%
-					#$el.add-class \progress-bar-success
-				
-				#input-file: $ @ui.input[0]
-			#}
-		#), 1
-	#on-destroy: !->
-		#@D.destroy! if @D?
-		#delete! @D
-		#delete! @files-dom-list
+
 
 module.exports = FilesItemView

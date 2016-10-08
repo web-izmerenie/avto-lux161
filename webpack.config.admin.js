@@ -19,7 +19,6 @@ module.exports = baseConfig(extractCss)({
 		'vendor': [
 			'jquery',
 			'jquery-ui/sortable',
-			'jquery.dragndrop-file-upload',
 			'backbone',
 			'backbone.marionette',
 			'backbone.wreqr',
