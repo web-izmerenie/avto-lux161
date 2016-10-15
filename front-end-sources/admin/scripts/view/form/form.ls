@@ -9,7 +9,7 @@ require! {
 	# libs
 	\jquery                   : $
 	\ckeditor/adapters/jquery : {}
-	\backbone.marionette      : { ItemView, CompositeView, LayoutView, Region }
+	\backbone.marionette      : { ItemView, CompositeView, LayoutView }
 	
 	# views
 	\./files       : FilesItemView
@@ -148,25 +148,15 @@ class FormView extends CompositeView
 		e.stop-propagation!
 		@trigger \cancel:form
 	
-	@model-to-view-map =
-		* CheckboxFormFieldModel , CheckboxItemView
-		* TextFormFieldModel     , TextItemView
-		* HtmlFormFieldModel     , null # TODO
-		* PasswordFormFieldModel , PasswordItemView
-	
 	get-child-view: (model)~>
-		
-		FoundView = null
-		@@model-to-view-map.some ([ModelClass, ViewClass])->
-			| model instanceof ModelClass =>
-				FoundView := ViewClass
-				true
-			| otherwise => false
-		
-		unless FoundView?
+		f = (model instanceof)
+		switch
+		| f CheckboxFormFieldModel => CheckboxItemView
+		| f TextFormFieldModel     => TextItemView
+		| f HtmlFormFieldModel     => null # TODO
+		| f PasswordFormFieldModel => PasswordItemView
+		| otherwise =>
 			panic-attack new Error "Cannot find View class for model instance"
-		
-		FoundView
 
 
 module.exports = FormView

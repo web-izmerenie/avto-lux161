@@ -109,13 +109,12 @@ export class FormFieldsCollection extends BasicCollection
 	
 	parse: (response)->
 		try
-			[{ x.name, x.type, x.default_val } <<< (
-				switch @get-option \type
-				| \edit =>
-					switch x.type
+			[{ ..name, ..type, ..default_val } <<< (
+				switch @get-option \type | \edit =>
+					switch ..type
 					| \password => void
-					| otherwise => value: response.values_list[x.name]
-			) for x in response.fields_list]
+					| otherwise => value: response.values_list[..name]
+			) for response.fields_list]
 		catch
 			panic-attack e
 	
