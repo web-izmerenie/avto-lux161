@@ -5,9 +5,7 @@
  * @author Andrew Fatkulin
  */
 
-require! {
-	\app/view/form-edit : FormEditView
-}
+require! \app/view/form-edit : FormEditView
 
 
 class EditPageView extends FormEditView

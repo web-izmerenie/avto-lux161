@@ -1,14 +1,10 @@
-h1= local.get('sections')[page].title[type]
-if err_key
-	.alert.alert-danger(role="alert")
-		span.glyphicon.glyphicon-exclamation-sign(aria-hidden="true")
-		span.sr-only= local.get('error') + ': '
-		=' ' + local.get('sections')[page].form.err[err_key]
+h1= local.get('sections')[section].title[type]
+.js-error-region
 .fields
 .actions
 	input.btn.btn-default.btn-success(
 		type="submit",
-		value=local.get('sections')[page].save)
+		value=local.get('sections')[section].save)
 	=' '
 	button.cancel.btn.btn-default
-		= local.get('sections')[page].cancel
+		= local.get('sections')[section].cancel

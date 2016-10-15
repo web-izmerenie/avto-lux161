@@ -79,7 +79,6 @@
           "seo_meta_keywords": "SEO: Ключевые слова",
           "files": {
             "title": "Файлы",
-            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",
             "uploaded_earlier": "Загружено ранее"
           },
           "submit": "Сохранить"
@@ -118,7 +117,6 @@
           "description_text": "Описание",
           "files": {
             "title": "Файлы",
-            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",
             "uploaded_earlier": "Загружено ранее"
           },
           "main_image": {
@@ -127,7 +125,6 @@
           },
           "images": {
             "title": "Фотографии",
-            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",
             "uploaded_earlier": "Загружено ранее"
           },
           "inherit_seo_title": "SEO: Наследовать заголовок H1 от раздела",
@@ -162,7 +159,6 @@
           "alias": "Символьный код",
           "files": {
             "title": "Файлы",
-            "dragndrop_here": "Перетащите ваши файлы сюда для загрузки",
             "uploaded_earlier": "Загружено ранее"
           },
           "delegate_seo_title": "SEO: Делегировать заголовок H1 элементам",

@@ -6,14 +6,24 @@
  */
 
 require! {
+	# libs
 	\jquery                   : $
 	\ckeditor/adapters/jquery : {}
+	\backbone.marionette      : { ItemView, CompositeView, LayoutView, Region }
 	
-	\backbone.marionette      : { ItemView, CompositeView }
+	# views
+	\./files       : FilesItemView
+	\./data-fields : DataFieldsItemView
 	
-	\./files                  : FilesItemView
-	\./data-fields            : DataFieldsItemView
-	\app/model/basic          : { BasicModel }
+	# fields models
+	\app/model/form/field-by-type/checkbox : { CheckboxFormFieldModel }
+	\app/model/form/field-by-type/text     : { TextFormFieldModel }
+	\app/model/form/field-by-type/html     : { HtmlFormFieldModel }
+	\app/model/form/field-by-type/password : { PasswordFormFieldModel }
+	
+	# utils
+	\app/utils/panic-attack : { panic-attack }
+	\app/utils/dashes       : { camelize }
 }
 
 
@@ -24,11 +34,25 @@ class InputItemView extends ItemView
 class TextItemView extends InputItemView
 	class-name: \text
 	template: \form/text
+	ui:
+		input: \input
+	events:
+		'input @ui.input': camelize \update-value
+	update-value: !->
+		@model.set \value, @ui.input.val!
+		@model.check-if-is-valid!
 
 
 class CheckboxItemView extends InputItemView
 	class-name: \checkbox
 	template: \form/checkbox
+	ui:
+		input: \input
+	events:
+		'input @ui.input': camelize \update-value
+	update-value: !->
+		@model.set \value, @ui.input.prop \checked
+		@model.check-if-is-valid!
 
 
 class HTMLInputItemView extends InputItemView
@@ -37,13 +61,13 @@ class HTMLInputItemView extends InputItemView
 	template: \form/html
 	ui:
 		textarea: \textarea
+	
 	check-for-alive: -> Boolean @?ui?textarea?ckeditor?
 		
 	on-render: !->
-		!~>
-			return unless @check-for-alive!
-			@ui.textarea.ckeditor!
-		|> set-timeout _, 1 #hack
+		<~! set-timeout _, 1 # hack
+		return unless @check-for-alive!
+		@ui.textarea.ckeditor!
 
 
 class SelectItemView extends InputItemView
@@ -54,6 +78,20 @@ class SelectItemView extends InputItemView
 class PasswordItemView extends TextItemView
 	class-name: \password
 	template: \form/password
+	ui:
+		input: \input
+	events:
+		'input @ui.input': camelize \update-value
+	update-value: !->
+		@model.set \value, @ui.input.val!
+		@model.check-if-is-valid!
+
+
+class FormErrorView extends LayoutView
+	template: \form/error
+	initialize: !->
+		super? ...
+		@listen-to @model, \change:error_message_code, @render
 
 
 class FormView extends CompositeView
@@ -63,52 +101,72 @@ class FormView extends CompositeView
 	child-view-container: \.fields
 	template: \form/form
 	ui:
-		\cancel : \.cancel
+		\cancel       : \.cancel
+		\error-region : \.js-error-region
 	events:
 		'click @ui.cancel' : \cancel
+		\submit            : camelize \on-form-submit
 	
 	initialize: !->
-		
-		super ...
-		
-		@model = new BasicModel do
-			page: @get-option \page
-			type: @get-option \type
-			err_key: null
-			values: {}
-		
-		@on \form-msg, @on-form-msg
+		super? ...
+		@model.check-if-is-valid!
+		@_mutex = false
+		@listen-to @collection, \reset:error_message_code, !->
+			@model.set \error_message_code, null
+		@listen-to @collection, \error_message_code, !->
+			@model.set \error_message_code, it
 	
-	on-form-msg: (err-key)!->
-		@model.set \err_key, err-key
-		$ 'html,body' .scroll-top 0
-		@render!
+	on-show: !->
+		super? ...
+		@form-error-view = new FormErrorView { @model, el: @ui.\error-region }
+			..render!
+	
+	on-destroy: !->
+		if @form-error-view?
+			@form-error-view.destroy!
+			delete @form-error-view
+		super? ...
+		delete @_mutex
+	
+	on-form-submit: (e)!->
+		
+		e.prevent-default!
+		e.stop-propagation!
+		
+		switch @_mutex
+		| on  => return
+		| off => @_mutex = true
+		
+		@collection.save do
+			fail: !~> @_mutex = false
+			success: !~>
+				@_mutex = false
+				@trigger \cancel:form
 	
 	cancel: (e)!->
 		e.prevent-default!
+		e.stop-propagation!
 		@trigger \cancel:form
 	
-	on-render: !->
-		@$el.off \submit.store-values
-		@$el.on \submit.store-values, !~>
-			@model.set \values, \
-				{[x.name, x.value] for x in @$el.serialize-array!}
+	@model-to-view-map =
+		* CheckboxFormFieldModel , CheckboxItemView
+		* TextFormFieldModel     , TextItemView
+		* HtmlFormFieldModel     , null # TODO
+		* PasswordFormFieldModel , PasswordItemView
 	
-	child-view-options: (model, index)!~>
-		model.set do
-			local  : @model.get \local
-			page   : @get-option \page
-			values : @model.get \values
-	
-	get-child-view: (item)~>
-		switch item.get \type
-		| \checkbox    => CheckboxItemView
-		| \html        => HTMLInputItemView
-		| \select      => SelectItemView
-		| \files       => FilesItemView
-		| \password    => PasswordItemView
-		| \data_fields => DataFieldsItemView
-		| otherwise    => TextItemView
+	get-child-view: (model)~>
+		
+		FoundView = null
+		@@model-to-view-map.some ([ModelClass, ViewClass])->
+			| model instanceof ModelClass =>
+				FoundView := ViewClass
+				true
+			| otherwise => false
+		
+		unless FoundView?
+			panic-attack new Error "Cannot find View class for model instance"
+		
+		FoundView
 
 
 module.exports = FormView

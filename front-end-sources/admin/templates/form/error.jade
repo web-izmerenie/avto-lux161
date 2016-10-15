@@ -1,0 +1,5 @@
+if error_message_code
+	.alert.alert-danger(role="alert")
+		span.glyphicon.glyphicon-exclamation-sign(aria-hidden="true")
+		span.sr-only= local.get('error') + ': '
+		=' ' + local.get('sections')[section].form.err[error_message_code]

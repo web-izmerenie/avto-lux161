@@ -27,7 +27,7 @@ class FilesItemView extends ItemView
 	ui:
 		file: 'input[type=file]'
 		json: 'input[type=hidden]'
-		list: \ul.uploaded-earlier-list
+		list: \ul.js-uploaded-earlier-list
 	
 	rebuild-files: !->
 		name = @model.get \name
@@ -93,7 +93,6 @@ class FilesItemView extends ItemView
 		name = @model.get \name
 		
 		@ui.file.on \change, !~>
-			radio.commands .execute \police, \request-stop
 			@ui.file.attr \disabled, \disabled
 			fd = new FormData!
 			for file,i in @ui.file[0].files
@@ -113,7 +112,6 @@ class FilesItemView extends ItemView
 					@rebuild-files!
 					@ui.file.remove-attr \disabled
 					@ajax = null
-					radio.commands .execute \police, \request-free
 	on-destroy: !->
 		@ajax.abort! if @ajax?
 		@ui.file.off \change

@@ -18,14 +18,15 @@ require! {
 
 export class BasicModel extends Model
 	
-	url: ajax_data_url
+	(attrs = {}, opts = {})!->
+		
+		attrs = { local: new LocalizationModel! }
+			<<< (if opts.parse then @parse attrs, opts else attrs)
+		
+		@options = {} <<< (_.result @, \options) <<< opts
+		
+		super? attrs, {} <<< @options <<< { -parse }
 	
-	initialize: (attrs = null, options = {})!->
-		
-		super ...
-		@options = {} <<< (_.result @, \options) <<< options
-		
-		new LocalizationModel! |> @set \local, _, { +silent }
-		@changed = {}
+	url: ajax_data_url
 	
 	get-option: proxy-get-option

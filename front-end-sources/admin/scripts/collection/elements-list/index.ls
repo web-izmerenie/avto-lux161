@@ -12,14 +12,12 @@ require! {
 	
 	\app/collection/basic   : { BasicCollection }
 	
-	\app/config.json        : { ajax_data_url }
 	\app/utils/panic-attack : { panic-attack }
 }
 
 
 export class ElementsListCollection extends BasicCollection
 	
-	url: ajax_data_url
 	action: null # must be overwritten by child class or by option
 	
 	parse: (response)->
@@ -30,11 +28,11 @@ export class ElementsListCollection extends BasicCollection
 		catch
 			panic-attack e
 	
-	fetch: (opts = {})->
+	fetch: (opts = {})!->
 		try
 			action = @get-option \action
 			
-			unless typeof! action is \String
+			unless (typeof! action) is \String
 				throw new Error '@action must be overwritten'
 			
 			data = { action } <<< (opts.data ? {})

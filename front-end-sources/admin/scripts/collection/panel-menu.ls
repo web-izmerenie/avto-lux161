@@ -5,9 +5,7 @@
  * @author Andrew Fatkulin
  */
 
-require! {
-	\app/collection/basic : { BasicCollection }
-}
+require! \app/collection/basic : { BasicCollection }
 
 
 data =
@@ -19,4 +17,7 @@ data =
 	* ref: \#logout         , title: \Выход
 
 
-export panel-menu-list = new BasicCollection data
+class PanelMenuListCollection extends BasicCollection
+	url: null
+
+export panel-menu-list = new PanelMenuListCollection data

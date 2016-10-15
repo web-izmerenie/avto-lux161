@@ -4,6 +4,7 @@
 *.zip
 *.rar
 *.log
+*.swp
 
 # python
 *.pyc

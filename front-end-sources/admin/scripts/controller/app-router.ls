@@ -6,11 +6,15 @@
  */
 
 require! {
+	# libs
 	\backbone                                : { history }
 	\backbone.marionette                     : { Controller, proxy-get-option }
 	\backbone.wreqr                          : { radio }
 	
+	# models
 	\app/collection/panel-menu               : { panel-menu-list }
+	
+	# views
 	\app/view/login-form                     : LoginFormView
 	\app/view/panel                          : PanelView
 	\app/view/sections/pages/list            : PagesListView
@@ -37,40 +41,11 @@ require! {
 police = radio.channel \police
 
 
-# semaphore {{{
-
-stop-counter = 0
-stop-last-page = null
-
-police.commands.set-handler \request-stop, !->
-	stop-counter++
-	if stop-counter is 1
-		stop-last-page := history.fragment
-
-police.commands.set-handler \request-free, !->
-	stop-counter--
-	if stop-counter is 0
-		stop-last-page := null
-	if stop-counter < 0
-		throw new Error 'stop-counter cannot be less than zero'
-
-restore-last-page = ->
-	return true if stop-counter <= 0
-	unless stop-last-page?
-		throw new Error 'stop-last-page must be a string'
-	history.navigate "\##stop-last-page", { +replace }
-	false
-
-# semaphore }}}
-
-
 class AppRouterController extends Controller
 	
 	get-option: proxy-get-option
 	
 	\main : !->
-		
-		return unless restore-last-page!
 		
 		if @get-option \app .auth-model .get \is_authorized
 			history.navigate \#panel, { +trigger, +replace }
@@ -83,7 +58,7 @@ class AppRouterController extends Controller
 	
 	\panel : !->
 		
-		return if not restore-last-page! or not @auth-handler!
+		return unless @auth-handler!
 		
 		if history.fragment is \panel
 			# go to first menu item
@@ -95,54 +70,55 @@ class AppRouterController extends Controller
 	\add-page : !->
 		@panel-page-handler <| new AddPageView! .render!
 	\edit-page : (id)!->
-		@panel-page-handler <| new EditPageView { id } .render!
+		@panel-page-handler <| new EditPageView { id: Number id } .render!
 	
 	\catalog-sections-list : !->
 		@panel-page-handler <| new CatalogSectionsListView! .render!
 	\catalog-section-add : !->
 		@panel-page-handler <| new CatalogSectionAddView! .render!
 	\catalog-section-edit : (sid)!->
-		new CatalogSectionEditView { \section-id : sid, id: sid } .render!
-		|> @panel-page-handler
+		new CatalogSectionEditView { \section-id : Number sid, id: Number sid }
+			..render!
+			@panel-page-handler ..
 	
 	\catalog-elements-list : (sid)!->
-		new CatalogElementsListView { \section-id : sid } .render!
+		new CatalogElementsListView { \section-id : Number sid } .render!
 		|> @panel-page-handler
 	\catalog-element-add : (sid)!->
-		new CatalogElementAddView { \section-id : sid } .render!
+		new CatalogElementAddView { \section-id : Number sid } .render!
 		|> @panel-page-handler
 	\catalog-element-edit : (sid, eid)!->
-		new CatalogElementEditView { \section-id : sid, id: eid } .render!
-		|> @panel-page-handler
+		new CatalogElementEditView { \section-id : Number sid, id: Number eid }
+			..render!
+			@panel-page-handler ..
 	
 	\redirect-list : !->
 		@panel-page-handler <| new RedirectListView! .render!
 	\add-redirect : !->
 		@panel-page-handler <| new AddRedirectView! .render!
 	\edit-redirect : (id)!->
-		@panel-page-handler <| new EditRedirectView { id } .render!
+		@panel-page-handler <| new EditRedirectView { id: Number id } .render!
 	
 	\data-list : !->
 		@panel-page-handler <| new DataListView! .render!
 	\add-data : !->
 		@panel-page-handler <| new AddDataView! .render!
 	\edit-data : (id)!->
-		@panel-page-handler <| new EditDataView { id } .render!
+		@panel-page-handler <| new EditDataView { id: Number id } .render!
 	
 	\accounts : !->
 		@panel-page-handler <| new AccountsListView! .render!
 	\account-add : !->
 		@panel-page-handler <| new AddAccountView! .render!
 	\account-edit : (id)!->
-		@panel-page-handler <| new EditAccountView { id } .render!
+		@panel-page-handler <| new EditAccountView { id: Number id } .render!
 	
 	\logout : !->
-		return if not restore-last-page! or not @auth-handler false
+		return unless @auth-handler false
 		@get-option \app .auth-model .logout success: !~>
 			history.navigate \#, { +trigger, +replace }
 	
 	\unknown : !->
-		return unless restore-last-page!
 		police.commands.execute \panic, new Error 'Route not found'
 	
 	
@@ -159,7 +135,7 @@ class AppRouterController extends Controller
 	
 	panel-page-handler: (view)!->
 		
-		return if not restore-last-page! or not @auth-handler!
+		return unless @auth-handler!
 		
 		panel-view = new PanelView! .render!
 		

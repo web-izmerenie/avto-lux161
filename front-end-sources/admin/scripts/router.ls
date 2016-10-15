@@ -6,11 +6,11 @@
  */
 
 require! {
-	\backbone.marionette : { AppRouter }
+	\backbone.marionette : { AppRouter: MAppRouter }
 }
 
 
-class AppRouter extends AppRouter
+class AppRouter extends MAppRouter
 	app-routes:
 		''                                         : \main # login form
 		

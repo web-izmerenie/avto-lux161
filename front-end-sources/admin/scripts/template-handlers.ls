@@ -33,6 +33,7 @@ templates-bundle =
 	\form/data-fields             : require \base/templates/form/data-fields.jade
 	\form/files                   : require \base/templates/form/files.jade
 	\form/form                    : require \base/templates/form/form.jade
+	\form/error                   : require \base/templates/form/error.jade
 	\form/html                    : require \base/templates/form/html.jade
 	\form/password                : require \base/templates/form/password.jade
 	\form/select                  : require \base/templates/form/select.jade
